@@ -1,5 +1,4 @@
 import React from 'react';
-import { Element as SlateElement } from 'slate';
 
 const Element = ({ attributes, children, element }) => {
     const style = { textAlign: element.align };

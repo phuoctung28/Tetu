@@ -2,7 +2,7 @@ import React from 'react';
 import { useSlate } from 'slate-react';
 
 import { Button, Icon } from './components';
-import {isBlockActive, TEXT_ALIGN_TYPES, toggleBlock} from './helpers';
+import { isBlockActive, toggleBlock, TEXT_ALIGN_TYPES, LIST_TYPES } from './helpers';
 
 const BlockButton = ({ format, icon }) => {
     const editor = useSlate();
