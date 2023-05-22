@@ -30,7 +30,7 @@ export const getDocument = async (collection, id) => {
     try {
         const docRef = await db.collection(collection).doc(id).get();
         if (docRef.exists) {
-            return {id: docRef.id, ...docRef.data()};
+            return { id: docRef.id, ...docRef.data() };
         } else {
             throw new Error('Document not found.');
         }
