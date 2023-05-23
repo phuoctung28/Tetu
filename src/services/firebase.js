@@ -1,13 +1,23 @@
 import firebase from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import 'firebase/storage';
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes , getDownloadURL, uploadBytesResumable  } from "firebase/storage";
+import {getFirestore} from "firebase/firestore"
+
+
 
 // Initialize Firebase
 const firebaseConfig = {
-    // Your Firebase configuration
+  // Your Firebase configuration
+  apiKey: "AIzaSyDP9EHsdddH7fjGgmo-r0Vz6KdkpzFRYqs",
+  authDomain: "tetu-3be72.firebaseapp.com",
+  projectId: "tetu-3be72",
+  storageBucket: "tetu-3be72.appspot.com",
+  messagingSenderId: "827087020606",
+  appId: "1:827087020606:web:117bb5069edd78362a276f",
+  measurementId: "G-BSY6RBRE8M",
 };
 
-const app = firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 // Firestore functions
 
@@ -97,15 +107,20 @@ export const queryDocuments = async (collection, field, operator, value) => {
 // Storage functions
 
 // Get a reference to the Firebase storage
-const storage = firebase.storage();
+const storage = getStorage();
 
-// Upload a file to Firebase storage
 export const uploadFile = async (file) => {
     try {
-        const storageRef = storage.ref();
-        const fileRef = storageRef.child(file.name);
-        await fileRef.put(file);
-        return fileRef.getDownloadURL();
+        const storageRef = ref(storage,`/files/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef,file );
+
+        uploadTask.on("state_changed", (snapshot) =>{
+            console.log("upload file successfully");
+        },
+        (err) => console.log(err), 
+        () => {
+            getDownloadURL(uploadTask.snapshot.ref).then(url => console.log(url))
+        });
     } catch (error) {
         console.error('Error uploading file:', error);
         throw error;
