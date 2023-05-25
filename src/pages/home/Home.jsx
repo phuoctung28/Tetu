@@ -26,8 +26,8 @@ const Home = () => {
    const [gap, setGap] = useState(4);
    return (
       <Layout hasSider>
-         <Sider style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, background: 'white' }}>
-            <div style={{ margin: '30px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+         <Sider className='home-sider' style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, background: 'white' }}>
+            <div className='sider-top' style={{ margin: '30px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                <Avatar
                   style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: 10 }}
                   size="medium"
@@ -46,6 +46,7 @@ const Home = () => {
                <div style={{ padding: 80, background: colorBgContainer, }}>
                   <div style={{ marginBottom: 60 }}>
                      <Title level={4}>Quick Tools</Title>
+                     
                      <br />
                      <div>
                         <Row gutter={[30, 30]}>
