@@ -4,6 +4,8 @@ import { Button, Form, Input, Divider } from 'antd';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
 import './login_form.css'
+import { signInWithGoogle } from '../../services/firebase';
+
 const layout = {
    labelCol: {
       span: 8,
@@ -53,7 +55,6 @@ const LoginForm = () => {
                >
                   <Input />
                </Form.Item>
-
                <Form.Item
                   label="Password"
                   labelCol={{ span: 24 }}
@@ -62,6 +63,8 @@ const LoginForm = () => {
                   rules={[{ required: true, message: 'Please input your password!' }]}
                >
                   <Input.Password />
+               </Form.Item>
+               <Form.Item>
                   <a className="login-form-forgot" href="/">
                      Forgot password
                   </a>
@@ -75,6 +78,7 @@ const LoginForm = () => {
             <Divider plain>or sign in with</Divider>
             <div className="btn-social">
                <button
+                  onClick={signInWithGoogle}
                   className="btn-google bg-white flex justify-center items-center border-solid border-2 rounded-lg py-3 mt-3 w-60 md:w-70 hover:bg-gray-200"
                >
                   <img src={google} alt="" style={{ width: 20, height: 20 }} />

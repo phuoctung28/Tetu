@@ -9,14 +9,14 @@ const { Content, Sider } = Layout;
 const { Title, Text } = Typography;
 
 const navItems = [
-   { title: 'Read Document', key: '1', icon: <FileTwoTone className='nav_icon' /> },
-   { title: 'New Session', key: '2', icon: <FolderAddTwoTone className='nav_icon' /> },
-   { title: 'New Notebook', key: '3', icon: <BookTwoTone className='nav_icon' /> },
-   { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav_icon' /> },
-   { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav_icon' /> },
-   { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav_icon' /> },
-   { title: 'Citation Box', key: '7', icon: <WalletTwoTone className='nav_icon' /> },
-   { title: 'Revision', key: '8', icon: <SecurityScanTwoTone className='nav_icon' /> },
+   { title: 'Read Document', key: '1', icon: <FileTwoTone className='nav_icon' />, navLink: '' },
+   { title: 'New Session', key: '2', icon: <FolderAddTwoTone className='nav_icon' />, navLink: '' },
+   { title: 'New Notebook', key: '3', icon: <BookTwoTone className='nav_icon' />, navLink: '/note' },
+   { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav_icon' />, navLink: '' },
+   { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav_icon' />, navLink: '' },
+   { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav_icon' />, navLink: '' },
+   { title: 'Citation Box', key: '7', icon: <WalletTwoTone className='nav_icon' />, navLink: '' },
+   { title: 'Revision', key: '8', icon: <SecurityScanTwoTone className='nav_icon' />, navLink: '' },
 ];
 
 const Home = () => {
@@ -26,8 +26,8 @@ const Home = () => {
    const [gap, setGap] = useState(4);
    return (
       <Layout hasSider>
-         <Sider style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, background: 'white' }}>
-            <div style={{ margin: '30px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+         <Sider className='home-sider' style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, background: 'white' }}>
+            <div className='sider-top' style={{ margin: '30px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                <Avatar
                   style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: 10 }}
                   size="medium"
@@ -46,15 +46,16 @@ const Home = () => {
                <div style={{ padding: 80, background: colorBgContainer, }}>
                   <div style={{ marginBottom: 60 }}>
                      <Title level={4}>Quick Tools</Title>
+                     
                      <br />
                      <div>
                         <Row gutter={[30, 30]}>
                            {navItems.map((item, index) => (
                               <Col key={index} className="gutter-row" span={6}>
-                                 <button className='nav_btn' >
+                                 <a href={item.navLink} className='nav_btn' >
                                     {item.icon}
                                     <Text style={{ fontSize: '20px' }} strong>{item.title}</Text>
-                                 </button>
+                                 </a>
                               </Col>
                            ))}
                         </Row>
