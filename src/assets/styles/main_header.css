@@ -19,6 +19,13 @@
    border: none;
    background-color: transparent;
 }
+
+.btn-logo img {
+   width: 30px;
+   height: 30px;
+   object-fit: fill;
+}
+
 .breadcrumb {
    font-weight: 500;
    margin-left: 10px;

@@ -6,9 +6,11 @@ import android from '../../assets/images/playstore.png';
 import apple from '../../assets/images/applestore.png';
 import { Modal } from 'antd';
 import "./landing_page.css";
+import RegisterForm from '../../components/modal/RegisterForm';
 
 const LandingPage = () => {
    const [openModal, setOpenModal] = useState(false);
+   const [openModal2, setOpenModal2] = useState(false);
 
    return (
       <div className='container'>
@@ -24,7 +26,7 @@ const LandingPage = () => {
             </div>
             <div>
                <button onClick={() => setOpenModal(true)} className='btn-sign-in'>SIGN IN</button>
-               <button onClick={() => setOpenModal(true)} className='btn-sign-up'>SIGN UP</button>
+               <button onClick={() => setOpenModal2(true)} className='btn-sign-up'>SIGN UP</button>
             </div>
          </div>
          <div className='hero-head'>
@@ -52,6 +54,16 @@ const LandingPage = () => {
             footer={null}
          >
             <LoginForm />
+         </Modal>
+         <Modal
+            title=""
+            centered
+            open={openModal2}
+            onOk={() => setOpenModal2(false)}
+            onCancel={() => setOpenModal2(false)}
+            footer={null}
+         >
+            <RegisterForm />
          </Modal>
       </div>
    );

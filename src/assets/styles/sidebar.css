@@ -1,0 +1,18 @@
+.quicktool-container {
+   margin: 0 20px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   gap: 10px;
+}
+
+.new-item-container {
+   display: flex;
+   flex-direction: column;
+   
+}
+
+.new-item {
+   width: 100%;
+   text-align: start;
+}

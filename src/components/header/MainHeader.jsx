@@ -1,6 +1,6 @@
 import { Breadcrumb, Button, Input } from 'antd';
-import './main-header.css';
-import { PushpinOutlined, ShareAltOutlined } from '@ant-design/icons';
+import '../../assets/styles/main_header.css';
+import { PushpinOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 const onSearch = (value) => console.log(value);
@@ -10,20 +10,19 @@ const MainHeader = () => {
       <div className='header-container'>
          <div className='header-left'>
             <a href="/home" className='btn-logo' >
-               <img src="logo.png" alt="logo" style={{ width: 30, height: 30, objectFit: 'fill', }} />
+               <img src="logo.png" alt="logo" />
             </a>
             <Breadcrumb
                className='breadcrumb'
                items={[
-                  { title: 'Home', },
-                  { title: <a href="">Application Center</a>, },
-                  { title: <a href="">Application List</a>, },
+                  { title: <a href="/home">Home</a>, },
+                  { title: <a href="/home">Application Center</a>, },
                   { title: 'An Application', },
                ]} />
          </div>
          <div>
             <Button className='btn-toolbar' shape="circle" icon={<PushpinOutlined style={{ color: '#596A77' }} />} />
-            <Button className='btn-toolbar' shape="circle" icon={<ShareAltOutlined style={{ color: '#596A77' }} />} />
+
             {/* <PushpinOutlined className='icon' /> */}
             <Search
                placeholder="Search..."

@@ -4,10 +4,10 @@ import { Button, Form, Input, Divider, message } from 'antd';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
 import '../../assets/styles/login_form.css';
-import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth, provider, database } from "../../services/firebase";
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 const layout = {
    labelCol: {
@@ -34,28 +34,31 @@ const validateMessages = {
    },
 };
 
-const LoginForm = () => {
+const RegisterForm = () => {
    const navigate = useNavigate();
-   const [error, setError] = useState(false);
+   const [errorRegister, setErrorRegister] = useState(false);
    const [email, setEmail] = useState("");
+   const [name, setName] = useState("");
    const [password, setPassword] = useState("");
 
    // SignIn with Email, password
-   const handleLogin = async (e) => {
+   const handleRegister = async (e) => {
       e.preventDefault();
       try {
-         const userCredential = await signInWithEmailAndPassword(auth, email, password);
+         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
          const user = userCredential.user;
-         const usersCollectionRef = doc(database, "users", user.uid);
-         const userSnap = await getDoc(usersCollectionRef);
-         // console.log("Login: ", userSnap.data());
-         const loginUser = userSnap.data();
+         const usersCollectionRef = doc(database, 'users', user.uid);
+         setDoc(usersCollectionRef, { email: email, name: name });
+         const loginUser = {
+            email: email,
+            name: name
+         }
          localStorage.setItem("user", JSON.stringify(loginUser));
          message.success("Login success!");
          navigate("/home");
       } catch (error) {
-         setError(true);
-         // console.log('error: ', error);
+         console.log(error.message);
+         setErrorRegister(error.message);
       }
    };
 
@@ -108,6 +111,15 @@ const LoginForm = () => {
                   <Input size="large" onChange={(e) => setEmail(e.target.value)} />
                </Form.Item>
                <Form.Item
+                  name={['user', 'name']}
+                  label="Name"
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                  rules={[{ required: true, type: 'text', },]}
+               >
+                  <Input size="large" onChange={(e) => setName(e.target.value)} />
+               </Form.Item>
+               <Form.Item
                   label="Password"
                   labelCol={{ span: 24 }}
                   wrapperCol={{ span: 24 }}
@@ -121,10 +133,10 @@ const LoginForm = () => {
                      Forgot password
                   </a>
                </Form.Item> */}
-               {error && <span>Wrong email or password!</span>}
+               {errorRegister && <span>Email has already existed!</span>}
                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }}>
-                  <Button onClick={handleLogin} type="primary" htmlType="submit" size="large" className="login-form-button">
-                     Go!
+                  <Button onClick={handleRegister} type="primary" htmlType="submit" size="large" className="login-form-button">
+                     Register!
                   </Button>
                </Form.Item>
             </Form>
@@ -152,4 +164,4 @@ const LoginForm = () => {
       </div >
    );
 };
-export default LoginForm;
+export default RegisterForm;

@@ -1,8 +1,7 @@
-import firebase from 'firebase/app';
 import { initializeApp } from "firebase/app";
-import { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { getFirestore } from "firebase/firestore"
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, } from "firebase/auth";
 
 
 // Initialize Firebase
@@ -22,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 // Firestore functions
 
 // Get a reference to the Firestore database
-const db = getFirestore();
+const db = getFirestore(app);
 
 // Create a document in a Firestore collection
 export const createDocument = async (collection, data) => {
@@ -152,21 +151,23 @@ export const getFileDownloadURL = async (fileURL) => {
 
 // Authentication 
 export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
+export const database = getFirestore(app);
 
-const provider = new GoogleAuthProvider();
-export const signInWithGoogle = () => {
-   signInWithPopup(auth, provider)
-      .then((result) => {
-         console.log(result);
-         const name = result.user.displayName;
-         const email = result.user.email;
-         const profilePic = result.user.photoURL;
+// const provider = new GoogleAuthProvider();
+// export const signInWithGoogle = () => {
+//    signInWithPopup(auth, provider)
+//       .then((result) => {
+//          console.log(result);
+//          const name = result.user.displayName;
+//          const email = result.user.email;
+//          const profilePic = result.user.photoURL;
 
-         localStorage.setItem("name", name);
-         localStorage.setItem("email", email);
-         localStorage.setItem("profilePic", profilePic);
-      })
-      .catch((error) => {
-         console.log(error);
-      })
-}
+//          localStorage.setItem("name", name);
+//          localStorage.setItem("email", email);
+//          localStorage.setItem("profilePic", profilePic);
+//       })
+//       .catch((error) => {
+//          console.log(error);
+//       })
+// }

@@ -1,6 +1,6 @@
 import { Collapse, Row, Col, DatePicker, Space, Badge, Input, Tag, Tooltip, Select, theme } from 'antd';
 import { CalendarOutlined, TagsOutlined, SwitcherOutlined, NumberOutlined, PlusOutlined } from '@ant-design/icons';
-import "./metadata.css";
+import "../../assets/styles/metadata.css";
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 
