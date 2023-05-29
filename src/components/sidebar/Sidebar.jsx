@@ -39,7 +39,7 @@ const Sidebar = () => {
                gap={4}
                src={currentUser?.profilePic}
             >
-               {currentUser?.profilePic ? currentUser?.profilePic : currentUser?.name.split(' ').at(-1).charAt(0)}
+               {currentUser?.profilePic ? '' : currentUser?.name.split(' ').at(-1).charAt(0)}
             </Avatar>
             <p>{currentUser?.name}</p>
          </div>

@@ -1,20 +1,15 @@
-import { Layout, theme, Divider, Avatar, Typography, Col, Row, Input, Breadcrumb } from 'antd';
-import { FileTwoTone, FolderAddTwoTone, BookTwoTone, StarTwoTone, AppstoreTwoTone, CalendarTwoTone, WalletTwoTone, SecurityScanTwoTone } from '@ant-design/icons';
+import { Layout, theme, Input, } from 'antd';
 import React, { useState, useEffect } from 'react';
-import SideMenu from '../../components/sidebar/SideMenu';
 import MainHeader from '../../components/header/MainHeader';
-import './notebook.css';
+import './note_page.css';
 import Metadata from '../../components/collapse/Metadata';
+import Sidebar from '../../components/sidebar/Sidebar';
 
-const { Content, Sider } = Layout;
-const { Title, Text } = Typography;
+const { Content } = Layout;
 const { TextArea } = Input;
 
-const Notebook = () => {
+const NotePage = () => {
    const { token: { colorBgContainer }, } = theme.useToken();
-   const [user, setUser] = useState('Idol');
-   const [color, setColor] = useState('#ffbf00');
-   const [gap, setGap] = useState(4);
 
    const [title, setTitle] = useState("Untitled");
    useEffect(() => {
@@ -34,20 +29,7 @@ const Notebook = () => {
    }
    return (
       <Layout hasSider>
-         <Sider style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, background: 'white' }}>
-            <div style={{ margin: '30px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-               <Avatar
-                  style={{ backgroundColor: color, verticalAlign: 'middle', marginRight: 10 }}
-                  size="medium"
-                  gap={gap}
-               >
-                  {user}
-               </Avatar>
-               <h3>Tung Ng.P</h3>
-            </div>
-            <Divider />
-            <SideMenu />
-         </Sider>
+         <Sidebar />
          <Layout className="site-layout" style={{ marginLeft: 200, }} >
             <MainHeader />
             {/* <Breadcrumb items={[
@@ -89,4 +71,4 @@ const Notebook = () => {
       </Layout>
    );
 };
-export default Notebook;
+export default NotePage;

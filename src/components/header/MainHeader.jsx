@@ -1,11 +1,18 @@
 import { Breadcrumb, Button, Input } from 'antd';
 import '../../assets/styles/main_header.css';
-import { PushpinOutlined } from '@ant-design/icons';
+import { PushpinOutlined, SplitCellsOutlined } from '@ant-design/icons';
+import { useState } from 'react';
 
 const { Search } = Input;
 const onSearch = (value) => console.log(value);
 
-const MainHeader = () => {
+const MainHeader = ({ dualNote, handleToggleDualNote }) => {
+   // const [dualNote, setDualNote] = useState(false);
+
+   // const handleToggleDualNote = () => {
+   //    setDualNote(!dualNote);
+   // }
+
    return (
       <div className='header-container'>
          <div className='header-left'>
@@ -22,7 +29,14 @@ const MainHeader = () => {
          </div>
          <div>
             <Button className='btn-toolbar' shape="circle" icon={<PushpinOutlined style={{ color: '#596A77' }} />} />
-
+            <Button
+               type={dualNote ? "primary" : "default"}
+               className='btn-toolbar'
+               icon={<SplitCellsOutlined size="large" style={{ color: dualNote ? '#fff' : '#596A77' }} />}
+               onClick={handleToggleDualNote}
+            >
+               Dual Note
+            </Button>
             {/* <PushpinOutlined className='icon' /> */}
             <Search
                placeholder="Search..."
