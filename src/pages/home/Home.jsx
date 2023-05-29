@@ -1,14 +1,12 @@
-import { Layout, theme, Typography, Col, Row, Popover, Button, Tooltip } from 'antd';
+import { Layout, theme, Typography, Col, Row, Popover, message } from 'antd';
 import { FileTwoTone, FolderAddTwoTone, BookTwoTone, StarTwoTone, AppstoreTwoTone, CalendarTwoTone, WalletTwoTone, SecurityScanTwoTone } from '@ant-design/icons';
 import React, { useState } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './home.css';
-import { auth } from '../../services/firebase';
-import { useNavigate } from 'react-router-dom';
 import ReadDocument from '../../components/popover/ReadDocument';
 import Sidebar from '../../components/sidebar/Sidebar';
 
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 const { Title, Text } = Typography;
 
 const navItems = [
@@ -29,6 +27,9 @@ const Home = () => {
       setOpen(newOpen);
    };
 
+   const devMsg = (msgTitle) => message.info(msgTitle + " is in development!");
+   const handleUploadFile = () => { };
+   
    return (
       <Layout hasSider>
          <Sidebar />
@@ -48,18 +49,18 @@ const Home = () => {
                                  open={open}
                                  onOpenChange={handleOpenChange}
                               >
-                                 <div className='nav-btn' >
+                                 <button onClick={handleUploadFile} className='nav-btn' >
                                     <FileTwoTone className='nav_icon' />
                                     <Text style={{ fontSize: '20px' }} strong>Read Document</Text>
-                                 </div>
+                                 </button>
                               </Popover>
                            </Col>
                            {navItems.map((item, index) => (
                               <Col key={index} className="gutter-row" span={6}>
-                                 <a href={item.navLink} className='nav-btn' >
+                                 <button onClick={() => devMsg(item.title)} className='nav-btn' >
                                     {item.icon}
                                     <Text style={{ fontSize: '20px' }} strong>{item.title}</Text>
-                                 </a>
+                                 </button>
                               </Col>
                            ))}
                         </Row>

@@ -1,45 +1,58 @@
-import React, { useRef } from 'react';
-import { FileTwoTone, UploadOutlined, ReadOutlined } from '@ant-design/icons';
-import { Layout, theme, Divider, Avatar, Typography, Col, Row, Popover } from 'antd';
-import { Button, Form, Input, message, Space } from 'antd';
+import React, { useRef, useState } from 'react';
+import { UploadOutlined, ReadOutlined } from '@ant-design/icons';
+import { Divider, Tooltip } from 'antd';
+import { Button, Input, Space } from 'antd';
 import "../../assets/styles/read_document.css";
-
-const { Content, Sider } = Layout;
-const { Title, Text } = Typography;
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { useNavigate } from 'react-router-dom';
 
 const ReadDocument = () => {
+   const navigate = useNavigate();
+   const [loadings, setLoadings] = useState([]);
+   const enterLoading = (index) => {
+      setLoadings((prevLoadings) => {
+         const newLoadings = [...prevLoadings];
+         newLoadings[index] = true;
+         return newLoadings;
+      });
+      setTimeout(() => {
+         setLoadings((prevLoadings) => {
+            const newLoadings = [...prevLoadings];
+            newLoadings[index] = false;
+            return newLoadings;
+         });
+      }, 2000);
+   };
+
+   const handleFileChange = async (event) => {
+      const fileObj = event.target.files && event.target.files[0];
+      if (!fileObj) return;
+
+      event.target.value = null;
+      const storageRef = ref(getStorage(), `/files/${fileObj.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, fileObj);
+
+      uploadTask.on(
+         "state_changed",
+         (snapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            console.log("Upload progress: ", progress);
+            enterLoading(0);
+         },
+         (err) => console.log(err),
+         () => {
+            getDownloadURL(uploadTask.snapshot.ref).then(url => {
+               console.log("File url: ", url);
+               navigate(`/file`, { state: { fileUrl: url }, replace: true });
+            });
+         }
+      );
+   };
 
    const inputRef = useRef(null);
    const handleClick = () => {
       inputRef.current.click();
    };
-
-   const handleFileChange = event => {
-      const fileObj = event.target.files && event.target.files[0];
-      if (!fileObj) return;
-
-      console.log('fileObj is', fileObj);
-      // 👇️ reset file input
-      event.target.value = null;
-      // 👇️ is now empty
-      console.log(event.target.files);
-      // 👇️ can still access file object here
-      console.log(fileObj);
-      console.log(fileObj.name);
-   };
-   const [form] = Form.useForm();
-   const onFinish = () => {
-      message.success('Submit success!');
-   };
-   const onFinishFailed = () => {
-      message.error('Submit failed!');
-   };
-   const onFill = () => {
-      form.setFieldsValue({
-         url: 'https://taobao.com/',
-      });
-   };
-
    return (
       <div className='popover-read-doc'>
          <div className='read-local-file'>
@@ -51,16 +64,21 @@ const ReadDocument = () => {
                onChange={handleFileChange}
             />
             <Button
+               type="primary"
                onClick={handleClick}
                className="btn-read-doc"
-               icon={<UploadOutlined />} >
+               icon={<UploadOutlined />}
+               loading={loadings[0]}
+            >
                Upload file
             </Button>
          </div>
          <div>
             <Space.Compact style={{ width: '100%', }}>
                <Input placeholder="Link to file..." />
-               <Button type="primary">Open</Button>
+               <Tooltip title="In development">
+                  <Button disabled type="primary">Open</Button>
+               </Tooltip>
             </Space.Compact>
          </div>
          <Divider plain>or</Divider>

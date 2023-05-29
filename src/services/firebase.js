@@ -108,18 +108,25 @@ export const queryDocuments = async (collection, field, operator, value) => {
 // Get a reference to the Firebase storage
 const storage = getStorage();
 
-export const uploadFile = async (file) => {
+export const uploadFile = (file, setFileUrl) => {
    try {
       const storageRef = ref(storage, `/files/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on("state_changed", (snapshot) => {
-         console.log("upload file successfully");
-      },
+      uploadTask.on(
+         "state_changed",
+         (snapshot) => {
+            console.log("upload file successfully");
+         },
          (err) => console.log(err),
          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then(url => console.log(url))
-         });
+            getDownloadURL(uploadTask.snapshot.ref).then(url => {
+               console.log(url);
+               setFileUrl(url);
+            })
+         }
+      );
+      // return fileUrl;
    } catch (error) {
       console.error('Error uploading file:', error);
       throw error;

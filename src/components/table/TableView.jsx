@@ -120,7 +120,7 @@ const data = [
       key: '1',
       title: 'Intro to ML with TF',
       status: 'To-do',
-      date: moment('05/31/2023').format('L'),
+      date: moment('05-31-2023').format('L'),
       tags: ['study', 'AI/ML'],
       type: 'Note',
    },

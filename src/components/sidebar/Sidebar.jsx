@@ -1,4 +1,4 @@
-import { Button, Layout, Avatar, Tooltip, Divider, message, Popover } from 'antd';
+import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm } from 'antd';
 import '../../assets/styles/sidebar.css';
 import { PlusCircleOutlined, TableOutlined, ShareAltOutlined, LogoutOutlined } from '@ant-design/icons';
 import { auth } from '../../services/firebase';
@@ -44,9 +44,21 @@ const Sidebar = () => {
             <p>{currentUser?.name}</p>
          </div>
          <div className='quicktool-container'>
-            <Tooltip title="Sign out">
-               <Button size="small" onClick={signOut} icon={<LogoutOutlined />} />
-            </Tooltip>
+            <Popconfirm
+               title="Confirm log out?"
+               // description="Are you sure to delete this task?"
+               onConfirm={signOut}
+               // onCancel={cancel}
+               okText="Yes"
+               cancelText="No"
+            >
+               <Tooltip title="Sign out">
+                  <Button
+                     size="small"
+                     // onClick={signOut}
+                     icon={<LogoutOutlined />} />
+               </Tooltip>
+            </Popconfirm>
             <Tooltip title="Table view">
                <Button size="small" icon={<TableOutlined />} />
             </Tooltip>
