@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@paypal/react-paypal-js": "^7.8.3",
     "@emotion/css": "^11.11.0",
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
@@ -10,7 +11,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.5.0",
+    "express": "^4.18.2",
     "firebase": "^9.22.0",
+    "nodemon": "^2.0.22",
     "pdfjs-dist": "^3.4.120",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
@@ -24,8 +27,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "nodemon firebase"
   },
+  "proxy": "http://localhost:",
   "eslintConfig": {
     "extends": [
       "react-app",
