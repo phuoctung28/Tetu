@@ -16,7 +16,7 @@
    color: #1e40af;
 }
 
-.nav_btn {
+.nav-btn {
    height: 80px;
    width: 100%;
    background-color: #F7F9FC;
@@ -29,11 +29,11 @@
    border: none;
 }
 
-.nav_btn:hover {
+.nav-btn:hover {
    border: 1px solid #3b82f6;
 }
 
-.nav_icon {
+.nav-icon {
    margin-right: 20px;
    font-size: 25px;
 }

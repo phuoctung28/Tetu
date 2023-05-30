@@ -1,0 +1,20 @@
+.container-metadata {
+   border: 1.5px solid #99A8B4;
+   border-radius: 8px;
+   height: fit-content;
+   margin: 20px auto;
+}
+
+.metadata-list {
+   font-weight: 400;
+   color: #000;
+}
+
+.metadata-item {
+   display: flex;
+   align-items: center;
+}
+
+.metadata-item .item-title {
+   width: 100px;
+}

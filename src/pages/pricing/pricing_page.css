@@ -1,105 +1,99 @@
-.container {
-    width: 900px;
-    display: flex;
-    height: 700px;
-    margin: 0 auto;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background: linear-gradient(90deg, #0056EB 54.78%, #0084ff 89.71%);
+.pricing-plan-container {
+   width: 100%;
+   height: calc(100vh - 50px);
+   background-color: #fff;
+   display: flex;
+   align-items: center;
+   justify-content: center;
 }
 
-.logo {
-    width: 50%;
+.pricing-content {
+   display: flex;
+   align-items: center;
+   justify-content: space-around;
+   gap: 20px;
+   width: 60%;
+   height: 100%;
 }
 
-.hero_img {
-    width: 100%;
-}
-
-.pricing-plan-premium, .pricing-plan-basic {
-    width: 50%;
-    height: 100%;
-    border-radius: 0 1rem 1rem 0;
-    box-sizing: border-box;
-
-    color: #514B64;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
+.pricing-plan-basic,
 .pricing-plan-premium {
-    position: absolute;
-    top: 0;
-    right: 0;
+   width: 400px;
+   height: 550px;
+   border-radius: 24px;
+   border: 0.5px solid #b4bcc0;
+   padding: 30px;
+   position: relative;
 }
 
-.pricing-plan-basic {
-    position: absolute;
-    top: 0;
-    left: 0;
-   animation-duration: 1s;
-   transform-origin: bottom;
-}
-
-.pricing-content{
-    background-color: white;
-    width: 80%;
-    height: 70%;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-h1 h2 {
-    align-items: center;
-}
-
-.divider {
-    width: 5rem;
-    height: 6px;
-    border-radius: 1rem;
-    background-color: #007BFF;
-}
-
-.text-small {
-    font-size: 1rem;
-}
-
-.subcribe-btn {
-    width: 200px;
-    text-decoration: none;
-    text-align: center;
-    height: 35px;
-    background-color: #007BFF ;
-    color: white;
-    border-radius: 1rem;
-    margin-top: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.pricing-plan-basic:hover,
+.pricing-plan-premium:hover {
+   border: 1px solid #65b8e2;
 }
 
 li {
-    list-style: none;
-}
-.basic {
-    position: relative;
-    left: 22px;
-    text-decoration: line-through;
+   list-style: none;
 }
 
-.pricing-plan-basic:hover {
-    animation-name: hoverUp;
-    animation-timing-function: ease;
+.btn-select-plan {
+   width: 300px;
+   background-color: #b4bcc0;
+   color: #fff;
+   padding: 8px;
+   cursor: pointer;
+   border-radius: 8px;
+   text-align: center;
+   margin: 0 auto;
+   font-weight: 600;
+   position: absolute;
+   bottom: 30px;
+   left: 50%;
+   transform: translateX(-50%);
 }
 
-@keyframes hoverUp {
-    from {transform: translateY(0);}
-    to {transform: translateY(-50px);}
+.btn-select-plan.premium {
+   background-color: #3682f3;
+   color: #fff;
+}
+
+.btn-select-plan.premium:hover {
+   background-color: #1b6fec;
+}
+
+.plan-heading {
+   text-align: center;
+}
+
+.plan-title {
+   font-size: 26px;
+   font-weight: 600;
+   color: #223138;
+   margin: 10px auto;
+}
+
+.pricing-plan-premium .plan-title {
+   color: #f5ab0d;
+}
+
+.price-text {
+   font-size: 34px;
+   font-weight: 800;
+   color: #b6c0c5;
+   margin: 10px auto;
+}
+
+.options {
+   display: flex;
+   align-items: center;
+   gap: 20px;
+}
+
+.options p {
+   font-size: 18px;
+   font-weight: 600;
+   color: #223138;
+}
+
+.basic p {
+   color: #cfd4d6;
 }

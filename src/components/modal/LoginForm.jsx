@@ -1,23 +1,20 @@
-import React from 'react';
-import logo from '../../assets/images/logo.png';
-import { Button, Form, Input, Divider } from 'antd';
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { Button, Form, Input, Divider, message } from 'antd';
+import { auth, provider, database } from "../../services/firebase";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
-import './login_form.css'
-import { signInWithGoogle } from '../../services/firebase';
+import logo from '../../assets/images/logo.png';
+import '../../assets/styles/login_form.css';
 
 const layout = {
-   labelCol: {
-      span: 8,
-   },
-   wrapperCol: {
-      span: 24,
-   },
+   labelCol: { span: 8, },
+   wrapperCol: { span: 24, },
 };
 
-const onFinish = (values) => {
-   console.log(values);
-};
+const onFinish = (values) => { console.log(values); };
 
 /* eslint-disable no-template-curly-in-string */
 const validateMessages = {
@@ -32,6 +29,55 @@ const validateMessages = {
 };
 
 const LoginForm = () => {
+   const navigate = useNavigate();
+   const [error, setError] = useState(false);
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
+
+   // SignIn with Email, password
+   const handleLogin = async (e) => {
+      e.preventDefault();
+      try {
+         const userCredential = await signInWithEmailAndPassword(auth, email, password);
+         const user = userCredential.user;
+         const usersCollectionRef = doc(database, "users", user.uid);
+         const userSnap = await getDoc(usersCollectionRef);
+         // console.log("Login: ", userSnap.data());
+         const loginUser = userSnap.data();
+         localStorage.setItem("user", JSON.stringify(loginUser));
+         message.success("Login success!");
+         navigate("/home");
+      } catch (error) {
+         setError(true);
+         console.log('error: ', error);
+      }
+   };
+
+   // SignIn with Google
+   const signInWithGoogle = async () => {
+      try {
+         const userCredential = await signInWithPopup(auth, provider)
+         const user = userCredential.user;
+         const email = user.email;
+
+         const usersCollectionRef = doc(database, 'users', user.uid);
+         await setDoc(usersCollectionRef, { email, googleAuth: true });
+
+         const loginUser = {
+            email: user.email,
+            name: user.displayName,
+            profilePic: user.photoURL,
+         }
+         localStorage.setItem("user", JSON.stringify(loginUser));
+         message.success("Login success!");
+         navigate("/home");
+
+      } catch (error) {
+         console.log('error: ', error);
+      }
+   }
+
+
    return (
       <div className="modal-login">
          <div className="modal-container">
@@ -53,7 +99,7 @@ const LoginForm = () => {
                   wrapperCol={{ span: 24 }}
                   rules={[{ required: true, type: 'email', },]}
                >
-                  <Input />
+                  <Input size="large" onChange={(e) => setEmail(e.target.value)} />
                </Form.Item>
                <Form.Item
                   label="Password"
@@ -62,15 +108,18 @@ const LoginForm = () => {
                   name="password"
                   rules={[{ required: true, message: 'Please input your password!' }]}
                >
-                  <Input.Password />
+                  <Input.Password size="large" onChange={(e) => setPassword(e.target.value)} />
                </Form.Item>
-               <Form.Item>
+               {/* <Form.Item>
                   <a className="login-form-forgot" href="/">
                      Forgot password
                   </a>
-               </Form.Item>
-               <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }} sss>
-                  <Button type="primary" htmlType="submit" size="large" className="login-form-button">
+               </Form.Item> */}
+               <div className='error-msg'>
+                  {error && <span>Wrong email or password!</span>}
+               </div>
+               <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }}>
+                  <Button onClick={handleLogin} type="primary" htmlType="submit" size="large" className="login-form-button">
                      Go!
                   </Button>
                </Form.Item>

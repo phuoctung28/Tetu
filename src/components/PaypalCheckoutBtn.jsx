@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
 function PaypalCheckoutBtn(props) {
-  const { product } = props;
+//   const { product } = props;
   const [paidFor, setPaidFor] = useState(false);
   const [error, setError] = useState(null);
 

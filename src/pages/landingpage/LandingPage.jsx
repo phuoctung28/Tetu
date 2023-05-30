@@ -5,26 +5,28 @@ import hero from '../../assets/images/hero.png';
 import android from '../../assets/images/playstore.png';
 import apple from '../../assets/images/applestore.png';
 import { Modal } from 'antd';
+import RegisterForm from '../../components/modal/RegisterForm';
 import "./landing_page.css";
 
 const LandingPage = () => {
    const [openModal, setOpenModal] = useState(false);
+   const [openModal2, setOpenModal2] = useState(false);
 
    return (
       <div className='container'>
          <div className='landing-header'>
             <button className='logo-btn'>
-               <img src={logo} alt="logo" className='img_logo' />
+               <img src={logo} alt="logo" className='img-logo' />
             </button>
             <div className='nav-tab'>
-               <p className='nav-item active'>Home</p>
-               <p className='nav-item'>Feature</p>
-               <p className='nav-item'>Contact</p>
-               <p className='nav-item'>About Us</p>
+               <a href="/" className='nav-item active'>Home</a>
+               <a href="/" className='nav-item'>Feature</a>
+               <a href="/" className='nav-item'>Contact</a>
+               <a href="/" className='nav-item'>About Us</a>
             </div>
             <div>
                <button onClick={() => setOpenModal(true)} className='btn-sign-in'>SIGN IN</button>
-               <button onClick={() => setOpenModal(true)} className='btn-sign-up'>SIGN UP</button>
+               <button onClick={() => setOpenModal2(true)} className='btn-sign-up'>SIGN UP</button>
             </div>
          </div>
          <div className='hero-head'>
@@ -41,7 +43,7 @@ const LandingPage = () => {
             </div>
          </div>
          <div className='hero-image'>
-            <img src={hero} alt='hero' className='hero_img' />
+            <img src={hero} alt='hero' className='hero-img' />
          </div>
          <Modal
             title=""
@@ -52,6 +54,16 @@ const LandingPage = () => {
             footer={null}
          >
             <LoginForm />
+         </Modal>
+         <Modal
+            title=""
+            centered
+            open={openModal2}
+            onOk={() => setOpenModal2(false)}
+            onCancel={() => setOpenModal2(false)}
+            footer={null}
+         >
+            <RegisterForm />
          </Modal>
       </div>
    );

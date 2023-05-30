@@ -1,0 +1,23 @@
+.popover-read-doc {
+   padding: 20px;
+   background-color: #fff;
+   /* border: 0.4px solid #899CAA; */
+   /* border-radius: 8px; */
+   width: 300px;
+}
+
+.btn-read-doc {
+   cursor: pointer;
+   width: 100%;
+}
+
+.open-file-url {
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.read-local-file {
+   margin-bottom: 20px;
+}
