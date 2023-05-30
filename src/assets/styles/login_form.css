@@ -67,3 +67,8 @@
    align-items: center;
    justify-content: space-between;
 }
+
+.error-msg {
+   text-align: center;
+   height: 30px;
+}

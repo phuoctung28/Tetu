@@ -1,26 +1,20 @@
 import React, { useState } from 'react';
-import logo from '../../assets/images/logo.png';
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Divider, message } from 'antd';
+import { auth, provider, database } from "../../services/firebase";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
+import logo from '../../assets/images/logo.png';
 import '../../assets/styles/login_form.css';
-import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { auth, provider, database } from "../../services/firebase";
-import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 const layout = {
-   labelCol: {
-      span: 8,
-   },
-   wrapperCol: {
-      span: 24,
-   },
+   labelCol: { span: 8, },
+   wrapperCol: { span: 24, },
 };
 
-const onFinish = (values) => {
-   console.log(values);
-};
+const onFinish = (values) => { console.log(values); };
 
 /* eslint-disable no-template-curly-in-string */
 const validateMessages = {
@@ -55,7 +49,7 @@ const LoginForm = () => {
          navigate("/home");
       } catch (error) {
          setError(true);
-         // console.log('error: ', error);
+         console.log('error: ', error);
       }
    };
 
@@ -121,7 +115,9 @@ const LoginForm = () => {
                      Forgot password
                   </a>
                </Form.Item> */}
-               {error && <span>Wrong email or password!</span>}
+               <div className='error-msg'>
+                  {error && <span>Wrong email or password!</span>}
+               </div>
                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }}>
                   <Button onClick={handleLogin} type="primary" htmlType="submit" size="large" className="login-form-button">
                      Go!

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import logo from '../../assets/images/logo.png';
+import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Divider, message } from 'antd';
+import { auth, provider, database } from "../../services/firebase";
+import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from 'firebase/firestore';
+import logo from '../../assets/images/logo.png';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
 import '../../assets/styles/login_form.css';
-import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { auth, provider, database } from "../../services/firebase";
-import { doc, setDoc } from 'firebase/firestore';
 
 const layout = {
    labelCol: {
@@ -133,7 +133,9 @@ const RegisterForm = () => {
                      Forgot password
                   </a>
                </Form.Item> */}
-               {errorRegister && <span>Email has already existed!</span>}
+               <div className='error-msg'>
+                  {errorRegister && <span>Email has already existed!</span>}
+               </div>
                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }}>
                   <Button onClick={handleRegister} type="primary" htmlType="submit" size="large" className="login-form-button">
                      Register!

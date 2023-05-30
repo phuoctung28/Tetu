@@ -1,12 +1,11 @@
-import { EllipsisOutlined, FolderOutlined, ProfileOutlined } from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Input, Menu, Modal } from 'antd';
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Sider from "antd/es/layout/Sider";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Dropdown, Input, Menu, Modal, Button, Tooltip } from 'antd';
+import { ProfileOutlined, FolderOutlined, EllipsisOutlined, FileAddOutlined, FolderAddOutlined, AppstoreAddOutlined } from '@ant-design/icons';
 
-const getItem = (label, key, icon, children) => ({ key, icon, children, label });
+let getItem = (label, key, icon, children) => ({ key, icon, children, label });
 
-const SideMenu = () => {
+const SidebarMenu = () => {
    const [items, setItems] = useState([
       getItem('Navigation One', '1', <ProfileOutlined />),
       getItem('Navigation Two', '2', <FolderOutlined />),
@@ -176,58 +175,32 @@ const SideMenu = () => {
    };
 
    return (
-      <Sider
-         style={{
-            overflow: 'auto',
-            height: '100vh',
-            position: 'fixed',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            background: 'white',
-         }}
-      >
-         <div style={{ margin: '30px 0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Avatar
-               style={{ backgroundColor: '#ffbf00', verticalAlign: 'middle', marginRight: 10 }}
-               size="medium"
-               gap={4}
-            >
-               {"ABC"}
-            </Avatar>
-            <h3>Tung Ng.P</h3>
-         </div>
-         <>
-            <Menu
-               style={{ width: 200 }}
-               defaultSelectedKeys={['1']}
-               defaultOpenKeys={['sub1']}
-               mode="inline"
-               theme="light"
-               onClick={handleMenuClick}
-            >
-               {renderMenuItems(items)}
-            </Menu>
-         </>
-         <Button
-            onClick={() => handleCreateNewFolder(null)}
-            style={{
-               display: 'block',
-               width: '100%',
-               marginBottom: '16px',
-               textAlign: 'center',
-               borderRadius: '0',
-               border: 'none',
-               boxShadow: 'none',
-               backgroundColor: 'transparent',
-               color: 'rgba(0, 0, 0, 0.65)',
-            }}
+      <div>
+         <div className='new-item-btn-container'>
+            <Tooltip title="New folder">
+               <Button className="btn-new-item" icon={<FolderAddOutlined />} onClick={() => handleCreateNewFolder(null)} />
+            </Tooltip>
+            <Tooltip title="New note">
+               <Button className="btn-new-item" icon={<FileAddOutlined />} />
+            </Tooltip>
+            <Tooltip title="New canvas">
+               <Button className="btn-new-item" icon={<AppstoreAddOutlined />} />
+            </Tooltip>
+         </div >
+         <Menu
+            style={{ width: 200 }}
+            defaultSelectedKeys={['1']}
+            defaultOpenKeys={['sub1']}
+            mode="inline"
+            theme="light"
+            onClick={handleMenuClick}
          >
-            New Folder
-         </Button>
+            {renderMenuItems(items)}
+         </Menu>
+
          <Modal
             title="Create New Folder"
-            visible={folderModalVisible}
+            open={folderModalVisible}
             onOk={handleModalOk}
             onCancel={() => setFolderModalVisible(false)}
          >
@@ -239,7 +212,7 @@ const SideMenu = () => {
          </Modal>
          <Modal
             title="Create New Page"
-            visible={pageModalVisible}
+            open={pageModalVisible}
             onOk={handleModalOk}
             onCancel={() => setPageModalVisible(false)}
          >
@@ -249,8 +222,7 @@ const SideMenu = () => {
                placeholder="Page Name"
             />
          </Modal>
-      </Sider>
+      </div>
    );
 };
-
-export default SideMenu;
+export default SidebarMenu;

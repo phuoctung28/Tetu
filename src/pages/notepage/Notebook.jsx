@@ -1,24 +1,18 @@
-import { Layout, theme, Input } from 'antd';
 import React, { useState, useEffect } from 'react';
-import MainHeader from '../../components/header/MainHeader';
+import { Layout, theme, Input, } from 'antd';
 import Metadata from '../../components/collapse/Metadata';
-import TetuEditor from "../../components/Editor/Editor";
 import Sidebar from '../../components/sidebar/Sidebar';
-import { useParams } from "react-router-dom";
-import './note_page.css';
+import MainHeader from '../../components/header/MainHeader';
+import TetuEditor from '../../components/Editor/Editor';
+import './note_editor.css';
 
 const { Content } = Layout;
 
-const NotePage = () => {
-   // const [isLoading, setIsLoading] = useState(true);
-   // const [pageData, setPageData] = useState();
-   const [title, setTitle] = useState("Untitled");
-   const { pageId } = useParams();
-
+const Notebook = () => {
    const { token: { colorBgContainer }, } = theme.useToken();
 
+   const [title, setTitle] = useState("Untitled");
    useEffect(() => {
-      // This will run when the page first loads and whenever the title changes
       document.title = title;
    }, [title]);
 
@@ -33,6 +27,7 @@ const NotePage = () => {
       }
    }
    return (
+
       <Layout hasSider>
          <Sidebar />
          <Layout className="site-layout" style={{ marginLeft: 200, }} >
@@ -41,20 +36,19 @@ const NotePage = () => {
                <div style={{ padding: 40, background: colorBgContainer, }}>
                   <div className='note-title-container'>
                      <Input
+                        // value="Untitled"
                         className="note-title"
+                        onChange={changeTitle}
                         onPressEnter={handleKeyUp}
                         placeholder="Untitled"
-                        bordered={false}
-                        onChange={changeTitle}
-                        value={pageId}
-                     />
-                     <Metadata />
-                     <TetuEditor />
+                        bordered={false} />
                   </div>
+                  <Metadata />
+                  <TetuEditor />
                </div>
             </Content>
          </Layout>
       </Layout>
    );
 };
-export default NotePage;
+export default Notebook;

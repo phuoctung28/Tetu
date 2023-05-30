@@ -1,4 +1,4 @@
-import { Layout, theme, Typography, Col, Row, Popover, message } from 'antd';
+import { Layout, Typography, Col, Row, Popover, message } from 'antd';
 import { FileTwoTone, FolderAddTwoTone, BookTwoTone, StarTwoTone, AppstoreTwoTone, CalendarTwoTone, WalletTwoTone, SecurityScanTwoTone } from '@ant-design/icons';
 import React, { useState } from 'react';
 import MainHeader from '../../components/header/MainHeader';
@@ -21,7 +21,6 @@ const navItems = [
 ];
 
 const Home = () => {
-   const { token: { colorBgContainer }, } = theme.useToken();
    const [open, setOpen] = useState(false);
    const handleOpenChange = (newOpen) => {
       setOpen(newOpen);
@@ -29,14 +28,15 @@ const Home = () => {
 
    const devMsg = (msgTitle) => message.info(msgTitle + " is in development!");
    const handleUploadFile = () => { };
-   
+
    return (
       <Layout hasSider>
          <Sidebar />
+
          <Layout className="site-layout" style={{ marginLeft: 200, }} >
             <MainHeader />
             <Content style={{ margin: '0', overflow: 'initial', }} >
-               <div style={{ padding: 80, background: colorBgContainer, }}>
+               <div style={{ padding: 80, background: '#fff', }}>
                   <div style={{ marginBottom: 60 }}>
                      <Title level={4}>Quick Tools</Title>
                      <br />

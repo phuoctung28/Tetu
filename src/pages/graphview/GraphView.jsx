@@ -1,4 +1,4 @@
-import { Layout, theme } from 'antd';
+import { Layout } from 'antd';
 import React, { useState } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './graph_view.css';
@@ -36,7 +36,6 @@ const randomColor = () => {
    return `#${red}${green}${blue}`;
 }
 const GraphView = () => {
-   const { token: { colorBgContainer }, } = theme.useToken();
    const createNode = (x, y) => {
       const color = randomColor();
       setState(({ graph: { nodes, edges }, counter, ...rest }) => {

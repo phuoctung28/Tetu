@@ -1,0 +1,105 @@
+.pricing-container {
+    width: 900px;
+    display: flex;
+    height: 700px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: linear-gradient(90deg, #0056EB 54.78%, #0084ff 89.71%);
+}
+
+.logo {
+    width: 50%;
+}
+
+.hero_img {
+    width: 100%;
+}
+
+.pricing-plan-premium, .pricing-plan-basic {
+    width: 50%;
+    height: 100%;
+    border-radius: 0 1rem 1rem 0;
+    box-sizing: border-box;
+
+    color: #514B64;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pricing-plan-premium {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.pricing-plan-basic {
+    position: absolute;
+    top: 0;
+    left: 0;
+   animation-duration: 1s;
+   transform-origin: bottom;
+}
+
+.pricing-content{
+    background-color: white;
+    width: 80%;
+    height: 70%;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 h2 {
+    align-items: center;
+}
+
+.divider {
+    width: 5rem;
+    height: 6px;
+    border-radius: 1rem;
+    background-color: #007BFF;
+}
+
+.text-small {
+    font-size: 1rem;
+}
+
+.subcribe-btn {
+    width: 200px;
+    text-decoration: none;
+    text-align: center;
+    height: 35px;
+    background-color: #007BFF ;
+    color: white;
+    border-radius: 1rem;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+li {
+    list-style: none;
+}
+.basic {
+    position: relative;
+    left: 22px;
+    text-decoration: line-through;
+}
+
+.pricing-plan-basic:hover {
+    animation-name: hoverUp;
+    animation-timing-function: ease;
+}
+
+@keyframes hoverUp {
+    from {transform: translateY(0);}
+    to {transform: translateY(-50px);}
+}

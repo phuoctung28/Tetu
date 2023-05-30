@@ -1,16 +1,24 @@
+import React from 'react';
+import logo from '../../assets/images/logo.png';
 import { Breadcrumb, Button, Input, Popconfirm, Tooltip } from 'antd';
-import '../../assets/styles/main_header.css';
 import { PushpinOutlined, SplitCellsOutlined, RestOutlined } from '@ant-design/icons';
+import '../../assets/styles/main_header.css';
 
 const { Search } = Input;
-const onSearch = (value) => console.log(value);
+
+const onSearch = (value) => {
+   console.log(value);
+};
 
 const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote }) => {
+   const handleLogoClick = () => {
+      window.location.href = '/home';
+   };
    return (
       <div className='header-container'>
          <div className='header-left'>
-            <a href="/home" className='btn-logo' >
-               <img src="logo.png" alt="logo" />
+            <a href="/home" className='btn-logo' onClick={handleLogoClick}>
+               <img src={logo} alt="logo tetu" />
             </a>
             <Breadcrumb
                className='breadcrumb'
@@ -56,4 +64,5 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote }) => {
       </div >
    );
 };
+
 export default MainHeader;

@@ -4,13 +4,14 @@ import { PlusCircleOutlined, TableOutlined, ShareAltOutlined, LogoutOutlined } f
 import { auth } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import SideMenu from './SideMenu';
+import SidebarMenu from './SidebarMenu';
 import "../../assets/styles/sidebar.css";
 import NewItem from './NewItem';
 
 const { Sider } = Layout;
 
 const Sidebar = () => {
+
    const navigate = useNavigate();
    const currentUser = JSON.parse(localStorage.getItem("user"));
    // console.log(currentUser);
@@ -76,8 +77,8 @@ const Sidebar = () => {
             </Popover>
          </div>
          <Divider />
-
-         <SideMenu />
+         {/* <SideMenu /> */}
+         <SidebarMenu />
       </Sider>
    );
 };

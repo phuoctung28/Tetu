@@ -1,0 +1,11 @@
+/* Additional styles for Quill toolbar */
+.ql-toolbar {
+    border-radius: 8px;
+}
+
+.ql-container {
+    border: none !important;
+}
+.editor-container {
+    width: 100%;
+}
