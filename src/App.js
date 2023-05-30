@@ -5,7 +5,7 @@ import LandingPage from './pages/landingpage/LandingPage';
 import NotePage from './pages/notepage/NotePage';
 import FilePage from './pages/file/FilePage';
 import ListView from './pages/listview/ListView';
-import ReadDocument from './components/popover/ReadDocument';
+import GraphView from './pages/graphview/GraphView';
 
 function App() {
    return (
@@ -16,7 +16,7 @@ function App() {
             <Route path="/note" element={<NotePage />} />
             <Route path="/file" element={<FilePage />} />
             <Route path="/table" element={<ListView />} />
-            <Route path="/read-doc" element={<ReadDocument />} />
+            <Route path="/graph" element={<GraphView />} />
          </Routes>
       </BrowserRouter>
    );
