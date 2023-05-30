@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import LandingPage from './pages/landingpage/LandingPage';
 import NotePage from './pages/notepage/NotePage';
-import FilePage from './pages/file/FilePage';
+import FilePage from './pages/filepage/FilePage';
 import PricingPage from './pages/pricing/PricingPage';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import DraggableEditor from "./components/Editor/Editor";
