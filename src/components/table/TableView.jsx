@@ -2,6 +2,7 @@ import "../../assets/styles/table.css";
 import { Button, Space, Table, Tag, Badge } from 'antd';
 import { useState } from 'react';
 import moment from 'moment';
+import { tableData } from "./tableData";
 
 const columns = [
    {
@@ -179,7 +180,7 @@ const TableView = () => {
                {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
             </span>
          </div>
-         <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+         <Table rowSelection={rowSelection} columns={columns} dataSource={tableData} />
       </div>
    );
 };

@@ -1,6 +1,6 @@
 import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm } from 'antd';
 import '../../assets/styles/sidebar.css';
-import { PlusCircleOutlined, TableOutlined, ShareAltOutlined, LogoutOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, TableOutlined, ShareAltOutlined, LogoutOutlined } from '@ant-design/icons';
 import { auth } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -61,10 +61,10 @@ const Sidebar = () => {
                </Tooltip>
             </Popconfirm>
             <Tooltip title="Table view">
-               <Button size="small" icon={<TableOutlined />} />
+               <Button size="small" icon={<TableOutlined />} onClick={() => { navigate("/table") }} />
             </Tooltip>
             <Tooltip title="Graph view">
-               <Button size="small" icon={<ShareAltOutlined />} />
+               <Button size="small" icon={<ShareAltOutlined />} onClick={() => { navigate("/graph") }} />
             </Tooltip>
             <Popover
                content={<NewItem />}
@@ -73,7 +73,7 @@ const Sidebar = () => {
                open={open}
                onOpenChange={handleOpenChange}
             >
-               <Button size="small" icon={<PlusCircleOutlined />} />
+               <Button size="small" icon={<EllipsisOutlined />} />
             </Popover>
          </div>
          <Divider />

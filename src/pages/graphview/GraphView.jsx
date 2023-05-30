@@ -19,14 +19,6 @@ const options = {
          // roundness: 0.5
       }
    },
-   nodes: {
-      shape: "circle",
-      font: {
-         color: '#000',
-         size: 18,
-         align: 'center'
-      },
-   }
 };
 
 const randomColor = () => {
@@ -61,17 +53,20 @@ const GraphView = () => {
       counter: 5,
       graph: {
          nodes: [
-            { id: 1, title: "Node 1", label: "Node 1", physics: false, color: "#f0f5ff" },
-            { id: 2, title: "Node 2", label: "Node 2", physics: false, color: "#fff2e8" },
-            { id: 3, title: "Node 3", label: "Node 3", physics: false, color: "#fff2e8" },
-            { id: 4, title: "Node 4", label: "Node 4", physics: false, color: "#f6ffed" },
-            { id: 5, title: "Node 5", label: "Node 5", physics: false, color: "#f0f5ff" },
+            { id: 1, shape: "diamond", group: "1", title: "✨ Seminar Note", label: "Seminar Note", color: "#A4E8A7" },
+            { id: 2, shape: "diamond", group: "1", title: "Hands On Machine Learning with Scikit Learn and Tensorflow.pdf", label: "Hands On ML", color: "#ceedd0" },
+            { id: 3, shape: "diamond", group: "1", title: "PyTorch Intro", label: "PyTorch Intro", color: "#ceedd0" },
+            { id: 4, shape: "diamond", title: "↗️ Transfer Learning", label: "Transfer Learning", color: "#99A8B4" },
+            { id: 5, shape: "diamond", title: "💪🏻 Image Augmentation", label: "Image Augmentation", color: "#99A8B4" },
+            { id: 6, shape: "diamond", group: "2", title: "🚀 Lesson 1 - Intro to ML with TF", label: "ML with TF", color: "#0098FF" },
+            { id: 7, shape: "diamond", group: "2", title: "👁️ Intro to Computer Vision", label: "Intro to CV", color: "#f0f5ff" },
+            { id: 8, shape: "diamond", group: "2", title: "🌐 Intro to Convolution", label: "Intro to Convolution", color: "#f0f5ff" },
          ],
          edges: [
-            { from: 1, to: 2 },
+            { from: 2, to: 1 },
             { from: 3, to: 1 },
-            { from: 2, to: 4 },
-            { from: 2, to: 5 }
+            { from: 7, to: 6 },
+            { from: 8, to: 6 },
          ]
       },
       events: {

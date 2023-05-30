@@ -19,7 +19,7 @@ const PricingPlan = () => {
             <div className="pricing-plan-basic">
                <div className="plan-heading">
                   <p className="plan-title">Basic</p>
-                  <p className="price-text">0VNĐ<span class="text-small">/ month</span></p>
+                  <p className="price-text">0đ<span class="text-small"> / month</span></p>
                </div>
                <ul className="benefits">
                   <li className="options">
@@ -50,7 +50,7 @@ const PricingPlan = () => {
             <div className="pricing-plan-premium">
                <div className="plan-heading">
                   <p className="plan-title">Premium</p>
-                  <p className="price-text">17.000VNĐ<span class="text-small">/ month</span></p>
+                  <p className="price-text">17.000đ<span class="text-small"> / month</span></p>
                </div>
                <ul className="benefits">
                   <li className="options">
