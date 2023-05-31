@@ -1,33 +1,33 @@
-import {useEffect, useState} from 'react';
-import {Button, Input, Modal, Tooltip} from 'antd';
-import {AppstoreAddOutlined, FolderAddOutlined, FolderOutlined, ProfileOutlined} from '@ant-design/icons';
-import {createDocument, queryDocuments} from "../../services/firebase";
+import { useEffect, useState } from 'react';
+import { Button, Input, Modal, Tooltip } from 'antd';
+import { AppstoreAddOutlined, FolderAddOutlined, FolderOutlined, ProfileOutlined } from '@ant-design/icons';
+import { createDocument, queryDocuments } from "../../services/firebase";
 import TeTuMenu from "../menu/Menu";
 
-let getItem = (label, key, icon, children) => ({key, icon, children, label});
+let getItem = (label, key, icon, children) => ({ key, icon, children, label });
 
 const SidebarMenu = () => {
     const [items, setItems] = useState([
-        getItem('Navigation One', '1', <ProfileOutlined/>),
-        getItem('Navigation Two', '2', <FolderOutlined/>),
-        getItem('Navigation Two', 'sub1', <FolderOutlined/>, [
+        getItem('Navigation One', '1', <ProfileOutlined />),
+        getItem('Navigation Two', '2', <FolderOutlined />),
+        getItem('Navigation Two', 'sub1', <FolderOutlined />, [
             getItem('Option 3', '3'),
             getItem('Option 4', '4'),
-            getItem('Submenu', 'sub1-2', <FolderOutlined/>, [
+            getItem('Submenu', 'sub1-2', <FolderOutlined />, [
                 getItem('Option 5', '5'),
                 getItem('Option 6', '6')
             ]),
         ]),
-        getItem('Navigation Three', 'sub2', <FolderOutlined/>, [
+        getItem('Navigation Three', 'sub2', <FolderOutlined />, [
             getItem('Option 7', '7'),
             getItem('Option 8', '8'),
             getItem('Option 9', '9'),
             getItem('Option 10', '10'),
         ]),
-        getItem('Navigation Four', 'sub3', <FolderOutlined/>, [
+        getItem('Navigation Four', 'sub3', <FolderOutlined />, [
             getItem('Option 11', '11'),
             getItem('Option 12', '12'),
-            getItem('Submenu', 'sub3-4', <FolderOutlined/>, [
+            getItem('Submenu', 'sub3-4', <FolderOutlined />, [
                 getItem('Option 13', '13'),
                 getItem('Option 14', '14')
             ]),
@@ -56,8 +56,7 @@ const SidebarMenu = () => {
         loadFolders();
     }, []);
 
-
-    const handleMenuClick = ({key}) => {
+    const handleMenuClick = ({ key }) => {
         if (key === 'createSubfolder') {
             setFolderModalVisible(true);
         } else if (key === 'deleteFolder') {
@@ -111,12 +110,12 @@ const SidebarMenu = () => {
     const findLabelByKey = (items, key) => {
         for (const item of items) {
             if (item.key === key) {
-                return {key, label: item.label};
+                return { key, label: item.label };
             }
             if (item.children) {
                 const label = findLabelByKey(item.children, key);
                 if (label) {
-                    return {key, label};
+                    return { key, label };
                 }
             }
         }
@@ -141,16 +140,16 @@ const SidebarMenu = () => {
         <div>
             <div className='new-item-btn-container'>
                 <Tooltip title="New folder">
-                    <Button className="btn-new-item" icon={<FolderAddOutlined/>}
-                            onClick={() => handleCreateNewFolder(null)}/>
+                    <Button className="btn-new-item" icon={<FolderAddOutlined />}
+                        onClick={() => handleCreateNewFolder(null)} />
                 </Tooltip>
                 <Tooltip title="New canvas">
-                    <Button className="btn-new-item" icon={<AppstoreAddOutlined/>}/>
+                    <Button className="btn-new-item" icon={<AppstoreAddOutlined />} />
                 </Tooltip>
             </div>
 
             {folders.map((data) =>
-                <TeTuMenu folderData={data}/>
+                <TeTuMenu folderData={data} />
             )
             }
             <Modal
