@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { getFirestore } from "firebase/firestore"
 import { getAuth, GoogleAuthProvider, } from "firebase/auth";
+import { getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
 
 
 // Initialize Firebase
@@ -24,10 +24,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // Create a document in a Firestore collection
-export const createDocument = async (collection, data) => {
+export const createDocument = async (collections, data) => {
    try {
-      const docRef = await db.collection(collection).add(data);
-      return docRef.id;
+      await addDoc(collection(db, collections), data);
    } catch (error) {
       console.error('Error creating document:', error);
       throw error;
@@ -85,13 +84,11 @@ export const getDocuments = async (collection) => {
 };
 
 // Query multiple documents from a collection with condition
-export const queryDocuments = async (collection, field, operator, value) => {
+export const queryDocuments = async (collections, field, operator, value) => {
    try {
-      const querySnapshot = await db
-         .collection(collection)
-         .where(field, operator, value)
-         .get();
       const documents = [];
+      const q = query(collection(db, collections), where(field, operator, value));
+      const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
          documents.push({ id: doc.id, ...doc.data() });
       });
