@@ -10,6 +10,7 @@ import DraggableEditor from "./components/Editor/Editor";
 import ListView from './pages/listview/ListView';
 import GraphView from './pages/graphview/GraphView';
 import Notebook from './pages/notepage/Notebook';
+import TeTuMenu from "./components/menu/Menu";
 
 function App() {
    return (
@@ -18,8 +19,9 @@ function App() {
             <Routes>
                <Route path="/" element={<LandingPage />} />
                <Route path="/home" element={<Home />} />
-               <Route path="/note" element={<NotePage />} />
+               {/*<Route path="/note" element={<NotePage />} />*/}
                <Route path="/note/:pageId" element={<Notebook />} />
+               <Route path="/test2" element={<TeTuMenu />} />
                <Route path="/file" element={<FilePage />} />
                <Route path="/test" element={<DraggableEditor />} />
                <Route path="/pricing" element={<PricingPage />} />
