@@ -5,13 +5,14 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import MainHeader from '../../components/header/MainHeader';
 import TetuEditor from '../../components/Editor/Editor';
 import './note_editor.css';
+import { useParams } from "react-router-dom";
 
 const { Content } = Layout;
 
 const Notebook = () => {
    const { token: { colorBgContainer }, } = theme.useToken();
-
-   const [title, setTitle] = useState("Untitled");
+   const { pageId } = useParams();
+   const [title, setTitle] = useState(pageId);
    useEffect(() => {
       document.title = title;
    }, [title]);
@@ -19,7 +20,16 @@ const Notebook = () => {
    const changeTitle = (event) => {
       setTitle(event.target.value);
    };
+   function makeTitle(slug) {
+      let words = slug.split('-');
 
+      for (let i = 0; i < words.length; i++) {
+         let word = words[i];
+         words[i] = word.charAt(0).toUpperCase() + word.slice(1);
+      }
+
+      return words.join(' ');
+   }
    const handleKeyUp = (event) => {
       if (event.keyCode === 13) {
          event.preventDefault();
@@ -36,7 +46,7 @@ const Notebook = () => {
                <div style={{ padding: 40, background: colorBgContainer, }}>
                   <div className='note-title-container'>
                      <Input
-                        // value="Untitled"
+                        // value={makeTitle(pageId)}
                         className="note-title"
                         onChange={changeTitle}
                         onPressEnter={handleKeyUp}

@@ -116,32 +116,6 @@ const columns = [
       ),
    },
 ];
-const data = [
-   {
-      key: '1',
-      title: 'Intro to ML with TF',
-      status: 'To-do',
-      date: moment('05-31-2023').format('L'),
-      tags: ['study', 'AI/ML'],
-      type: 'Note',
-   },
-   {
-      key: '2',
-      title: 'PyTorch Introduction',
-      status: 'In progress',
-      date: moment('05/01/2023').format('L'),
-      tags: ['CV'],
-      type: 'File',
-   },
-   {
-      key: '3',
-      title: 'Transfer Learning',
-      status: 'Done',
-      date: moment('04/30/2023').format('L'),
-      tags: ['study', 'AI/ML'],
-      type: 'Canvas',
-   },
-];
 const TableView = () => {
    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
    const [loading, setLoading] = useState(false);

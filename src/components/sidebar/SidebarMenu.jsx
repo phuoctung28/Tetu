@@ -17,20 +17,20 @@ const SidebarMenu = () => {
             getItem('Option 6', '6')
          ]),
       ]),
-      getItem('Navigation Three', 'sub2', <FolderOutlined />, [
-         getItem('Option 7', '7'),
-         getItem('Option 8', '8'),
-         getItem('Option 9', '9'),
-         getItem('Option 10', '10'),
-      ]),
-      getItem('Navigation Four', 'sub3', <FolderOutlined />, [
-         getItem('Option 11', '11'),
-         getItem('Option 12', '12'),
-         getItem('Submenu', 'sub3-4', <FolderOutlined />, [
-            getItem('Option 13', '13'),
-            getItem('Option 14', '14')
-         ]),
-      ]),
+      // getItem('Navigation Three', 'sub2', <FolderOutlined />, [
+      //    getItem('Option 7', '7'),
+      //    getItem('Option 8', '8'),
+      //    getItem('Option 9', '9'),
+      //    getItem('Option 10', '10'),
+      // ]),
+      // getItem('Navigation Four', 'sub3', <FolderOutlined />, [
+      //    getItem('Option 11', '11'),
+      //    getItem('Option 12', '12'),
+      //    getItem('Submenu', 'sub3-4', <FolderOutlined />, [
+      //       getItem('Option 13', '13'),
+      //       getItem('Option 14', '14')
+      //    ]),
+      // ]),
    ]);
    const [folderModalVisible, setFolderModalVisible] = useState(false);
    const [pageModalVisible, setPageModalVisible] = useState(false);
@@ -71,7 +71,8 @@ const SidebarMenu = () => {
 
    const handleCreateNewFolder = (parentKey) => {
       setFolderModalVisible(true);
-      setParentKey(parentKey);
+      // setParentKey(parentKey);
+
    };
 
    const handleCreateNewPage = (parentKey) => {
@@ -80,34 +81,37 @@ const SidebarMenu = () => {
    };
 
    const handleModalOk = () => {
-      if (folderValue) {
-         const newKey = `${parentKey}-${items.length + 1}`;
-         const newItem = getItem(folderValue, newKey, <FolderOutlined />);
-         const updatedItems = items.map(item =>
-            item.key === parentKey ? {
-               ...item,
-               children: item.children ? [...item.children, newItem] : [newItem]
-            } : item
-         );
-         setItems(updatedItems);
-         setFolderValue('');
-         setFolderModalVisible(false);
-         setParentKey(null);
-      }
-      if (pageValue) {
-         const newKey = `${parentKey}-${items.length + 1}`;
-         const newItem = getItem(pageValue, newKey, <ProfileOutlined />);
-         const updatedItems = items.map(item =>
-            item.key === parentKey ? {
-               ...item,
-               children: item.children ? [...item.children, newItem] : [newItem]
-            } : item
-         );
-         setItems(updatedItems);
-         setPageValue('');
-         setPageModalVisible(false);
-         setParentKey(null);
-      }
+      console.log("new folder: ", folderValue);
+      items.push(getItem(folderValue, items.length + 1, <FolderOutlined />));
+      setFolderModalVisible(false);
+      // if (folderValue) {
+      //    const newKey = `${parentKey}-${items.length + 1}`;
+      //    const newItem = getItem(folderValue, newKey, <FolderOutlined />);
+      //    const updatedItems = items.map(item =>
+      //       item.key === parentKey ? {
+      //          ...item,
+      //          children: item.children ? [...item.children, newItem] : [newItem]
+      //       } : item
+      //    );
+      //    setItems(updatedItems);
+      //    setFolderValue('');
+      //    setFolderModalVisible(false);
+      //    setParentKey(null);
+      // }
+      // if (pageValue) {
+      //    const newKey = `${parentKey}-${items.length + 1}`;
+      //    const newItem = getItem(pageValue, newKey, <ProfileOutlined />);
+      //    const updatedItems = items.map(item =>
+      //       item.key === parentKey ? {
+      //          ...item,
+      //          children: item.children ? [...item.children, newItem] : [newItem]
+      //       } : item
+      //    );
+      //    setItems(updatedItems);
+      //    setPageValue('');
+      //    setPageModalVisible(false);
+      //    setParentKey(null);
+      // }
    };
 
    const findLabelByKey = (items, key) => {
