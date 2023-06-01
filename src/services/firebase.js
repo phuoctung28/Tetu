@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { getAuth, GoogleAuthProvider, } from "firebase/auth";
-import { doc, updateDoc, getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc, getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
 
 
 // Initialize Firebase
@@ -63,7 +63,7 @@ export const updateDocument = async (ref, data) => {
 // Delete a document from a Firestore collection
 export const deleteDocument = async (collection, id) => {
    try {
-      await db.collection(collection).doc(id).delete();
+      await deleteDoc(doc(db, collection, id));
    } catch (error) {
       console.error('Error deleting document:', error);
       throw error;

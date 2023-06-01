@@ -5,40 +5,45 @@ import {createDocument, queryDocuments} from "../../services/firebase";
 import TeTuMenu from "../menu/Menu";
 
 const SidebarMenu = () => {
+    const user_id = JSON.parse(localStorage.getItem("user")).user_id;
     const [folderModalVisible, setFolderModalVisible] = useState(false);
     const [pageModalVisible, setPageModalVisible] = useState(false);
     const [folderValue, setFolderValue] = useState('');
     const [pageValue, setPageValue] = useState('');
     const [parentKey, setParentKey] = useState(null);
     const [deleteKey, setDeleteKey] = useState(null);
-    const [notes, setNotes] = useState([])
+    const [notes, setNotes] = useState([]);
     const [files, setFiles] = useState([]);
-    const [folders, setFolders] = useState([
-        {files: ["file 1", "file 2"],
-            folder_name: "aaa",
-            notes: ["note 1", "note 2"],
-            owner: "abc"}
-    ]);
 
-    // useEffect(() => {
-    //     const loadFolders = async () => {
-    //         try {
-    //             const folderData = await queryDocuments("folders", "owner", "==", "nNa92AN84zVqIo47BKIyzgsilfx1");
-    //             setFolders(folderData);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //
-    //     loadFolders();
-    // }, [folders]);
+    const [folders, setFolders] = useState([]);
+    // const [folders, setFolders] = useState([
+    //     {
+    //         files: ["file 1", "file 2"],
+    //         folder_name: "aaa",
+    //         notes: ["note 1", "note 2"],
+    //         owner: "abc"
+    //     }
+    // ]);
+
+    useEffect(() => {
+        const loadFolders = async () => {
+            try {
+                const folderData = await queryDocuments("folders", "owner", "==", user_id);
+                setFolders(folderData);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        loadFolders();
+    }, [folders]);
 
     const handleModalOk = async () => {
         if (folderValue) {
             const folderData = {
                 files: [],
                 notes: [],
-                owner: "tung",
+                owner: user_id,
                 folder_name: folderValue
             }
             console.log(folderData)
@@ -59,11 +64,10 @@ const SidebarMenu = () => {
         <div>
             <div className='new-item-btn-container'>
                 <Tooltip title="New folder">
-                    <Button className="btn-new-item" icon={<FolderAddOutlined/>}
-                            onClick={() => handleCreateNewFolder(null)}/>
-                </Tooltip>
-                <Tooltip title="New canvas">
-                    <Button className="btn-new-item" icon={<AppstoreAddOutlined/>}/>
+                    <Button block className="btn-new-item" icon={<FolderAddOutlined/>}
+                            onClick={() => handleCreateNewFolder(null)}>
+                        New Session
+                    </Button>
                 </Tooltip>
             </div>
 
