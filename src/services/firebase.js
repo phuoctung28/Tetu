@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { getAuth, GoogleAuthProvider, } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { doc, updateDoc, getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
 
 
 // Initialize Firebase
@@ -22,7 +22,9 @@ const app = initializeApp(firebaseConfig);
 
 // Get a reference to the Firestore database
 const db = getFirestore(app);
-
+export const createRef = (collection, documentId) => {
+   return doc(db, collection, documentId)
+}
 // Create a document in a Firestore collection
 export const createDocument = async (collections, data) => {
    try {
@@ -49,9 +51,9 @@ export const getDocument = async (collection, id) => {
 };
 
 // Update a document in a Firestore collection
-export const updateDocument = async (collection, id, data) => {
+export const updateDocument = async (ref, data) => {
    try {
-      await db.collection(collection).doc(id).update(data);
+      await updateDoc(ref, data);
    } catch (error) {
       console.error('Error updating document:', error);
       throw error;
@@ -175,3 +177,4 @@ export const database = getFirestore(app);
 //          console.log(error);
 //       })
 // }
+

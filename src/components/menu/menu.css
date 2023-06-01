@@ -1,0 +1,19 @@
+.ant-menu-submenu-arrow {
+    left: 5%;
+    right: unset;
+    transform: translateX(-100%);
+}
+.ant-menu-submenu-title {
+    padding-right: 17px !important;
+}
+.ant-menu-submenu-title > span {
+    display: flex;
+    align-items: center;
+}
+
+.folder-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
