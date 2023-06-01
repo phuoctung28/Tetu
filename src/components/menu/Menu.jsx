@@ -60,28 +60,29 @@ const TeTuMenu = ({ folderData }) => {
             }
             trigger={['contextMenu']}
         >
-
-            <Menu.SubMenu
-                key={folderData.id}
-                title={folderData.folder_name}
-                icon={<FolderOutlined />}
-            // popupOffset={[10, 10]}
-            // style={{marginLeft: 10}}
-            // style={{ height: 30 }}
-            >
-                {folderData.notes.map((note) => (
-                    <Menu.Item key={note} icon={<BookOutlined />} style={{ height: 30 }} >
-                        {note}
-                        <DropDown fileType={FileType.Note.toString()} />
-                    </Menu.Item>))
-                }
-                {folderData.files.map((file) => (
-                    <Menu.Item key={file} icon={<FilePdfOutlined />} style={{ height: 30 }}>
-                        {file}
-                        <DropDown fileType={FileType.Pdf.toString()} />
-                    </Menu.Item>))
-                }
-            </Menu.SubMenu>
+            <Menu mode='inline' >
+                <Menu.SubMenu
+                    key={folderData.id}
+                    title={folderData.folder_name}
+                    icon={<FolderOutlined />}
+                    popupOffset={[10, 10]}
+                // style={{marginLeft: 10}}
+                // style={{ height: 30 }}
+                >
+                    {folderData.notes.map((note) => (
+                        <Menu.Item key={note} icon={<BookOutlined />} style={{ height: 30 }} >
+                            {note}
+                            <DropDown fileType={FileType.Note.toString()} />
+                        </Menu.Item>))
+                    }
+                    {folderData.files.map((file) => (
+                        <Menu.Item key={file} icon={<FilePdfOutlined />} style={{ height: 30 }}>
+                            {file}
+                            <DropDown fileType={FileType.Pdf.toString()} />
+                        </Menu.Item>))
+                    }
+                </Menu.SubMenu>
+            </Menu>
         </Dropdown>
     );
 };

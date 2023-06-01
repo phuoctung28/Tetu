@@ -11,6 +11,7 @@ import ListView from './pages/listview/ListView';
 import GraphView from './pages/graphview/GraphView';
 import Notebook from './pages/notepage/Notebook';
 import TeTuMenu from "./components/menu/Menu";
+import CalendarView from './pages/calendarview/CalendarView';
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/pricing" element={<PricingPage />} />
                     <Route path="/table" element={<ListView />} />
                     <Route path="/graph" element={<GraphView />} />
+                    <Route path="/calendar" element={<CalendarView />} />
                 </Routes >
             </BrowserRouter >
         </PayPalScriptProvider >
