@@ -1,7 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { getAuth, GoogleAuthProvider, } from "firebase/auth";
-import { doc, updateDoc, deleteDoc, getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import {initializeApp} from "firebase/app";
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
+import {getAuth, GoogleAuthProvider,} from "firebase/auth";
+import {addDoc, getDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where} from "firebase/firestore";
 
 
 // Initialize Firebase
@@ -28,7 +28,7 @@ export const createRef = (collection, documentId) => {
 // Create a document in a Firestore collection
 export const createDocument = async (collections, data) => {
    try {
-      await addDoc(collection(db, collections), data);
+      return await addDoc(collection(db, collections), data);
    } catch (error) {
       console.error('Error creating document:', error);
       throw error;
@@ -70,21 +70,6 @@ export const deleteDocument = async (collection, id) => {
    }
 };
 
-// Query multiple documents from a collection
-export const getDocuments = async (collection) => {
-   try {
-      const querySnapshot = await db.collection(collection).get();
-      const documents = [];
-      querySnapshot.forEach((doc) => {
-         documents.push({ id: doc.id, ...doc.data() });
-      });
-      return documents;
-   } catch (error) {
-      console.error('Error getting documents:', error);
-      throw error;
-   }
-};
-
 // Query multiple documents from a collection with condition
 export const queryDocuments = async (collections, field, operator, value) => {
    try {
@@ -101,7 +86,15 @@ export const queryDocuments = async (collections, field, operator, value) => {
    }
 };
 
-
+export const getDocumentById = async (collections, id) => {
+   try {
+      const docRef = doc(db, collections, id);
+      const docSnap = await getDoc(docRef);
+      return docSnap.data();
+   } catch(error) {
+      console.log(error)
+   }
+}
 // Storage functions
 
 // Get a reference to the Firebase storage
