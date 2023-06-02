@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {Modal} from 'antd';
+import {Button, Modal} from 'antd';
 import "./landing_page.css";
 import RegisterForm from '../../components/modal/RegisterForm';
 import LoginForm from '../../components/modal/LoginForm';
 import Footer from "../../components/landingpage/Footer";
-import CallToAction from "../../components/landingpage/CallToAction";
 import AboutCard from '../../components/landingpage/AboutCard';
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -14,6 +13,18 @@ import android from '../../assets/images/playstore.png';
 import apple from '../../assets/images/applestore.png';
 import features from "../../components/landingpage/featureData";
 
+const CallToAction = ({setOpenModal2}) => {
+    return (<div className="cta-container">
+        <h1 className="cta-title">
+            It's time to sharpen your workflows! 🚀
+        </h1>
+        <Button type="primary" className="cta-button" onClick={() => {
+            setOpenModal2(true)
+        }}>
+            GET STARTED
+        </Button>
+    </div>);
+}
 const LandingPage = () => {
     const [openModal, setOpenModal] = useState(false);
     const [openModal2, setOpenModal2] = useState(false);
