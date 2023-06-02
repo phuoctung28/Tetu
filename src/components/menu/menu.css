@@ -12,6 +12,9 @@
     display: flex;
     align-items: center;
 }
+.ant-menu-title-content > .ant-dropdown-trigger {
+    margin-left: 50px;
+}
 .ant-menu-title-content {
     display: flex;
 }
