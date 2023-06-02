@@ -1,25 +1,17 @@
 .container {
-    width: 100%;
+    /*width: 100%;*/
     background-color: #fff;
 }
 
-.logo-btn {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-}
-
 .landing-header {
+    width: 100vw;
     position: fixed;
-    left: 0;
-    right: 0;
-    /*width: 100%;*/
-    padding: 20px 40px;
     background-color: #fff;
     z-index: 100;
 }
 
 .landing-header-wrapper {
+    padding: 10px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -27,6 +19,14 @@
 
 .landing-header.scroll {
     border-bottom: 0.4px solid #e0e4e5;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(6px);
+}
+
+.logo-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
 }
 
 .nav-tab {
