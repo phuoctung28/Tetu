@@ -25,3 +25,8 @@
    align-items: center;
    justify-content: space-between;
 }
+
+.ant-menu-item {
+   height: 30px !important;
+
+}

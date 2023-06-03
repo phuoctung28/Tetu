@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Dropdown, Input, Menu, Modal } from 'antd';
-import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined } from '@ant-design/icons';
-import { FileType } from '../../enums/FileType';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Dropdown, Input, Menu, Modal} from 'antd';
+import {BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined} from '@ant-design/icons';
+import {FileType} from '../../enums/FileType';
+import {useNavigate} from 'react-router-dom';
 import './menu.css';
-import { createDocument, createRef, deleteDocument, getDocumentById, queryDocuments, updateDocument } from "../../services/firebase";
+import {
+    createDocument, createRef, deleteDocument, getDocumentById, queryDocuments, updateDocument
+} from "../../services/firebase";
 
-const TeTuMenu = ({ folderData }) => {
+const TeTuMenu = ({folderData}) => {
     const [pageModalVisible, setPageModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const navigate = useNavigate();
@@ -21,13 +23,13 @@ const TeTuMenu = ({ folderData }) => {
             const fetchedNotes = [];
             for (const noteId of folderData.notes) {
                 const note = await getDocumentById("notes", noteId);
-                fetchedNotes.push(note);
+                fetchedNotes.push({item_id: noteId, item: note});
             }
             setNotes(fetchedNotes);
             const fetchedFiles = [];
             for (const fileId of folderData.files) {
                 const file = await getDocumentById("files", fileId);
-                fetchedFiles.push(file);
+                fetchedFiles.push({item_id: fileId, item: file});
             }
             setFiles(fetchedFiles);
         };
@@ -62,8 +64,8 @@ const TeTuMenu = ({ folderData }) => {
         // }
     };
 
-    const handleMenuClick = ({ key }) => {
-        console.log(key)
+    const handleMenuClick = ({key}) => {
+        console.log("KEY: ", key);
         if (key === 'deleteFile') {
             setDeleteModalVisible(true);
         } else if (key === 'createNewPage') {
@@ -72,6 +74,12 @@ const TeTuMenu = ({ folderData }) => {
             // Handle other cases
         }
     };
+
+    const handleDropdownItemClick = (event, item, type) => {
+        console.log("EVENT: ", event);
+        console.log("ITEM: ", item);
+        console.log("FILE TYPE: ", type);
+    }
 
     const handleNoteUpdate = async () => {
         try {
@@ -84,7 +92,7 @@ const TeTuMenu = ({ folderData }) => {
             const folderId = folderData.id;
             const folderRef = createRef("folders", folderId);
             const updatedNotes = [...folderData.notes, noteId];
-            await updateDocument(folderRef, { notes: updatedNotes });
+            await updateDocument(folderRef, {notes: updatedNotes});
             setPageModalVisible(false);
             setUpdatedNotes(updatedNotes);
             const newNotePath = `/note/${noteId}`;
@@ -95,84 +103,90 @@ const TeTuMenu = ({ folderData }) => {
         }
     };
 
-    const DropDown = (fileType) => {
-        const isFolder = fileType.fileType === FileType.Folder;
-        return (
-            <Dropdown
-                autoAdjustOverflow
-                placement={"bottomLeft"}
-                autoFocus
-                overlay={
-                    <Menu style={{ minWidth: '160px' }} onClick={handleMenuClick}>
-                        {isFolder && <Menu.Item key="createNewPage">New Note</Menu.Item>}
-                        <Menu.Item key="renameFile">
-                            {fileType.fileType === FileType.Note ? 'Rename Note' : 'Rename File'}
-                        </Menu.Item>
-                        <Menu.Item key="deleteFile">
-                            {fileType.fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
-                        </Menu.Item>
-                    </Menu>
-                }
-                trigger={['click']}>
-        <span style={{ float: 'right' }}>
-          <EllipsisOutlined />
+    const DropDown = ({fileType, item}) => {
+        const isFolder = fileType === FileType.Folder;
+        return (<Dropdown
+            autoAdjustOverflow
+            placement={"bottomLeft"}
+            autoFocus
+            overlay={
+                <Menu
+                    style={{minWidth: '160px'}}
+                    onClick={(e) => handleDropdownItemClick(e, item, fileType)}
+                >
+                    {isFolder && <Menu.Item key="createNewPage">New Note</Menu.Item>}
+                    <Menu.Item key="renameFile">
+                        {fileType.fileType === FileType.Note ? 'Rename Note' : 'Rename File'}
+                    </Menu.Item>
+                    <Menu.Item key="deleteFile">
+                        {fileType.fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
+                    </Menu.Item>
+                </Menu>
+            }
+            trigger={
+                ['click']
+            }>
+        <span style={{float: 'right'}}>
+          <EllipsisOutlined/>
         </span>
-            </Dropdown>);
+        </Dropdown>);
     };
 
-    return (
-        <>
-            <Menu mode="inline" onClick={handleMenuClick}>
-                <Menu.SubMenu
-                    key={folderData.id}
-                    title={
-                        <div className="folder-menu">
-                            <span> {folderData.folder_name} </span>
-                            <DropDown fileType={FileType.Folder} key={folderData.id} />
-                        </div>}
-                    icon={<FolderOutlined />}>
-                    {notes.map((note) => (
-                        <Menu.Item
-                            key={note.id}
-                            icon={<BookOutlined />}
-                            style={{ minWidth: '160px' }}>
-                            <span className="file-name">{note.title}</span>
-                            <DropDown fileType={FileType.Note} key={note} />
-                        </Menu.Item>
-                    ))}
-                    {files.map((file) => (
-                        <Menu.Item
-                            key={file}
-                            icon={<FilePdfOutlined />}
-                            style={{ minWidth: '160px' }}>
-                            <span className="file-name">{file.title}</span>
-                            <DropDown fileType={FileType.Pdf} key={file} />
-                        </Menu.Item>
-                    ))}
-                </Menu.SubMenu>
-            </Menu>
-            <Modal
-                title="Create New Page"
-                open={pageModalVisible}
-                onCancel={() => setPageModalVisible(false)}
-                onOk={handleNoteUpdate}
-            >
-                <Input
-                    value={noteValue}
-                    onChange={(e) => setNoteValue(e.target.value)}
-                    placeholder="Enter note content"
-                />
-            </Modal>
-            <Modal
-                title="Do you want to delete file?"
-                open={deleteModalVisible}
-                onOk={() => handleDeleteFile()}
-                confirmLoading={confirmLoading}
-                onCancel={() => setDeleteModalVisible(false)}
-            >
-            </Modal>
-        </>
-    );
+    return (<>
+        <Menu
+            mode="inline"
+            // onClick={handleMenuClick}
+        >
+            <Menu.SubMenu
+                key={folderData.id}
+                title={<div className="folder-menu">
+                    <span> {folderData.folder_name} </span>
+                    <DropDown fileType={FileType.Folder} item={folderData}
+                    />
+                </div>}
+                icon={<FolderOutlined/>}>
+                {notes.map((note) => {
+                    // console.log("NOTE: ", note?.item)
+                    return (<Menu.Item
+                        key={note.item_id}
+                        icon={<BookOutlined/>}
+                        style={{minWidth: '160px'}}>
+                        <span className="file-name">{note?.item?.title}</span>
+                        <DropDown fileType={FileType.Note} item={note}/>
+                    </Menu.Item>)
+                })}
+                {files.map((file) => (<Menu.Item
+                    key={file}
+                    icon={<FilePdfOutlined/>}
+                    style={{minWidth: '160px'}}>
+                    <span className="file-name">{file.title}</span>
+                    <DropDown fileType={FileType.Pdf} key={file}/>
+                </Menu.Item>))}
+            </Menu.SubMenu>
+        </Menu>
+        <Modal
+            title="Create New Page"
+            open={pageModalVisible}
+            onCancel={() => setPageModalVisible(false)}
+            onOk={handleNoteUpdate}
+        >
+            <Input
+                value={noteValue}
+                onChange={(e) => setNoteValue(e.target.value)}
+                placeholder="Enter note content"
+            />
+        </Modal>
+        <Modal
+            title="⁉️ Confirm delete?"
+            open={deleteModalVisible}
+            onOk={() => handleDeleteFile()}
+            confirmLoading={confirmLoading}
+            onCancel={() => setDeleteModalVisible(false)}
+        >
+            You will not be able to restore this item!<br/>
+            Continue?
+        </Modal>
+    </>);
 };
 
 export default TeTuMenu;

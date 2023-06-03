@@ -15,7 +15,7 @@ const SidebarMenu = () => {
         const loadFolders = async () => {
             try {
                 const folderData = await queryDocuments("folders", "owner", "==", "abc");
-                console.log(folderData)
+                // console.log(folderData);
                 setFolders(folderData);
             } catch (error) {
                 console.log(error);
@@ -60,7 +60,7 @@ const SidebarMenu = () => {
             </div>
 
             {folders.map((data) =>
-                <TeTuMenu folderData={data}/>
+                <TeTuMenu key={data.id} folderData={data}/>
             )}
             <Modal
                 title="Create New Folder"
