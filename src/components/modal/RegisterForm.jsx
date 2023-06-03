@@ -144,7 +144,7 @@ const RegisterForm = () => {
                   </Button>
                </Form.Item>
             </Form>
-            <Divider plain>or sign in with</Divider>
+            <Divider plain>or start with</Divider>
             <div className="btn-social">
                <button
                   onClick={signInWithGoogle}
@@ -159,7 +159,7 @@ const RegisterForm = () => {
                   className="btn-apple bg-white flex justify-center items-center border-solid border-2 rounded-lg py-3 mt-3 w-60 md:w-70 hover:bg-gray-200"
                >
                   <img src={apple} alt="" style={{ width: 'fit-content', height: 20 }} />
-                  <div className="btn-title">
+                  <div className="btn-title" onClick={() => message.info("In development!")}>
                      Apple
                   </div>
                </button>

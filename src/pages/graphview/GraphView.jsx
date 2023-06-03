@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './graph_view.css';
 import Sidebar from '../../components/sidebar/Sidebar';
-import Graph from "react-graph-vis";
+import Graph from 'react-graph-vis';
 
 const { Content } = Layout;
 
