@@ -1,7 +1,7 @@
 import {initializeApp} from "firebase/app";
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import {getAuth, GoogleAuthProvider,} from "firebase/auth";
-import {addDoc, getDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where} from "firebase/firestore";
+import {addDoc, getDoc, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where, deleteField, arrayRemove, arrayUnion } from "firebase/firestore";
 
 
 // Initialize Firebase
@@ -60,12 +60,61 @@ export const updateDocument = async (ref, data) => {
    }
 };
 
+// Function to update a document
+export const updateDocumentProperty = async (collection, documentId, field, data) => {
+   try {
+      const ref = doc(db, collection, documentId);
+      await updateDoc(ref, {
+         [field]: data
+      });
+   } catch (error) {
+      console.error('Error updating document:', error);
+      throw error;
+   }
+};
+
+
+export const updateExistedDocumentArray = async (ref, arrayFieldName, dataId) => {
+   try {
+      await updateDoc(ref, {
+         [arrayFieldName]: arrayUnion(dataId),
+      });
+   } catch (error) {
+      console.error("Error updating document:", error);
+      throw error;
+   }
+};
+
 // Delete a document from a Firestore collection
 export const deleteDocument = async (collection, id) => {
    try {
       await deleteDoc(doc(db, collection, id));
    } catch (error) {
       console.error('Error deleting document:', error);
+      throw error;
+   }
+};
+
+export const deleteDocumentField = async (collection, documentId, fieldName) => {
+   try {
+      const ref = doc(db, collection, documentId);
+      await updateDoc(ref, {
+         [fieldName]: deleteField()
+      });
+   } catch (error) {
+      console.log("Error deleting field:", error);
+      throw error;
+   }
+};
+
+export const deleteArrayElement = async (collection, documentId, fieldName, element) => {
+   try {
+      const ref = doc(db, collection, documentId);
+      await updateDoc(ref, {
+         [fieldName]: arrayRemove(element)
+      });
+   } catch (error) {
+      console.log("Error deleting array element:", error);
       throw error;
    }
 };
@@ -100,30 +149,40 @@ export const getDocumentById = async (collections, id) => {
 // Get a reference to the Firebase storage
 const storage = getStorage();
 
-export const uploadFile = (file, setFileUrl) => {
-   try {
-      const storageRef = ref(storage, `/files/${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+export const uploadFile = (file) => {
+   return new Promise((resolve, reject) => {
+      try {
+         const storageRef = ref(storage, `/files/${file.name}`);
+         const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on(
-         "state_changed",
-         (snapshot) => {
-            console.log("upload file successfully");
-         },
-         (err) => console.log(err),
-         () => {
-            getDownloadURL(uploadTask.snapshot.ref).then(url => {
-               console.log(url);
-               setFileUrl(url);
-            })
-         }
-      );
-      // return fileUrl;
-   } catch (error) {
-      console.error('Error uploading file:', error);
-      throw error;
-   }
+         uploadTask.on(
+             "state_changed",
+             (snapshot) => {
+                console.log("Upload in progress");
+             },
+             (error) => {
+                console.error("Error uploading file:", error);
+                reject(error);
+             },
+             () => {
+                getDownloadURL(uploadTask.snapshot.ref)
+                    .then((url) => {
+                       console.log("File uploaded successfully:", url);
+                       resolve(url);
+                    })
+                    .catch((error) => {
+                       console.error("Error getting file URL:", error);
+                       reject(error);
+                    });
+             }
+         );
+      } catch (error) {
+         console.error("Error uploading file:", error);
+         reject(error);
+      }
+   });
 };
+
 
 // Delete a file from Firebase storage
 export const deleteFile = async (fileURL) => {

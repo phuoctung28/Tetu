@@ -1,192 +1,312 @@
 import React, {useEffect, useState} from 'react';
-import {Dropdown, Input, Menu, Modal} from 'antd';
+import {Button, Dropdown, Input, Menu, Modal} from 'antd';
 import {BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined} from '@ant-design/icons';
 import {FileType} from '../../enums/FileType';
 import {useNavigate} from 'react-router-dom';
 import './menu.css';
 import {
-    createDocument, createRef, deleteDocument, getDocumentById, queryDocuments, updateDocument
-} from "../../services/firebase";
+    createDocument,
+    createRef,
+    deleteArrayElement,
+    deleteDocument,
+    getDocumentById,
+    updateDocumentProperty,
+    updateExistedDocumentArray, uploadFile,
+} from '../../services/firebase';
 
 const TeTuMenu = ({folderData}) => {
     const [pageModalVisible, setPageModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [deleteItemId, setDeleteItemId] = useState(null);
+    const [deleteItemType, setDeleteItemType] = useState(null);
     const navigate = useNavigate();
-    const [updatedNotes, setUpdatedNotes] = useState([...folderData.notes]);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [noteValue, setNoteValue] = useState("");
     const [notes, setNotes] = useState([]);
     const [files, setFiles] = useState([]);
-
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [noteValue, setNoteValue] = useState('');
+    const [renameModalVisible, setRenameModalVisible] = useState(false);
+    const [renameItemId, setRenameItemId] = useState(null);
+    const [renameItemType, setRenameItemType] = useState(null);
+    const [renameItemValue, setRenameItemValue] = useState('');
+    const [folder, setFolderData] = useState(folderData);
     useEffect(() => {
         const fetchNotesAndFiles = async () => {
-            const fetchedNotes = [];
-            for (const noteId of folderData.notes) {
-                const note = await getDocumentById("notes", noteId);
-                fetchedNotes.push({item_id: noteId, item: note});
+            try {
+                const fetchedNotes = await Promise.all(
+                    folder.notes.map(async (noteId) => {
+                        const note = await getDocumentById('notes', noteId);
+                        return {item_id: noteId, item: note};
+                    })
+                );
+                setNotes(fetchedNotes);
+
+                const fetchedFiles = await Promise.all(
+                    folder.files.map(async (fileId) => {
+                        const file = await getDocumentById('files', fileId);
+                        return {item_id: fileId, item: file};
+                    })
+                );
+                setFiles(fetchedFiles);
+            } catch (error) {
+                console.error('Error fetching notes and files:', error);
             }
-            setNotes(fetchedNotes);
-            const fetchedFiles = [];
-            for (const fileId of folderData.files) {
-                const file = await getDocumentById("files", fileId);
-                fetchedFiles.push({item_id: fileId, item: file});
-            }
-            setFiles(fetchedFiles);
         };
-        fetchNotesAndFiles()
+
+        fetchNotesAndFiles();
     }, []);
 
-    const handleDeleteFile = async (key, fileType) => {
-        // setConfirmLoading(true);
-        console.log(folderData.folder_name)
-        console.log(noteValue)
-        // try {
-        //     if (folderData.folder_name) {
-        //         // Delete folder case
-        //         await deleteDocument("folders", folderData.id);
-        //     } else if (noteValue) {
-        //         // Delete note case
-        //         await deleteDocument("notes", noteValue);
-        //         const updatedNotes = folderData.notes.filter(note => note !== noteValue);
-        //         const folderRef = createRef("folders", folderData.id);
-        //         await updateDocument(folderRef, { notes: updatedNotes });
-        //         setUpdatedNotes(updatedNotes);
-        //     } else {
-        //         // Delete file case
-        //         // Implement the delete file functionality here
-        //     }
-        //
-        //     setDeleteModalVisible(false);
-        //     setConfirmLoading(false);
-        // } catch (error) {
-        //     console.error('Error deleting document:', error);
-        //     setConfirmLoading(false);
-        // }
-    };
-
-    const handleMenuClick = ({key}) => {
-        console.log("KEY: ", key);
-        if (key === 'deleteFile') {
-            setDeleteModalVisible(true);
-        } else if (key === 'createNewPage') {
-            setPageModalVisible(true);
-        } else {
-            // Handle other cases
+    const handleFileDelete = async () => {
+        setConfirmLoading(true);
+        try {
+            if (deleteItemType === FileType.Folder) {
+                await deleteDocument('folders', deleteItemId);
+                for (const noteId of folder.notes) {
+                    await deleteDocument('notes', noteId);
+                }
+                for (const fileId of folder.files) {
+                    await deleteDocument('files', fileId);
+                }
+                setNotes([]);
+                setFiles([]);
+            } else if (deleteItemType === FileType.Note) {
+                await deleteArrayElement('folders', folder.id, 'notes', deleteItemId);
+                await deleteDocument('notes', deleteItemId);
+                setNotes((prevNotes) => prevNotes.filter((note) => note.item_id !== deleteItemId));
+            } else {
+                await deleteArrayElement('folders', folder.id, 'files', deleteItemId);
+                await deleteDocument('files', deleteItemId);
+                setFiles((prevFiles) => prevFiles.filter((file) => file.item_id !== deleteItemId));
+            }
+            setDeleteModalVisible(false);
+            setConfirmLoading(false);
+        } catch (error) {
+            console.error('Error deleting document:', error);
+            setConfirmLoading(false);
         }
     };
 
-    const handleDropdownItemClick = (event, item, type) => {
-        console.log("EVENT: ", event);
-        console.log("ITEM: ", item);
-        console.log("FILE TYPE: ", type);
+    const handleMenuClick = (key, item, fileType) => {
+        if (key === 'deleteFile') {
+            const deletedItemId = item.item_id || folder.id;
+            setDeleteModalVisible(true);
+            setDeleteItemId(deletedItemId);
+            setDeleteItemType(fileType);
+        } else if (key === 'createNewPage') {
+            setPageModalVisible(true);
+        } else if (key === 'addNewFile') {
+            handleFileInputClick();
+        }
+        else if (key === 'renameFile') {
+            console.log(item)
+            const renameItemId = item.item_id || folder.id;
+            const renameItemValue = item.folder_name || item.item.name || item.item.title || ''
+            setRenameItemId(renameItemId);
+            setRenameItemType(fileType);
+            setRenameItemValue(renameItemValue);
+            setRenameModalVisible(true);
+        }
+    };
+
+    const handleFileInputClick = () => {
+        const fileInput = document.getElementById('file-input');
+        fileInput.click();
+    };
+
+    const handleFileInputChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                const fileUrl = await uploadFile(file);
+
+                const fileRef = await createDocument("files", {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    url: fileUrl,
+                });
+                const fileId = fileRef.id;
+
+                const folderId = folder.id;
+                const folderRef = createRef("folders", folderId);
+                await updateExistedDocumentArray(folderRef, "files", fileId);
+
+                const fileData = { item_id: fileId, item: file };
+                setFiles((prevFiles) => [...prevFiles, fileData]);
+                console.log("File uploaded successfully");
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
+    };
+
+    const handleNavigateFile = async (key, fileType) => {
+        if (fileType === FileType.Note) {
+            await navigate(`../note/${key}`, {replace: true});
+        } else if(fileType === FileType.Pdf) {
+            const file = await getDocumentById("files", key);
+            const url = file?.url;
+            navigate(`/file`, { state: { fileUrl: url }, replace: true });
+        }
     }
+    const handleRename = async () => {
+        setConfirmLoading(true);
+        console.log(renameItemId)
+        console.log(renameItemValue)
+        console.log(renameItemType)
+        try {
+            if (renameItemType === FileType.Folder) {
+                await updateDocumentProperty("folders", renameItemId, 'folder_name', renameItemValue);
+                setFolderData((prevFolderData) => ({...prevFolderData, folder_name: renameItemValue}));
+            } else if (renameItemType === FileType.Note) {
+                await updateDocumentProperty("notes", renameItemId, 'title', renameItemValue);
+                setNotes((prevNotes) =>
+                    prevNotes.map((note) =>
+                        note.item_id === renameItemId ? {...note, item: {...note.item, title: renameItemValue}} : note
+                    )
+                );
+            }
+            setRenameModalVisible(false);
+            setConfirmLoading(false);
+        } catch (error) {
+            console.error('Error updating document:', error);
+            setConfirmLoading(false);
+        }
+    };
 
     const handleNoteUpdate = async () => {
+        setConfirmLoading(true);
         try {
             const newNote = {
                 title: noteValue,
             };
-            const noteRef = await createDocument("notes", newNote);
+            const noteRef = await createDocument('notes', newNote);
             const noteId = noteRef.id;
-
-            const folderId = folderData.id;
-            const folderRef = createRef("folders", folderId);
-            const updatedNotes = [...folderData.notes, noteId];
-            await updateDocument(folderRef, {notes: updatedNotes});
+            const folderId = folder.id;
+            const folderRef = createRef('folders', folderId);
+            await updateExistedDocumentArray(folderRef, "notes", noteId);
             setPageModalVisible(false);
-            setUpdatedNotes(updatedNotes);
+            const note = await getDocumentById('notes', noteId);
+            setNotes((prevNotes) => [...prevNotes, {item_id: noteId, item: note}]);
+            setNoteValue('');
             const newNotePath = `/note/${noteId}`;
             await navigate(newNotePath);
             console.log('Note and document updated successfully');
+            setConfirmLoading(false);
         } catch (error) {
             console.error('Error updating document:', error);
+            setConfirmLoading(false);
         }
     };
 
     const DropDown = ({fileType, item}) => {
         const isFolder = fileType === FileType.Folder;
-        return (<Dropdown
-            autoAdjustOverflow
-            placement={"bottomLeft"}
-            autoFocus
-            overlay={
-                <Menu
-                    style={{minWidth: '160px'}}
-                    onClick={(e) => handleDropdownItemClick(e, item, fileType)}
-                >
-                    {isFolder && <Menu.Item key="createNewPage">New Note</Menu.Item>}
-                    <Menu.Item key="renameFile">
-                        {fileType.fileType === FileType.Note ? 'Rename Note' : 'Rename File'}
-                    </Menu.Item>
-                    <Menu.Item key="deleteFile">
-                        {fileType.fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
-                    </Menu.Item>
-                </Menu>
-            }
-            trigger={
-                ['click']
-            }>
+        return (
+            <Dropdown
+                autoAdjustOverflow
+                placement={'bottomLeft'}
+                autoFocus
+                overlay={
+                    <Menu style={{minWidth: '160px'}}>
+                        {isFolder && (
+                            <>
+                                <Menu.Item key="createNewPage"
+                                           onClick={() => handleMenuClick('createNewPage', item, fileType)}>
+                                    New Note
+                                </Menu.Item>
+                                <Menu.Item key="addNewFile"
+                                           onClick={() => handleMenuClick('addNewFile', item, fileType)}>
+                                Add new file
+                            </Menu.Item>
+                            </>
+                        )}
+                        {fileType !== FileType.Pdf && (
+                            <Menu.Item key="renameFile" onClick={() => handleMenuClick('renameFile', item, fileType)}>
+                                {fileType.fileType === FileType.Note ? 'Rename Note' : 'Rename Folder'}
+                            </Menu.Item>
+                        )}
+                        <Menu.Item key="deleteFile" onClick={() => handleMenuClick('deleteFile', item, fileType)}>
+                            {fileType.fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
+                        </Menu.Item>
+                    </Menu>
+                }
+                trigger={['click']}
+            >
         <span style={{float: 'right'}}>
           <EllipsisOutlined/>
         </span>
-        </Dropdown>);
+            </Dropdown>
+        );
     };
 
-    return (<>
-        <Menu
-            mode="inline"
-            // onClick={handleMenuClick}
-        >
-            <Menu.SubMenu
-                key={folderData.id}
-                title={<div className="folder-menu">
-                    <span> {folderData.folder_name} </span>
-                    <DropDown fileType={FileType.Folder} item={folderData}
-                    />
-                </div>}
-                icon={<FolderOutlined/>}>
-                {notes.map((note) => {
-                    // console.log("NOTE: ", note?.item)
-                    return (<Menu.Item
-                        key={note.item_id}
-                        icon={<BookOutlined/>}
-                        style={{minWidth: '160px'}}>
-                        <span className="file-name">{note?.item?.title}</span>
-                        <DropDown fileType={FileType.Note} item={note}/>
-                    </Menu.Item>)
-                })}
-                {files.map((file) => (<Menu.Item
-                    key={file}
-                    icon={<FilePdfOutlined/>}
-                    style={{minWidth: '160px'}}>
-                    <span className="file-name">{file.title}</span>
-                    <DropDown fileType={FileType.Pdf} key={file}/>
-                </Menu.Item>))}
-            </Menu.SubMenu>
-        </Menu>
-        <Modal
-            title="Create New Page"
-            open={pageModalVisible}
-            onCancel={() => setPageModalVisible(false)}
-            onOk={handleNoteUpdate}
-        >
-            <Input
-                value={noteValue}
-                onChange={(e) => setNoteValue(e.target.value)}
-                placeholder="Enter note content"
+    return (
+        <>
+            <Menu mode="inline">
+                <Menu.SubMenu
+                    key={folder.id}
+                    title={
+                        <div className="folder-menu">
+                            <span> {folder.folder_name} </span>
+                            <DropDown fileType={FileType.Folder} item={folder}/>
+                        </div>
+                    }
+                    icon={<FolderOutlined/>}
+                >
+                    {notes.map((note) => (
+                        <Menu.Item onClick={() => handleNavigateFile(note.item_id, FileType.Note)} key={note.item_id} icon={<BookOutlined/>} style={{minWidth: '160px'}}>
+                            <span className="file-name">{note?.item?.title}</span>
+                            <DropDown fileType={FileType.Note} item={note}/>
+                        </Menu.Item>
+                    ))}
+                    {files.map((file) => (
+                        <Menu.Item onClick={() => handleNavigateFile(file.item_id, FileType.Pdf)} key={file.item_id} icon={<FilePdfOutlined/>} style={{minWidth: '160px'}}>
+                            <span className="file-name">{file.item.name}</span>
+                            <DropDown fileType={FileType.Pdf} item={file}/>
+                        </Menu.Item>
+                    ))}
+                </Menu.SubMenu>
+            </Menu>
+            <Modal
+                title="Create New Page"
+                open={pageModalVisible}
+                confirmLoading={confirmLoading}
+                onCancel={() => setPageModalVisible(false)}
+                onOk={handleNoteUpdate}
+            >
+                <Input value={noteValue} onChange={(e) => setNoteValue(e.target.value)} placeholder="Enter note title"/>
+            </Modal>
+            <Modal
+                title="⁉️ Confirm delete?"
+                open={deleteModalVisible}
+                onOk={handleFileDelete}
+                confirmLoading={confirmLoading}
+                onCancel={() => setDeleteModalVisible(false)}
+            >
+                You will not be able to restore this item!
+                <br/>
+                Continue?
+            </Modal>
+            <Modal
+                title={renameItemType === FileType.Folder ? 'Rename Folder' : 'Rename Note'}
+                open={renameModalVisible}
+                confirmLoading={confirmLoading}
+                onCancel={() => setRenameModalVisible(false)}
+                onOk={handleRename}
+            >
+                <Input
+                    value={renameItemValue}
+                    onChange={(e) => setRenameItemValue(e.target.value)}
+                    placeholder={`Enter ${renameItemType === FileType.Folder ? 'folder' : 'note'} name`}
+                />
+            </Modal>
+            <input
+                id="file-input"
+                type="file"
+                accept="application/pdf"
+                style={{ display: 'none' }}
+                onChange={handleFileInputChange}
             />
-        </Modal>
-        <Modal
-            title="⁉️ Confirm delete?"
-            open={deleteModalVisible}
-            onOk={() => handleDeleteFile()}
-            confirmLoading={confirmLoading}
-            onCancel={() => setDeleteModalVisible(false)}
-        >
-            You will not be able to restore this item!<br/>
-            Continue?
-        </Modal>
-    </>);
+        </>
+    );
 };
 
 export default TeTuMenu;
