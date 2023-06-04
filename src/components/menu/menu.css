@@ -1,0 +1,39 @@
+.ant-menu-submenu-arrow {
+    left: 5%;
+    right: unset;
+    transform: translateX(-100%);
+}
+
+.ant-menu-submenu-title {
+    padding-right: 17px !important;
+}
+
+.ant-menu-submenu-title > span {
+    display: flex;
+    align-items: center;
+}
+.ant-menu-title-content {
+    display: flex;
+}
+.ant-menu-title-content > .file-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 20px;
+    width: 120px;
+}
+.folder-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.ant-menu-submenu div {
+    height: 30px !important;
+}
+
+.ant-menu-item {
+    padding-left: 24px !important;
+    margin-right: 24px !important;
+}
