@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Input, Menu, Modal } from 'antd';
-import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined } from '@ant-design/icons';
+import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined, FileAddOutlined, UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { FileType } from '../../enums/FileType';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -222,21 +222,21 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
                             <>
                                 <Menu.Item key="createNewPage"
                                     onClick={() => handleMenuClick('createNewPage', item, fileType)}>
-                                    New Note
+                                    <FileAddOutlined /> New Note
                                 </Menu.Item>
                                 <Menu.Item key="addNewFile"
                                     onClick={() => handleMenuClick('addNewFile', item, fileType)}>
-                                    Add File
+                                    <UploadOutlined /> Add File
                                 </Menu.Item>
                             </>
                         )}
                         {fileType !== FileType.Pdf && (
                             <Menu.Item key="renameFile" onClick={() => handleMenuClick('renameFile', item, fileType)}>
-                                {fileType === FileType.Note ? 'Rename Note' : 'Rename Folder'}
+                                <EditOutlined /> {fileType === FileType.Note ? 'Rename Note' : 'Rename Folder'}
                             </Menu.Item>
                         )}
                         <Menu.Item key="deleteFile" onClick={() => handleMenuClick('deleteFile', item, fileType)}>
-                            {fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
+                            <DeleteOutlined /> {fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
                         </Menu.Item>
                     </Menu>
                 }

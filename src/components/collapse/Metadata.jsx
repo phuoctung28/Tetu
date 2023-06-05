@@ -170,7 +170,6 @@ const Metadata = ({ noteData }) => {
         }
 
     }
-    console.log("NOTE DATA:", noteData);
 
     return (
         <div className="container-metadata">

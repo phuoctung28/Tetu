@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './Editor.css';
 
-const TetuEditor = ({ editorData }) => {
+const TetuEditor = ({ editorData, setNoteContent }) => {
     const [editorValue, setEditorValue] = useState('');
 
     useEffect(() => {
@@ -12,6 +12,7 @@ const TetuEditor = ({ editorData }) => {
 
     const handleChange = (value) => {
         setEditorValue(value);
+        setNoteContent(value);
     };
 
     return (

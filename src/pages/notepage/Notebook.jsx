@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Layout, theme, } from 'antd';
+import { Input, Layout, message, theme, } from 'antd';
 import Metadata from '../../components/collapse/Metadata';
 import Sidebar from '../../components/sidebar/Sidebar';
 import MainHeader from '../../components/header/MainHeader';
 import TetuEditor from '../../components/Editor/Editor';
 import './note_editor.css';
-import { getDocumentById, queryDocuments, updateDocumentProperty } from "../../services/firebase";
+import { getDocumentById, queryDocuments, updateDocument, updateDocumentProperty } from "../../services/firebase";
 import { useLocation, useParams } from "react-router-dom";
+import { useCallback } from 'react';
 
 const { Content } = Layout;
 
@@ -20,6 +21,7 @@ const Notebook = () => {
     const location = useLocation();
     const data = location.state;
     const [currentTitle, setCurrentTitle] = useState(data.name);
+    const [noteContent, setNoteContent] = useState("");
 
     useEffect(() => {
         const fetchNote = async () => {
@@ -36,6 +38,7 @@ const Notebook = () => {
                     noteId: pageId,
                     folderId: folder[0].id,
                 });
+                setNoteContent(fetchedNote.content);
 
             } catch (error) {
                 console.error('Error fetching notes and files:', error);
@@ -63,11 +66,40 @@ const Notebook = () => {
         }
     }
 
+    const saveNoteContent = async () => {
+        console.log("current note content:", noteContent);
+        try {
+            await updateDocumentProperty("notes", pageId, "content", noteContent);
+            message.success("Save successfully!");
+        } catch (error) {
+            console.error('Error saving note content:', error);
+        }
+    }
+
+
+    useEffect(() => {
+        // check if the key is "s" with ctrl key
+        const keyDown = (event) => {
+            if (event.key === "s" && event.ctrlKey) {
+                // prevent the browser from opening the save dialog
+                event.preventDefault();
+                // call our callback method
+                saveNoteContent();
+            }
+        };
+        // listen to keydown events
+        document.addEventListener("keydown", keyDown);
+        // stop listening on component destory
+        return () => {
+            document.removeEventListener("keydown", keyDown);
+        };
+    });
+
     return (
         <Layout hasSider>
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
             <Layout className="site-layout" style={{ marginLeft: 200, }}>
-                <MainHeader noteData={noteData} />
+                <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} />
                 <Content className="notebook-container">
                     <div className='note-space-container' style={{ padding: 40, background: colorBgContainer, }}>
                         <div className='note-title-container'>
@@ -80,7 +112,9 @@ const Notebook = () => {
                                 bordered={false} />
                         </div>
                         <Metadata noteData={noteData} />
-                        <TetuEditor editorData={noteData.content || ""} />
+                        <TetuEditor
+                            editorData={noteData.content || ""}
+                            setNoteContent={setNoteContent} />
                     </div>
                 </Content>
             </Layout>

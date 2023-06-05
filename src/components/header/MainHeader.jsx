@@ -10,7 +10,7 @@ const onSearch = (value) => {
     console.log(value);
 };
 
-const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData }) => {
+const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData, saveNoteContent }) => {
     const handleLogoClick = () => {
         window.location.href = '/home';
     };
@@ -41,7 +41,10 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                         icon={<PushpinOutlined style={{ color: '#596A77' }} />} />
                 </Tooltip>
                 <Tooltip title="Save">
-                    <Button className='btn-toolbar' shape="circle"
+                    <Button
+                        className='btn-toolbar'
+                        shape="circle"
+                        onClick={saveNoteContent}
                         icon={<SaveOutlined style={{ color: '#596A77' }} />} />
                 </Tooltip>
 
