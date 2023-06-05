@@ -50,6 +50,7 @@ const RegisterForm = () => {
          const usersCollectionRef = doc(database, 'users', user.uid);
          setDoc(usersCollectionRef, { email: email, name: name });
          const loginUser = {
+            user_id: user.uid,
             email: email,
             name: name
          }
@@ -73,6 +74,7 @@ const RegisterForm = () => {
          await setDoc(usersCollectionRef, { email, googleAuth: true });
 
          const loginUser = {
+            user_id: user.uid,
             email: user.email,
             name: user.displayName,
             profilePic: user.photoURL,

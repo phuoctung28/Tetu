@@ -1,16 +1,16 @@
-import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm } from 'antd';
+import {Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm} from 'antd';
 import '../../assets/styles/sidebar.css';
-import { EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined } from '@ant-design/icons';
-import { auth } from '../../services/firebase';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import {EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined} from '@ant-design/icons';
+import {auth} from '../../services/firebase';
+import {useNavigate} from 'react-router-dom';
+import {useState} from 'react';
 import SidebarMenu from './SidebarMenu';
 import "../../assets/styles/sidebar.css";
 import NewItem from './NewItem';
 
-const { Sider } = Layout;
+const {Sider} = Layout;
 
-const Sidebar = () => {
+const Sidebar = ({currentPage}) => {
 
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -22,11 +22,20 @@ const Sidebar = () => {
     };
     // console.log(currentUser);
     return (
-        <Sider className='home-sider' style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, background: 'white' }}>
-            <div className='sider-top' style={{ margin: '0 0 10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Sider className='home-sider' style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            background: 'white'
+        }}>
+            <div className='sider-top'
+                 style={{margin: '0 0 10px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Avatar
                     shape="square"
-                    style={{ verticalAlign: 'middle', marginRight: 10 }}
+                    style={{verticalAlign: 'middle', marginRight: 10}}
                     size="small"
                     gap={4}
                     src={currentUser?.profilePic}>
@@ -37,27 +46,35 @@ const Sidebar = () => {
             <div className='quicktool-container'>
 
                 <Tooltip title="Table view">
-                    <Button size="small" icon={<TableOutlined />} onClick={() => { navigate("/table") }} />
+                    <Button size="small" icon={<TableOutlined/>} onClick={() => {
+                        navigate("/table")
+                    }}/>
                 </Tooltip>
                 <Tooltip title="Calendar view">
-                    <Button size="small" icon={<CalendarOutlined />} onClick={() => { navigate("/calendar") }} />
+                    <Button size="small" icon={<CalendarOutlined/>} onClick={() => {
+                        navigate("/calendar")
+                    }}/>
                 </Tooltip>
                 <Tooltip title="Graph view">
-                    <Button size="small" icon={<ShareAltOutlined />} onClick={() => { navigate("/graph") }} />
+                    <Button size="small" icon={<ShareAltOutlined/>} onClick={() => {
+                        navigate("/graph")
+                    }}/>
                 </Tooltip>
                 <Popover
-                    content={<NewItem />}
+                    content={<NewItem/>}
                     placement='rightTop'
                     trigger="click"
                     open={open}
                     onOpenChange={handleOpenChange}
                 >
-                    <Button size="small" icon={<EllipsisOutlined />} />
+                    <Button size="small" icon={<EllipsisOutlined/>}/>
                 </Popover>
             </div>
-            <Divider />
+            <Divider/>
             {/* <SideMenu /> */}
-            <SidebarMenu />
+            <SidebarMenu
+                currentPage={currentPage}
+            />
         </Sider>
     );
 };
