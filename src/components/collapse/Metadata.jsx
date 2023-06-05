@@ -3,6 +3,7 @@ import { CalendarTwoTone, TagsTwoTone, SwitcherTwoTone, NumberOutlined, PlusOutl
 import "../../assets/styles/metadata.css";
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
+import { updateDocumentProperty } from '../../services/firebase';
 
 const { Panel } = Collapse;
 
@@ -11,6 +12,16 @@ const statusOptions = [
     { value: 'In progress', },
     { value: 'Done', },
     { value: 'Closed', },
+];
+
+
+const options = [
+    { value: "Self-study", label: "Self-study" },
+    { value: "In-class note", label: "In-class note" },
+    { value: "Revision", label: "Revision" },
+    { value: "Assignment", label: "Assignment" },
+    { value: "Project", label: "Project" },
+    { value: "Presentation", label: "Presentation" }
 ];
 
 const tagRender = (props) => {
@@ -35,14 +46,21 @@ const tagRender = (props) => {
 };
 
 const Metadata = ({ noteData }) => {
+    const { token } = theme.useToken();
     const panelStyle = {
         border: 'none',
         fontWeight: 600,
     };
+    const tagInputStyle = {
+        width: 78,
+        verticalAlign: 'top',
+    };
+    const tagPlusStyle = {
+        background: token.colorBgContainer,
+        borderStyle: 'dashed',
+    };
     const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD'];
 
-
-    const { token } = theme.useToken();
     const [tags, setTags] = useState([]);
     const [inputVisible, setInputVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
@@ -50,6 +68,7 @@ const Metadata = ({ noteData }) => {
     const [editInputValue, setEditInputValue] = useState('');
     const inputRef = useRef(null);
     const editInputRef = useRef(null);
+
 
     useEffect(() => {
         setTags(noteData.meta_data?.tags || []);
@@ -61,13 +80,20 @@ const Metadata = ({ noteData }) => {
             inputRef.current?.focus();
         }
     }, [inputVisible]);
+
     useEffect(() => {
         editInputRef.current?.focus();
     }, [inputValue]);
 
-    const handleClose = (removedTag) => {
+    const handleClose = async (removedTag) => {
         const newTags = tags.filter((tag) => tag !== removedTag);
-        console.log(newTags);
+        // console.log(newTags);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, tags: newTags });
+        }
+        catch (error) {
+            console.error('Error updating tags:', error);
+        }
         setTags(newTags);
     };
 
@@ -79,11 +105,17 @@ const Metadata = ({ noteData }) => {
         setInputValue(e.target.value);
     };
 
-    const handleInputConfirm = () => {
+    const handleInputConfirm = async () => {
         if (inputValue && tags.indexOf(inputValue) === -1) {
             setTags([...tags, inputValue]);
         }
         // console.log("TAGS: ", [...tags, inputValue]);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, tags: [...tags, inputValue] });
+        }
+        catch (error) {
+            console.error('Error updating tags:', error);
+        }
         setInputVisible(false);
         setInputValue('');
     };
@@ -92,45 +124,53 @@ const Metadata = ({ noteData }) => {
         setEditInputValue(e.target.value);
     };
 
-    const handleEditInputConfirm = () => {
+    const handleEditInputConfirm = async () => {
         const newTags = [...tags];
         newTags[editInputIndex] = editInputValue;
         setTags(newTags);
         // console.log("EDIT TAGS: ", newTags);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, tags: newTags });
+        }
+        catch (error) {
+            console.error('Error updating tags:', error);
+        }
         setEditInputIndex(-1);
         setInputValue('');
     };
 
-    const tagInputStyle = {
-        width: 78,
-        verticalAlign: 'top',
-    };
-    const tagPlusStyle = {
-        background: token.colorBgContainer,
-        borderStyle: 'dashed',
-    };
-
-    const options = [
-        { value: "Self-study", label: "Self-study" },
-        { value: "In-class note", label: "In-class note" },
-        { value: "Revision", label: "Revision" },
-        { value: "Assignment", label: "Assignment" },
-        { value: "Project", label: "Project" },
-        { value: "Presentation", label: "Presentation" }
-    ];
-
-    const handleDatePicker = (date, dateString) => {
+    const handleDatePicker = async (date, dateString) => {
         console.log("datepicker:", date);
         console.log("datestring: ", dateString);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, datetime: dateString });
+        }
+        catch (error) {
+            console.error('Error updating date:', error);
+        }
     }
 
-    const handleSelectStatus = (value) => {
+    const handleSelectStatus = async (value) => {
         console.log("select status: ", value);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, status: [value] });
+        }
+        catch (error) {
+            console.error('Error updating status:', error);
+        }
     }
 
-    const handleSelectType = (value) => {
+    const handleSelectType = async (value) => {
         console.log("select type: ", value);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, type: [value] });
+        }
+        catch (error) {
+            console.error('Error updating type:', error);
+        }
+
     }
+    console.log("NOTE DATA:", noteData);
 
     return (
         <div className="container-metadata">

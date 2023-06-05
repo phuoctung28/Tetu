@@ -26,7 +26,11 @@ const Notebook = () => {
             try {
                 const fetchedNote = await getDocumentById("notes", pageId);
                 const folder = await queryDocuments("folders", "notes", "array-contains", pageId);
-                setNoteData({ ...fetchedNote, location: folder[0].folder_name });
+                setNoteData({
+                    ...fetchedNote,
+                    noteId: pageId,
+                    location: folder[0].folder_name
+                });
                 setTitle(fetchedNote.title);
                 setCurrentPage({
                     noteId: pageId,
