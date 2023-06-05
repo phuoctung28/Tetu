@@ -5,7 +5,7 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import MainHeader from '../../components/header/MainHeader';
 import TetuEditor from '../../components/Editor/Editor';
 import './note_editor.css';
-import {getDocumentById} from "../../services/firebase";
+import {getDocumentById, queryDocuments} from "../../services/firebase";
 import {useParams} from "react-router-dom";
 
 const {Content} = Layout;
@@ -15,24 +15,37 @@ const Notebook = () => {
 
     const [title, setTitle] = useState("Untitled");
     const [noteData, setNoteData] = useState({});
+    const [location, setLocation] = useState("");
     const {pageId} = useParams();
+    const [currentPage, setCurrentPage] = useState({});
+
     useEffect(() => {
         const fetchNote = async () => {
             try {
                 const fetchedNote = await getDocumentById("notes", pageId);
-                setNoteData(fetchedNote);
-                console.log(fetchedNote)
+                const folder = await queryDocuments("folders", "notes", "array-contains", pageId);
+                setNoteData({...fetchedNote, location: folder[0].folder_name});
+                setLocation(folder[0].folder_name);
+                setCurrentPage({
+                    noteId: pageId,
+                    folderId: folder[0].id,
+                })
+
             } catch (error) {
                 console.error('Error fetching notes and files:', error);
             }
+
         };
 
         fetchNote();
-    }, [pageId]);
+        document.title = noteData.title;
+        console.log("NOTE DATA:", noteData);
+        setTitle(noteData.title);
+    }, [pageId, title]);
 
-    useEffect(() => {
-        document.title = title;
-    }, [title]);
+    // useEffect(() => {
+    //     document.title = title;
+    // }, [title]);
 
     const changeTitle = (event) => {
         setTitle(event.target.value);
@@ -45,16 +58,15 @@ const Notebook = () => {
         }
     }
     return (
-
         <Layout hasSider>
-            <Sidebar/>
+            <Sidebar currentPage={currentPage}/>
             <Layout className="site-layout" style={{marginLeft: 200,}}>
-                <MainHeader/>
+                <MainHeader noteData={noteData}/>
                 <Content className="notebook-container" style={{margin: '0', overflow: 'initial',}}>
-                    <div style={{padding: 40, background: colorBgContainer,}}>
+                    <div className='note-space-container' style={{padding: 40, background: colorBgContainer,}}>
                         <div className='note-title-container'>
                             <Input
-                                value={noteData.title}
+                                value={title}
                                 className="note-title"
                                 onChange={changeTitle}
                                 onPressEnter={handleKeyUp}

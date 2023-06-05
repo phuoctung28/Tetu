@@ -11,26 +11,27 @@ import ListView from './pages/listview/ListView';
 import GraphView from './pages/graphview/GraphView';
 import Notebook from './pages/notepage/Notebook';
 import TeTuMenu from "./components/menu/Menu";
+import CalendarView from './pages/calendarview/CalendarView';
 
 function App() {
-   return (
-      <PayPalScriptProvider options={{ "client-id": "AYoTMzxCm2u7ot7z8kCWQGMgUlf79LmiJIrLY2zBpIemVUhBZh3nhF4llvBr5bIAk4jNgey06AAae5ex" }}>
-         <BrowserRouter>
-            <Routes>
-               <Route path="/" element={<LandingPage />} />
-               <Route path="/home" element={<Home />} />
-               {/*<Route path="/note" element={<NotePage />} />*/}
-               <Route path="/note/:pageId" element={<Notebook />} />
-               <Route path="/test2" element={<TeTuMenu />} />
-               <Route path="/file" element={<FilePage />} />
-               <Route path="/test" element={<DraggableEditor />} />
-               <Route path="/pricing" element={<PricingPage />} />
-               <Route path="/table" element={<ListView />} />
-               <Route path="/graph" element={<GraphView />} />
-            </Routes >
-         </BrowserRouter >
-      </PayPalScriptProvider >
-   );
+    return (
+        <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/note/:pageId" element={<Notebook />} />
+                    <Route path="/test2" element={<TeTuMenu />} />
+                    <Route path="/file" element={<FilePage />} />
+                    <Route path="/test" element={<DraggableEditor />} />
+                    <Route path="/pricing" element={<PricingPage />} />
+                    <Route path="/table" element={<ListView />} />
+                    <Route path="/graph" element={<GraphView />} />
+                    <Route path="/calendar" element={<CalendarView />} />
+                </Routes >
+            </BrowserRouter >
+        </PayPalScriptProvider >
+    );
 }
 
 export default App;
