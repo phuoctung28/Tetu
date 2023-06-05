@@ -6,11 +6,12 @@ import './file_page.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import NoteEditor from '../notepage/NoteEditor';
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 const { Content } = Layout;
 
 const FilePage = () => {
+    const { fileId } = useParams();
    const [dualNote, setDualNote] = useState(false);
    const location = useLocation();
    const data = location.state;

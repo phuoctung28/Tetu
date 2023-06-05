@@ -1,25 +1,20 @@
 import { Collapse, DatePicker, Space, Input, Tag, Tooltip, Select, theme } from 'antd';
-import { CalendarOutlined, TagsOutlined, SwitcherOutlined, NumberOutlined, PlusOutlined } from '@ant-design/icons';
+import { CalendarTwoTone, TagsTwoTone, SwitcherTwoTone, NumberOutlined, PlusOutlined } from '@ant-design/icons';
 import "../../assets/styles/metadata.css";
 import dayjs from 'dayjs';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const {Panel} = Collapse;
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+const { Panel } = Collapse;
 
 const statusOptions = [
-    {value: 'To-do',},
-    {value: 'In progress',},
-    {value: 'Done',},
-    {value: 'Canceled',},
+    { value: 'To-do', },
+    { value: 'In progress', },
+    { value: 'Done', },
+    { value: 'Closed', },
 ];
 
 const tagRender = (props) => {
-    const {label, value, closable, onClose} = props;
+    const { label, value, closable, onClose } = props;
     const onPreventMouseDown = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -39,24 +34,28 @@ const tagRender = (props) => {
     );
 };
 
-const Metadata = () => {
-    const onChange = (key) => {
-        console.log(key);
-    };
+const Metadata = ({ noteData }) => {
     const panelStyle = {
         border: 'none',
         fontWeight: 600,
     };
-    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
+    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD'];
 
-    const {token} = theme.useToken();
-    const [tags, setTags] = useState(['Tag 1',]);
+
+    const { token } = theme.useToken();
+    const [tags, setTags] = useState([]);
     const [inputVisible, setInputVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [editInputIndex, setEditInputIndex] = useState(-1);
     const [editInputValue, setEditInputValue] = useState('');
     const inputRef = useRef(null);
     const editInputRef = useRef(null);
+
+    useEffect(() => {
+        setTags(noteData.meta_data?.tags || []);
+    }, [noteData.meta_data?.tags]);
+    // console.log("TAGS:", tags);
+
     useEffect(() => {
         if (inputVisible) {
             inputRef.current?.focus();
@@ -65,34 +64,43 @@ const Metadata = () => {
     useEffect(() => {
         editInputRef.current?.focus();
     }, [inputValue]);
+
     const handleClose = (removedTag) => {
         const newTags = tags.filter((tag) => tag !== removedTag);
         console.log(newTags);
         setTags(newTags);
     };
+
     const showInput = () => {
         setInputVisible(true);
     };
+
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
+
     const handleInputConfirm = () => {
         if (inputValue && tags.indexOf(inputValue) === -1) {
             setTags([...tags, inputValue]);
         }
+        // console.log("TAGS: ", [...tags, inputValue]);
         setInputVisible(false);
         setInputValue('');
     };
+
     const handleEditInputChange = (e) => {
         setEditInputValue(e.target.value);
     };
+
     const handleEditInputConfirm = () => {
         const newTags = [...tags];
         newTags[editInputIndex] = editInputValue;
         setTags(newTags);
+        // console.log("EDIT TAGS: ", newTags);
         setEditInputIndex(-1);
         setInputValue('');
     };
+
     const tagInputStyle = {
         width: 78,
         verticalAlign: 'top',
@@ -101,49 +109,68 @@ const Metadata = () => {
         background: token.colorBgContainer,
         borderStyle: 'dashed',
     };
+
     const options = [
-        {value: "In-class note", label: "In-class note"},
-        {value: "Revision", label: "Revision"},
-        {value: "Assignment", label: "Assignment"},
-        {value: "Project", label: "Project"},
-        {value: "Presentation", label: "Presentation"}
+        { value: "Self-study", label: "Self-study" },
+        { value: "In-class note", label: "In-class note" },
+        { value: "Revision", label: "Revision" },
+        { value: "Assignment", label: "Assignment" },
+        { value: "Project", label: "Project" },
+        { value: "Presentation", label: "Presentation" }
     ];
+
+    const handleDatePicker = (date, dateString) => {
+        console.log("datepicker:", date);
+        console.log("datestring: ", dateString);
+    }
+
+    const handleSelectStatus = (value) => {
+        console.log("select status: ", value);
+    }
+
+    const handleSelectType = (value) => {
+        console.log("select type: ", value);
+    }
+
     return (
         <div className="container-metadata">
-            <Collapse defaultActiveKey={['']} onChange={onChange} ghost bordered={true}>
+            <Collapse defaultActiveKey={['']} ghost bordered={true}>
                 <Panel header="Metadata" key="1" style={panelStyle}>
                     {/* <p className="metadata-item">{text}</p> */}
                     <Space className="metadata-list" direction='vertical' size={10}>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <CalendarOutlined/> Date
+                                <CalendarTwoTone /> Date
                             </div>
                             <div className="item-detail">
-                                <DatePicker size="small" defaultValue={dayjs('01/01/2015', dateFormatList[0])}
-                                            format={dateFormatList}/>
+                                <DatePicker
+                                    size="small"
+                                    // defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
+                                    defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
+                                    onChange={handleDatePicker}
+                                    format={dateFormatList} />
                             </div>
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <NumberOutlined/> Status
+                                <NumberOutlined style={{ color: "#1677ff" }} /> Status
                             </div>
                             <div className="item-detail">
                                 <Select
                                     // mode="multiple"
                                     showArrow
                                     tagRender={tagRender}
-                                    defaultValue={['To-do']}
-                                    style={{
-                                        width: '150px',
-                                    }}
+                                    defaultValue={noteData.meta_data?.status}
+                                    style={{ width: '150px', }}
                                     size="small"
                                     options={statusOptions}
+                                    onChange={handleSelectStatus}
                                 />
                             </div>
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <TagsOutlined/> Tag
+                                <TagsTwoTone /> Tag
                             </div>
                             <div className="item-detail">
                                 <Space size={[0, 8]} wrap>
@@ -174,17 +201,17 @@ const Metadata = () => {
                                                     }}
                                                     onClose={() => handleClose(tag)}
                                                 >
-                                       <span
-                                           onDoubleClick={(e) => {
-                                               if (index !== 0) {
-                                                   setEditInputIndex(index);
-                                                   setEditInputValue(tag);
-                                                   e.preventDefault();
-                                               }
-                                           }}
-                                       >
-                                          {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                                       </span>
+                                                    <span
+                                                        onDoubleClick={(e) => {
+                                                            if (index !== 0) {
+                                                                setEditInputIndex(index);
+                                                                setEditInputValue(tag);
+                                                                e.preventDefault();
+                                                            }
+                                                        }}
+                                                    >
+                                                        {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                                    </span>
                                                 </Tag>
                                             );
                                             return isLongTag ? (
@@ -210,7 +237,7 @@ const Metadata = () => {
                                         />
                                     ) : (
                                         <Tag style={tagPlusStyle} onClick={showInput}>
-                                            <PlusOutlined/> New Tag
+                                            <PlusOutlined /> New Tag
                                         </Tag>
                                     )}
                                 </Space>
@@ -218,25 +245,25 @@ const Metadata = () => {
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <SwitcherOutlined/> Type
+                                <SwitcherTwoTone /> Type
                             </div>
                             <div className="item-detail">
                                 <Select
                                     // mode="tags"
                                     size="small"
                                     placeholder="Select or Create"
-                                    defaultValue={["In-class note"]}
-                                    style={{
-                                        width: '150px',
-                                    }}
+                                    // defaultValue={["Self-study"]}
+                                    defaultValue={noteData.meta_data?.type}
+                                    style={{ width: '150px', }}
                                     options={options}
+                                    onChange={handleSelectType}
                                 />
                             </div>
                         </div>
                     </Space>
                 </Panel>
                 <Panel header="Outline" key="2" style={panelStyle}>
-                    <p>{text}</p>
+                    <span>This feature is in development...</span>
                 </Panel>
             </Collapse>
         </div>

@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Input, Modal, Tooltip} from 'antd';
-import {AppstoreAddOutlined, FolderAddOutlined} from '@ant-design/icons';
-import {createDocument, queryDocuments} from "../../services/firebase";
+import React, { useEffect, useState } from 'react';
+import { Button, Input, Modal, Tooltip } from 'antd';
+import { FolderAddOutlined } from '@ant-design/icons';
+import { createDocument, queryDocuments } from "../../services/firebase";
 import TeTuMenu from "../menu/Menu";
 
-const SidebarMenu = ({currentPage}) => {
+const SidebarMenu = ({ currentPage, currentTitle }) => {
     // const user_id = JSON.parse(localStorage.getItem("user")).user_id;
     const [folderModalVisible, setFolderModalVisible] = useState(false);
     const [folderValue, setFolderValue] = useState('');
     const [pageValue, setPageValue] = useState('');
     const [folders, setFolders] = useState([]);
-    console.log("CURRENT PAGE:", currentPage);
+    // console.log("CURRENT PAGE:", currentPage);
     useEffect(() => {
         const loadFolders = async () => {
             try {
@@ -51,15 +51,19 @@ const SidebarMenu = ({currentPage}) => {
         <div>
             <div className='new-item-btn-container'>
                 <Tooltip title="New folder">
-                    <Button block className="btn-new-item" icon={<FolderAddOutlined/>}
-                            onClick={() => handleCreateNewFolder(null)}>
+                    <Button block className="btn-new-item" icon={<FolderAddOutlined />}
+                        onClick={() => handleCreateNewFolder(null)}>
                         New Session
                     </Button>
                 </Tooltip>
             </div>
 
             {folders.map((data) =>
-                <TeTuMenu key={data.id} folderData={data} currentPage={currentPage}/>
+                <TeTuMenu
+                    key={data.id}
+                    folderData={data}
+                    currentPage={currentPage}
+                    currentTitle={currentTitle} />
             )}
             <Modal
                 title="Create New Folder"

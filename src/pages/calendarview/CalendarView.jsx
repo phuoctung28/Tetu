@@ -1,5 +1,5 @@
 import { Badge, Button, Calendar, Layout } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
 import Sidebar from '../../components/sidebar/Sidebar';

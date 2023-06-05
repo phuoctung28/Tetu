@@ -31,13 +31,12 @@ const NewItem = () => {
                 title="Confirm log out?"
                 onConfirm={signOut}
                 // onCancel={cancel}
+                placement="right"
                 okText="Yes"
                 cancelText="No">
-                <Tooltip title="Sign out">
-                    <Button className="new-item" type="text" icon={<LogoutOutlined />}>
-                        Sign out
-                    </Button>
-                </Tooltip>
+                <Button className="new-item" type="text" icon={<LogoutOutlined />}>
+                    Sign out
+                </Button>
             </Popconfirm>
 
         </div >

@@ -8,17 +8,17 @@ import Sidebar from '../../components/sidebar/Sidebar';
 const { Content } = Layout;
 
 const ListView = () => {
-   return (
-      <Layout hasSider>
-         <Sidebar />
-         <Layout className="site-layout" style={{ marginLeft: 200, }} >
-            <MainHeader />
-            <Content style={{ margin: '0', overflow: 'initial', }} >
-               <TableView />
-            </Content>
-         </Layout>
-      </Layout>
-   );
+    return (
+        <Layout hasSider>
+            <Sidebar />
+            <Layout className="site-layout" style={{ marginLeft: 200, }} >
+                <MainHeader />
+                <Content style={{ margin: '0', overflow: 'initial', }} >
+                    <TableView />
+                </Content>
+            </Layout>
+        </Layout>
+    );
 };
 
 export default ListView;

@@ -1,6 +1,6 @@
-import {initializeApp} from "firebase/app";
-import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
-import {getAuth, GoogleAuthProvider,} from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { getAuth, GoogleAuthProvider, } from "firebase/auth";
 import {
     addDoc,
     getDoc,
@@ -41,7 +41,7 @@ export const createRef = (collection, documentId) => {
 }
 // Create a document in a Firestore collection
 export const createDocument = async (collections, data) => {
-    try {
+    try {   
         return await addDoc(collection(db, collections), data);
     } catch (error) {
         console.error('Error creating document:', error);
@@ -54,7 +54,7 @@ export const getDocument = async (collection, id) => {
     try {
         const docRef = await db.collection(collection).doc(id).get();
         if (docRef.exists) {
-            return {id: docRef.id, ...docRef.data()};
+            return { id: docRef.id, ...docRef.data() };
         } else {
             throw new Error('Document not found.');
         }
@@ -140,7 +140,22 @@ export const queryDocuments = async (collections, field, operator, value) => {
         const q = query(collection(db, collections), where(field, operator, value));
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-            documents.push({id: doc.id, ...doc.data()});
+            documents.push({ id: doc.id, ...doc.data() });
+        });
+        return documents;
+    } catch (error) {
+        console.error('Error querying documents:', error);
+        throw error;
+    }
+};
+
+export const getAllDocuments = async (collections) => {
+    try {
+        const documents = [];
+        const q = collection(db, collections);
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            documents.push({ id: doc.id, ...doc.data() });
         });
         return documents;
     } catch (error) {

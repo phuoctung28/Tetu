@@ -44,7 +44,7 @@
     flex-direction: column;
     margin: 0;
     padding: 40px;
-    overflow: initial;
+    overflow: auto;
     height: 100vh;
     background: white;
 }

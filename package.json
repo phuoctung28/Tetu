@@ -34,7 +34,7 @@
       "eject": "react-scripts eject",
       "dev": "nodemon firebase"
    },
-   "proxy": "http://localhost:",
+   "proxy": "http://localhost:3000",
    "eslintConfig": {
       "extends": [
          "react-app",
