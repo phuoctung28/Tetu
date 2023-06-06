@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import check from "../../assets/icons/check.svg";
 import cross from "../../assets/icons/cross.svg";
+import qrPayment from "../../assets/images/qrpayment.jpg";
 import './pricing_page.css';
 import { Modal } from "antd";
 import PaypalCheckoutBtn from '../../components/PaypalCheckoutBtn';
@@ -80,12 +81,12 @@ const PricingPlan = () => {
             </div>
          </div>
          <Modal
-            title="Choose payment method"
+            title="Scan this to finish payment"
             open={isModalOpen}
             onCancel={handleCancel}
             footer={null}
          >
-            <PaypalCheckoutBtn ></PaypalCheckoutBtn>
+            <img src={qrPayment} className='qrPayment' />
          </Modal>
       </div>
    )
