@@ -1,9 +1,11 @@
 import { Badge, Button, Calendar, Layout } from 'antd';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
+import { getAllDocument } from '../../services/firebase';
+import moment from 'moment';
 
 const { Content } = Layout;
 const getListData = (value) => {
@@ -61,6 +63,39 @@ const getMonthData = (value) => {
     }
 };
 const CalendarView = () => {
+    const [fetchedData, setFetchedData] = useState();
+    useEffect(() =>{
+        const fetchNoteData = async () =>{
+            try  {
+                const fetchedNote = await getAllDocument("notes");
+                setFetchedData(fetchedNote);
+            }catch(err) {
+                console.error(err);
+            }
+        };
+        fetchNoteData();
+    },[])
+
+    const transformData = (data) =>{
+        const listData = [];
+        if(data) {
+            data.forEach(e =>{
+                if(e.meta_data) {
+                    const {meta_data, title} = e;
+                    const datetime = meta_data.datetime;
+                    const formattedDate = moment(datetime)
+                    listData.push({
+                        title: title,
+                        dateTime:datetime,
+                        url:'/',
+                        type: 'success',
+    
+                    })
+                }
+            })
+        }
+        return listData;
+    }
     const monthCellRender = (value) => {
         const num = getMonthData(value);
         return num ? (
@@ -74,9 +109,13 @@ const CalendarView = () => {
 
     const dateCellRender = (value) => {
         const listData = getListData(value);
+        const firebaseData = transformData(fetchedData);
+        const filteredData = firebaseData.filter((item) =>
+            moment(moment(item.dateTime).format('L')).isSame(moment(value.$d).format('L'))
+        );
         return (
             <ul className="events">
-                {listData.map((item) => (
+                {filteredData.map((item) => (
                     <li key={item.title}>
                         <Button type="text" onClick={() => navigate(item.url)}>
                             <Badge status={item.type} text={item.title} />
