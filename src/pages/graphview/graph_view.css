@@ -1,0 +1,12 @@
+.graph-container {
+    width: 100%;
+    height: calc(100vh - 50px);
+    background-color: #ffffff;
+    opacity: 1;
+    background-image: radial-gradient(#e3e8f1 1px, #ffffff 1px) !important;
+    background-size: 30px 30px;
+}
+
+.graph-component {
+    height: 100%;
+}
