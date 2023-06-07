@@ -71,10 +71,10 @@ const GraphView = () => {
         },
         events: {
             select: ({ nodes, edges }) => {
-                console.log("Selected nodes:");
-                console.log(nodes);
-                console.log("Selected edges:");
-                console.log(edges);
+                // console.log("Selected nodes:");
+                // console.log(nodes);
+                // console.log("Selected edges:");
+                // console.log(edges);
             },
             doubleClick: ({ pointer: { canvas } }) => {
                 createNode(canvas.x, canvas.y);
