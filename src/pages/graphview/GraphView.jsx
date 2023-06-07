@@ -1,48 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { getAllDocuments } from '../../services/firebase';
+import { Alert, Badge, Layout, Modal, Tag, message } from 'antd';
+import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { createDocument, getAllDocuments, getDocumentById, updateDocumentProperty } from '../../services/firebase';
 import './graph_view.css';
 import MainHeader from '../../components/header/MainHeader';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Graph from 'react-graph-vis';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
+import { getDocument } from 'pdfjs-dist';
 
 const { Content } = Layout;
 
-const options = {
-    layout: {
-        hierarchical: false
-    },
-    nodes: {
-        shape: "dot",
-        // opacity: 1,
-        // border: "#fff",
-        scaling: {
-            min: 10,
-            max: 30,
-        },
-        font: {
-            size: 12,
-            // face: "Tahoma",
-        },
-    },
-    edges: {
-        color: "#73A2FF",
-        width: 0.15,
-        // smooth: {
-        //     // enabled: true,
-        //     type: "continuous",
-        //     // type: "diagonalCross",
-        //     // roundness: 0.5
-        // }
-    },
-    manipulation: {
-        enabled: true,
-    },
-    interaction: { hover: true },
-};
 
 const randomColor = () => {
     const red = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
@@ -53,6 +22,94 @@ const randomColor = () => {
 const GraphView = () => {
     const [nodeList, setNodeList] = useState([]);
     const [edgeList, setEdgeList] = useState([]);
+
+    const options = {
+        layout: {
+            hierarchical: false
+        },
+        nodes: {
+            shape: "dot",
+            // opacity: 1,
+            // border: "#fff",
+            scaling: {
+                min: 10,
+                max: 30,
+            },
+            font: {
+                size: 12,
+                // face: "Tahoma",
+            },
+        },
+        edges: {
+            color: "#73A2FF",
+            width: 0.15,
+            smooth: {
+                // enabled: true,
+                type: "continuous",
+                // type: "diagonalCross",
+                // roundness: 0.5
+            }
+        },
+        manipulation: {
+            // enabled: false,
+            initiallyActive: false,
+            addEdge: async function (data, callback) {
+                if (data.from == data.to) {
+                    // var r = confirm("Do you want to connect the node to itself?");
+                    // if (r == true) {
+                    //     callback(data);
+                    // }
+                } else {
+                    let target = nodeList.filter(item => item.id === data.from)[0];
+                    callback(data);
+                    try {
+                        const type = target.type === "file" ? "files" : "notes";
+                        const targetItem = await getDocumentById(type, target.id);
+                        const formatData = {
+                            edge_id: data.id,
+                            node_id: data.to,
+                        }
+                        const insertData = targetItem?.connections && targetItem?.connections.length > 0
+                            ? [...targetItem?.connections, formatData]
+                            : [formatData];
+
+                        await updateDocumentProperty(type, target.id, "connections", insertData)
+                        message.success("Add edge successfully!");
+                    } catch (error) {
+                        console.log("Error add edge", error);
+                    }
+                }
+            },
+            deleteEdge: async function (data, callback) {
+                console.log("Delete edge: ", data);
+                let deletingEdge = edgeList.filter(item => item.id === data.edges[0])[0];
+                let target = nodeList.filter(item => item.id === deletingEdge.from)[0];
+                console.log("Invoke: ", deletingEdge);
+                console.log("Target: ", target);
+                callback(data);
+                try {
+                    const type = target.type === "file" ? "files" : "notes";
+                    const targetItem = await getDocumentById(type, target.id);
+                    const updateData = targetItem?.connections && targetItem?.connections.length > 0
+                        ? targetItem?.connections
+                        : [];
+                    const objWithIdIndex = updateData.findIndex((obj) => obj.id === data.id);
+                    if (objWithIdIndex > -1) {
+                        updateData.splice(objWithIdIndex, 1);
+                    }
+                    await updateDocumentProperty(type, target.id, "connections", updateData)
+                    message.success("Delete edge successfully!");
+                } catch (error) {
+                    console.log("Error delete edge", error);
+                }
+            },
+            deleteNode: false,
+            // editNode: undefined,
+            editEdge: false,
+        },
+        interaction: { hover: true },
+        filter: 'nodes',
+    };
 
     const createNode = (x, y) => {
         const color = randomColor();
@@ -78,17 +135,36 @@ const GraphView = () => {
 
     const [modal, contextHolder] = Modal.useModal();
 
+    const getEdgeFromNoteAndFile = (data) => {
+        let edges = []
+        for (let item of data) {
+            let from = item.id;
+            if (item?.connections) {
+                item?.connections.forEach(element => {
+                    edges.push({
+                        from: from,
+                        to: element.node_id,
+                        id: element.edge_id,
+                        color: "#969ead",
+                    });
+                });
+            }
+        }
+        return edges;
+    }
     useEffect(() => {
         const fetchNotesAndFiles = async () => {
             try {
                 const fetchedNotes = await getAllDocuments("notes");
                 const fetchedFiles = await getAllDocuments("files");
                 const fetchedFolders = await getAllDocuments("folders");
+                const fetchedEdges = await getAllDocuments("edges");
                 const folders = fetchedFolders.map(item => ({
                     id: item.id,
                     title: item.folder_name,
                     label: item.folder_name,
                     color: "#2b7ce9",
+                    type: "folder",
                 }));
                 const notes = fetchedNotes.map(item => ({
                     // ...item, 
@@ -111,7 +187,11 @@ const GraphView = () => {
                     // type: "File",
                 }));
                 const noteData = [...folders, ...notes, ...files];
-                const edgeData = [];
+
+                const noteEdges = getEdgeFromNoteAndFile(fetchedNotes);
+                const fileEdges = getEdgeFromNoteAndFile(fetchedFiles);
+                const edgeData = [...noteEdges, ...fileEdges];
+
                 for (let item of fetchedFolders) {
                     let rootNode = item.id;
                     for (let note of item.notes) {
@@ -145,19 +225,6 @@ const GraphView = () => {
     }, []);
 
     const navigate = useNavigate();
-
-    const handleOpenNode = (nodeId) => {
-        console.log("Cur node id: ", nodeId);
-        console.log("Cur node id: ", nodeList);
-        let filter = nodeList.filter(item => item.id === nodeId && item.type === "note");
-        console.log("Filter: ", filter);
-        if (nodeList.filter(item => item.id === nodeId && item.type === "note").length > 0)
-            // navigate(`/note/${nodeId}`);
-            console.log("open note");
-
-        console.log("open file");
-        // navigate(`/file/${nodeId}`);
-    }
 
     const [state, setState] = useState({
         counter: 0,
@@ -207,37 +274,57 @@ const GraphView = () => {
             ...state,
             events: {
                 doubleClick: ({ nodes }) => {
-                    if (nodes) {
-                        // console.log("dbl click: ", nodes);
-                        modal.confirm({
-                            title: 'Confirm',
-                            icon: <ExclamationCircleOutlined />,
-                            content: 'Open this item?',
-                            okText: 'Open',
-                            cancelText: 'Cancel',
-                            onOk: () => {
-                                // console.log("Cur node id: ", nodes[0]);
-                                // console.log("Cur node list: ", nodeList);
-                                let filter = nodeList.filter(item => item.id === nodes[0]);
-                                console.log("Filter: ", filter);
-                                if (filter.length > 0) {
-                                    const url = `/${filter[0].type}/${nodes[0]}`;
-                                    console.log("url: ", url);
-                                    navigate(url);
-                                }
-                            },
-                        });
+                    if (nodes.length > 0) {
+                        let filters = nodeList.filter(item => item.id === nodes[0]);
+                        // console.log("Filter: ", filters);
+                        if (filters[0].type !== "folder") {
+                            // console.log("dbl click: ", nodes);
+                            modal.confirm({
+                                title: 'Confirm',
+                                icon: <ExclamationCircleOutlined />,
+                                content: 'Open this item?',
+                                okText: 'Open',
+                                cancelText: 'Cancel',
+                                onOk: () => {
+                                    // console.log("Cur node id: ", nodes[0]);
+                                    // console.log("Cur node list: ", nodeList);
+                                    if (filters.length > 0) {
+                                        const url = `/${filters[0].type}/${nodes[0]}`;
+                                        navigate(url);
+                                    }
+                                },
+                            });
+                        }
                     }
                 }
             }
         });
     }, [nodeList]);
+
+    const edgesFilterValues = {
+        Folder: true,
+        Note: true,
+        File: true,
+    };
+
+    const edgesFilter = (edge) => {
+        return edgesFilterValues[edge.relation];
+    };
+    const edgeFilters = document.getElementsByName("edgesFilter");
+    // const edgesView = new vis.DataView(edgeList, { filter: edgesFilter });
+    edgeFilters.forEach((filter) =>
+        filter.addEventListener("change", (e) => {
+            const { value, checked } = e.target;
+            edgesFilterValues[value] = checked;
+            // edgesView.refresh();
+        })
+    );
     return (
         <Layout hasSider>
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
-                <Content style={{ margin: '0', overflow: 'initial', }} >
+                <Content style={{ margin: '0', }} >
                     <div className="graph-container">
                         {contextHolder}
                         <Graph
@@ -250,6 +337,39 @@ const GraphView = () => {
                                 backgroundColor: "transparent"
                             }}
                         />
+                        <div className='info-panel'>
+                            <div>Node Types</div>
+                            <Badge className="info-panel-item" text="Folder" color="#2b7ce9" />
+                            <Badge className="info-panel-item" text="Note" color="#6da7f5" />
+                            <Badge className="info-panel-item" text="File" color="#DAEAFF" />
+                        </div>
+                        <div className='support-info-panel'>
+                            <InfoCircleOutlined style={{ color: "#96b4db" }} />
+                            <span> Please reload page if the graph doesn't display correctly</span>
+                        </div>
+                        <div className='filter-panel'>
+                            <label>
+                                Display Type
+                                <div>
+                                    <label>
+                                        <input type="checkbox" name="edgesFilter" value="Folder" checked="checked" />
+                                        <span> Folder</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" name="edgesFilter" value="Note" checked="checked" />
+                                        <span> Note</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" name="edgesFilter" value="File" checked="checked" />
+                                        <span> File</span>
+                                    </label>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </Content>
             </Layout>
