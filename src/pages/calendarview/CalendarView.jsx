@@ -1,5 +1,5 @@
 import { Badge, Button, Calendar, Layout } from 'antd';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
 import Sidebar from '../../components/sidebar/Sidebar';
@@ -64,32 +64,30 @@ const getMonthData = (value) => {
 };
 const CalendarView = () => {
     const [fetchedData, setFetchedData] = useState();
-    useEffect(() =>{
-        const fetchNoteData = async () =>{
-            try  {
+    useEffect(() => {
+        const fetchNoteData = async () => {
+            try {
                 const fetchedNote = await getAllDocument("notes");
                 setFetchedData(fetchedNote);
-            }catch(err) {
+            } catch (err) {
                 console.error(err);
             }
         };
         fetchNoteData();
-    },[])
+    }, [])
 
-    const transformData = (data) =>{
+    const transformData = (data) => {
         const listData = [];
-        if(data) {
-            data.forEach(e =>{
-                if(e.meta_data) {
-                    const {meta_data, title} = e;
+        if (data) {
+            data.forEach(e => {
+                if (e.meta_data) {
+                    const { meta_data, title } = e;
                     const datetime = meta_data.datetime;
-                    const formattedDate = moment(datetime)
+                    const formattedDate = moment(datetime).format("DD/MM/YYYY");
                     listData.push({
+                        id: e.id,
                         title: title,
-                        dateTime:datetime,
-                        url:'/',
-                        type: 'success',
-    
+                        dateTime: formattedDate,
                     })
                 }
             })
@@ -111,14 +109,16 @@ const CalendarView = () => {
         const listData = getListData(value);
         const firebaseData = transformData(fetchedData);
         const filteredData = firebaseData.filter((item) =>
-            moment(moment(item.dateTime).format('L')).isSame(moment(value.$d).format('L'))
+            moment(moment(item.dateTime).format('L'))
+                .isSame(moment(value.$d).format('L'))
         );
+        // console.log("Calendar note: ", filteredData);
         return (
             <ul className="events">
                 {filteredData.map((item) => (
                     <li key={item.title}>
-                        <Button type="text" onClick={() => navigate(item.url)}>
-                            <Badge status={item.type} text={item.title} />
+                        <Button type="text" onClick={() => navigate(`/note/${item.id}`)}>
+                            <Badge color="blue" text={item.title} />
                             {/* {item.content} */}
                         </Button>
                     </li>
@@ -126,6 +126,7 @@ const CalendarView = () => {
             </ul>
         );
     };
+
     const cellRender = (current, info) => {
         if (info.type === 'date') return dateCellRender(current);
         if (info.type === 'month') return monthCellRender(current);
