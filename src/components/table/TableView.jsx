@@ -42,7 +42,7 @@ const TableView = () => {
             key: note.item_id,
             title: note.item?.title,
             status: note.item?.meta_data?.status?.[0] || 'To-do',
-            date: moment(note.item?.meta_data?.datetime).format('YYYY-MM-DD') || moment('05-31-2023').format('YYYY-MM-DD'),
+            date: moment(note.item?.meta_data?.datetime).format('DD/MM/YYYY') || moment(new Date()).format('DD/MM/YYYY'),
             tags: note.item?.meta_data?.tags || [],
             type: FileType.Note,
         }));
@@ -50,8 +50,8 @@ const TableView = () => {
         const filesModel = files.map((file) => ({
             key: file.item_id,
             title: file.item?.name,
-            status: 'Reading',
-            date: moment().format('YYYY-MM-DD'),
+            status: 'In progress',
+            date: moment().format('DD/MM/YYYY'),
             tags: [],
             type: FileType.Pdf,
         }));
