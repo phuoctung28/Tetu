@@ -7,6 +7,7 @@ import { updateDocumentProperty } from '../../services/firebase';
 
 const { Panel } = Collapse;
 
+
 const statusOptions = [
     { value: 'To-do', },
     { value: 'In progress', },
@@ -47,6 +48,7 @@ const tagRender = (props) => {
 
 const Metadata = ({ noteData }) => {
     const { token } = theme.useToken();
+
     const panelStyle = {
         border: 'none',
         fontWeight: 600,
@@ -187,6 +189,7 @@ const Metadata = ({ noteData }) => {
                                     // defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
                                     defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
                                     onChange={handleDatePicker}
+
                                     format={dateFormatList} />
                             </div>
                         </div>

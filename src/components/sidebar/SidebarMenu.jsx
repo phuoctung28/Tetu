@@ -5,6 +5,7 @@ import { createDocument, queryDocuments } from "../../services/firebase";
 import TeTuMenu from "../menu/Menu";
 
 const SidebarMenu = ({ currentPage, currentTitle }) => {
+
     // const user_id = JSON.parse(localStorage.getItem("user")).user_id;
     const [folderModalVisible, setFolderModalVisible] = useState(false);
     const [folderValue, setFolderValue] = useState('');
@@ -18,7 +19,7 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
                 // console.log(folderData);
                 setFolders(folderData);
             } catch (error) {
-                console.log(error);
+                // console.log(error);
             }
         };
 
@@ -32,15 +33,15 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
                 owner: "zzz",
                 folder_name: folderValue
             }
-            console.log(folders)
-            console.log(folderData)
+            // console.log(folders)
+            // console.log(folderData)
             await createDocument("folders", folderData);
             setFolders([...folders, folderData]);
             setFolderModalVisible(false);
         }
 
         if (pageValue) {
-            console.log(pageValue)
+            // console.log(pageValue)
         }
     };
     const handleCreateNewFolder = () => {
@@ -64,6 +65,7 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
                     folderData={data}
                     currentPage={currentPage}
                     currentTitle={currentTitle} />
+
             )}
             <Modal
                 title="Create New Folder"

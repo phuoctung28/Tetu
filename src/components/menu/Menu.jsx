@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Input, Menu, Modal } from 'antd';
+import { Dropdown, Input, Menu, Modal } from 'antd';
 import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined, FileAddOutlined, UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { FileType } from '../../enums/FileType';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+
 import './menu.css';
 import {
     createDocument,
@@ -54,10 +55,31 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
     };
 
     useEffect(() => {
+        const fetchNotesAndFiles = async () => {
+            try {
+                const fetchedNotes = await Promise.all(
+                    folder.notes.map(async (noteId) => {
+                        const note = await getDocumentById('notes', noteId);
+                        return { item_id: noteId, item: note };
+                    })
+                );
+                setNotes(fetchedNotes);
+
+                const fetchedFiles = await Promise.all(
+                    folder.files.map(async (fileId) => {
+                        const file = await getDocumentById('files', fileId);
+                        return { item_id: fileId, item: file };
+                    })
+                );
+                setFiles(fetchedFiles);
+            } catch (error) {
+                console.error('Error fetching notes and files:', error);
+            }
+        };
+
         fetchNotesAndFiles();
         // console.log("current title: ", currentTitle);s
     }, [currentTitle]);
-
 
     const handleFileDelete = async () => {
         setConfirmLoading(true);
@@ -100,7 +122,7 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
         } else if (key === 'addNewFile') {
             handleFileInputClick();
         } else if (key === 'renameFile') {
-            console.log(item)
+            // console.log(item)
             const renameItemId = item.item_id || folder.id;
             const renameItemValue = item.folder_name || item.item.name || item.item.title || ''
             setRenameItemId(renameItemId);
@@ -135,7 +157,7 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
 
                 const fileData = { item_id: fileId, item: file };
                 setFiles((prevFiles) => [...prevFiles, fileData]);
-                console.log("File uploaded successfully");
+                // console.log("File uploaded successfully");
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
@@ -154,9 +176,9 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
 
     const handleRename = async () => {
         setConfirmLoading(true);
-        console.log(renameItemId)
-        console.log(renameItemValue)
-        console.log(renameItemType)
+        // console.log(renameItemId)
+        // console.log(renameItemValue)
+        // console.log(renameItemType)
         try {
             if (renameItemType === FileType.Folder) {
                 await updateDocumentProperty("folders", renameItemId, 'folder_name', renameItemValue);
@@ -201,7 +223,7 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
             setNoteValue('');
             const newNotePath = `/note/${noteId}`;
             await navigate(newNotePath);
-            console.log('Note and document updated successfully');
+            // console.log('Note and document updated successfully');
             setConfirmLoading(false);
         } catch (error) {
             console.error('Error updating document:', error);
@@ -252,6 +274,7 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
     // console.log("Select: ", currentPage?.noteId);
     return (
         <>
+
             <Menu
                 mode="inline"
                 defaultSelectedKeys={currentPage?.noteId ? [currentPage.noteId] : undefined}

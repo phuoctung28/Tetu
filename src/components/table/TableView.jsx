@@ -2,8 +2,8 @@ import "../../assets/styles/table.css";
 import { Button, Space, Table, Tag, Badge } from 'antd';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { tableData } from "./tableData";
-import { getAllDocuments, queryDocuments } from "../../services/firebase";
+// import { tableData } from "./tableData";
+import { getAllDocuments } from "../../services/firebase";
 
 const columns = [
     {
@@ -29,7 +29,8 @@ const columns = [
                 key={type}
             >
                 {String(type).toUpperCase()}
-            </Tag>
+
+            </Tag >
 
         ),
         filters: [
@@ -130,7 +131,7 @@ const TableView = () => {
         }, 1000);
     };
     const onSelectChange = (newSelectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+        //   console.log('selectedRowKeys changed: ', newSelectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     };
     const rowSelection = {
@@ -193,7 +194,8 @@ const TableView = () => {
                 </span>
             </div>
             <Table rowSelection={rowSelection} columns={columns} dataSource={tblData} />
-        </div>
+
+        </div >
     );
 };
 export default TableView;

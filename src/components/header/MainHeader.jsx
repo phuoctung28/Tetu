@@ -7,7 +7,7 @@ import '../../assets/styles/main_header.css';
 const { Search } = Input;
 
 const onSearch = (value) => {
-    console.log(value);
+    // console.log(value);
 };
 
 const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData, saveNoteContent }) => {

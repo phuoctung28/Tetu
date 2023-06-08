@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Layout, message, theme, } from 'antd';
+
 import Metadata from '../../components/collapse/Metadata';
 import Sidebar from '../../components/sidebar/Sidebar';
 import MainHeader from '../../components/header/MainHeader';
 import TetuEditor from '../../components/Editor/Editor';
 import './note_editor.css';
-import { getDocumentById, queryDocuments, updateDocument, updateDocumentProperty } from "../../services/firebase";
+import { getDocumentById, queryDocuments, updateDocumentProperty } from "../../services/firebase";
 import { useLocation, useParams } from "react-router-dom";
+
 
 const { Content } = Layout;
 
@@ -33,6 +35,7 @@ const Notebook = () => {
                     location: folder[0].folder_name
                 });
                 setTitle(fetchedNote.title);
+
                 setCurrentPage({
                     noteId: pageId,
                     folderId: folder[0].id,
@@ -48,6 +51,7 @@ const Notebook = () => {
         fetchNote();
         // console.log("Note data:", noteData);
     }, [pageId]);
+
 
     const changeTitle = (event) => {
         setTitle(event.target.value);

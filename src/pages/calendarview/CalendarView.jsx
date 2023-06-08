@@ -1,66 +1,99 @@
 import { Badge, Button, Calendar, Layout } from 'antd';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
+import { getAllDocument } from '../../services/firebase';
+import moment from 'moment';
 
 const { Content } = Layout;
-const getListData = (value) => {
-    let listData;
-    switch (value.date()) {
-        case 8:
-            listData = [
-                {
-                    type: 'warning',
-                    title: 'This is warning event.',
-                    url: '/',
-                },
-                {
-                    type: 'success',
-                    title: 'This is usual event.',
-                    url: '/',
-                },
-            ];
-            break;
-        case 10:
-            listData = [
-                {
-                    type: 'success',
-                    title: 'This is usual event.',
-                    url: '/',
-                },
-                {
-                    type: 'error',
-                    title: 'This is error event.',
-                    url: '/',
-                },
-            ];
-            break;
-        case 15:
-            listData = [
-                {
-                    type: 'success',
-                    title: 'This is very long usual event...',
-                    url: '/',
-                },
-                {
-                    type: 'error',
-                    title: 'This is error event 1.',
-                    url: '/',
-                },
-            ];
-            break;
-        default:
-    }
-    return listData || [];
-};
+// const getListData = (value) => {
+//     let listData;
+//     switch (value.date()) {
+//         case 8:
+//             listData = [
+//                 {
+//                     type: 'warning',
+//                     title: 'This is warning event.',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'success',
+//                     title: 'This is usual event.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         case 10:
+//             listData = [
+//                 {
+//                     type: 'success',
+//                     title: 'This is usual event.',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'error',
+//                     title: 'This is error event.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         case 15:
+//             listData = [
+//                 {
+//                     type: 'success',
+//                     title: 'This is very long usual event...',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'error',
+//                     title: 'This is error event 1.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         default:
+//     }
+//     return listData || [];
+// };
 const getMonthData = (value) => {
     if (value.month() === 8) {
         return 1394;
     }
 };
 const CalendarView = () => {
+    const [fetchedData, setFetchedData] = useState();
+    useEffect(() => {
+        const fetchNoteData = async () => {
+            try {
+                const fetchedNote = await getAllDocument("notes");
+                setFetchedData(fetchedNote);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchNoteData();
+    }, [])
+
+    const transformData = (data) => {
+        const listData = [];
+        if (data) {
+            data.forEach(e => {
+                if (e.meta_data) {
+                    const { meta_data, title } = e;
+                    const datetime = meta_data.datetime;
+                    const formattedDate = moment(datetime).format("DD/MM/YYYY");
+                    listData.push({
+                        id: e.id,
+                        title: title,
+                        dateTime: formattedDate,
+                    })
+                }
+            })
+        }
+        return listData;
+    }
     const monthCellRender = (value) => {
         const num = getMonthData(value);
         return num ? (
@@ -73,13 +106,19 @@ const CalendarView = () => {
     const navigate = useNavigate();
 
     const dateCellRender = (value) => {
-        const listData = getListData(value);
+        // const listData = getListData(value);
+        const firebaseData = transformData(fetchedData);
+        const filteredData = firebaseData.filter((item) =>
+            moment(moment(item.dateTime).format('L'))
+                .isSame(moment(value.$d).format('L'))
+        );
+        // console.log("Calendar note: ", filteredData);
         return (
             <ul className="events">
-                {listData.map((item) => (
+                {filteredData.map((item) => (
                     <li key={item.title}>
-                        <Button type="text" onClick={() => navigate(item.url)}>
-                            <Badge status={item.type} text={item.title} />
+                        <Button type="text" onClick={() => navigate(`/note/${item.id}`)}>
+                            <Badge color="blue" text={item.title} />
                             {/* {item.content} */}
                         </Button>
                     </li>
@@ -87,6 +126,7 @@ const CalendarView = () => {
             </ul>
         );
     };
+
     const cellRender = (current, info) => {
         if (info.type === 'date') return dateCellRender(current);
         if (info.type === 'month') return monthCellRender(current);

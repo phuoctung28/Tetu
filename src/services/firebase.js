@@ -164,6 +164,20 @@ export const getAllDocuments = async (collections) => {
     }
 };
 
+export const getAllDocument = async (collections) => {
+  try {
+    const documents = [];
+    const querySnapshot = await getDocs(collection(db, collections));
+    querySnapshot.forEach((doc) => {
+      documents.push({ id: doc.id, ...doc.data() });
+    });
+    return documents;
+  } catch (error) {
+    console.error("Error getting documents:", error);
+    throw error;
+  }
+};
+
 export const getDocumentById = async (collections, id) => {
     try {
         const docRef = doc(db, collections, id);
