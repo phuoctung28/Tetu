@@ -10,7 +10,6 @@ const SidebarMenu = ({ currentPage }) => {
     const [folderValue, setFolderValue] = useState('');
     const [pageValue, setPageValue] = useState('');
     const [folders, setFolders] = useState([]);
-    // console.log("CURRENT PAGE:", currentPage);
     useEffect(() => {
         const loadFolders = async () => {
             try {
