@@ -1,5 +1,4 @@
 import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm, Modal } from 'antd';
-import '../../assets/styles/sidebar.css';
 import { EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined } from '@ant-design/icons';
 import { auth } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';

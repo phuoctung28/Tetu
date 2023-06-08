@@ -5,10 +5,9 @@ import Metadata from '../../components/collapse/Metadata';
 import Sidebar from '../../components/sidebar/Sidebar';
 import MainHeader from '../../components/header/MainHeader';
 import TetuEditor from '../../components/Editor/Editor';
-import './note_editor.css';
 import { getDocumentById, queryDocuments, updateDocumentProperty } from "../../services/firebase";
 import { useLocation, useParams } from "react-router-dom";
-
+import './note-book.css';
 
 const { Content } = Layout;
 
@@ -80,7 +79,6 @@ const Notebook = () => {
         }
     }
 
-
     useEffect(() => {
         // check if the key is "s" with ctrl key
         const keyDown = (event) => {
@@ -104,10 +102,10 @@ const Notebook = () => {
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
             <Layout className="site-layout" style={{ marginLeft: 200, }}>
                 <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} />
-                <Content className="notebook-container">
-                    <div className="note-space-container" style={{ padding: 40, background: colorBgContainer, }}>
+                <Content className="notebook-wrapper">
+                    <div className="note-space-container">
                         <div className="note-header">
-                            <div className='note-title-container'>
+                            <div className="note-title-container">
                                 <Input
                                     value={title}
                                     className="note-title"
