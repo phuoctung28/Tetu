@@ -35,10 +35,11 @@ const LoginForm = () => {
     const [error, setError] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    const [loading, setLoading] = useState(false);
     // SignIn with Email, password
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -47,9 +48,11 @@ const LoginForm = () => {
             // console.log("Login: ", userSnap.data());
             const loginUser = userSnap.data();
             localStorage.setItem("user", JSON.stringify(loginUser));
+            setLoading(false);
             message.success("Login success!");
             navigate("/home");
         } catch (error) {
+            setLoading(false);
             setError(true);
             // console.log('error: ', error);
         }
@@ -121,7 +124,7 @@ const LoginForm = () => {
                         {error && <span>Wrong email or password!</span>}
                     </div>
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }}>
-                        <Button onClick={handleLogin} type="primary" htmlType="submit" size="large" className="login-form-button">
+                        <Button loading={loading} onClick={handleLogin} type="primary" htmlType="submit" size="large" className="login-form-button">
                             Go!
                         </Button>
                     </Form.Item>
