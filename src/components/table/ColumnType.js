@@ -19,7 +19,7 @@ const CustomRender = ({ text, record }) => {
         }
     };
 
-    return <span style={{ color: "blue", cursor: "pointer" }} onClick={onNavigateFile}>{text}</span>;
+    return <span style={{ color: "#1F99FF", cursor: "pointer" }} onClick={onNavigateFile}>{text}</span>;
 };
 
 export const columns = [
@@ -93,6 +93,34 @@ export const columns = [
             }
         ],
         onFilter: (value, record) => record.status.indexOf(value) === 0,
+    },
+    {
+        title: 'Note Type',
+        dataIndex: 'noteType',
+        key: 'noteType',
+        render: (_, record) => (
+            <Tag
+                color={'purple'}
+                key={record.noteType}
+            >
+                {String(record.noteType).toUpperCase()}
+            </Tag>
+        ),
+        filters: [
+            {
+                text: 'Revision',
+                value: 'Revision',
+            },
+            {
+                text: 'In-class note',
+                value: 'In-class note',
+            },
+            {
+                text: 'Self-study',
+                value: 'Self-study',
+            }
+        ],
+        onFilter: (value, record) => record.noteType.indexOf(value) === 0,
     },
     {
         title: 'Date',
