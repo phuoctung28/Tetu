@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactQuill from 'react-quill';
 import EditorJS from "@editorjs/editorjs";
 import Header from '@editorjs/header';
 import Table from '@editorjs/table'
@@ -109,31 +108,6 @@ const TetuEditor = ({ editorData, setNoteContent }) => {
     return (
         <div className="editor-container">
             <div id='editorjs'></div>
-            {/* <ReactQuill
-                value={editorValue}
-                onChange={handleChange}
-                placeholder="Enter here"
-                modules={{
-                    toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                        [{ list: 'ordered' }, { list: 'bullet' }],
-                        // ['image'],
-                    ],
-                }}
-                formats={[
-                    'header',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strike',
-                    'blockquote',
-                    'list',
-                    'bullet',
-                    'link',
-                    // 'image',
-                ]}
-            /> */}
         </div>
     );
 };

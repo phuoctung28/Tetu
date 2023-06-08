@@ -14,7 +14,7 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
     useEffect(() => {
         const loadFolders = async () => {
             try {
-                const folderData = await queryDocuments("folders", "owner", "==", "abc");
+                const folderData = await queryDocuments("folders", "owner", "==", "JWwEYRA6yARL9pjMrDDOgG9cbpF3");
                 // console.log(folderData);
                 setFolders(folderData);
             } catch (error) {

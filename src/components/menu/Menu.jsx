@@ -71,6 +71,7 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
                         return { item_id: fileId, item: file };
                     })
                 );
+                console.log(fetchedFiles)
                 setFiles(fetchedFiles);
             } catch (error) {
                 console.error('Error fetching notes and files:', error);
