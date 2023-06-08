@@ -270,8 +270,8 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
 
             <Menu
                 mode="inline"
-                defaultSelectedKeys={currentPage?.noteId ? [currentPage.noteId] : undefined}
-                openKeys={currentPage?.folderId === folderData.id ? [currentPage.folderId] : undefined}
+            // defaultSelectedKeys={currentPage?.noteId ? [currentPage.noteId] : undefined}
+            // openKeys={currentPage?.folderId === folderData.id ? [currentPage.folderId] : undefined}
             >
                 <Menu.SubMenu
                     key={folder.id}

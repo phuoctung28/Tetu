@@ -10,10 +10,10 @@ const TableView = () => {
     const [notes, setNotes] = useState([]);
     const [files, setFiles] = useState([]);
     const [table, setTable] = useState([]);
-
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const loadFoldersAndNotes = async () => {
         try {
-            const folderData = await queryDocuments('folders', 'owner', '==', 'abc');
+            const folderData = await queryDocuments('folders', 'owner', '==', userId);
 
             const fetchedNotes = [];
             const fetchedFiles = [];

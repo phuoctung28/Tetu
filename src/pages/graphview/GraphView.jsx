@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {  Badge, Layout, Modal, message } from 'antd';
+import { Badge, Layout, Modal, message } from 'antd';
 import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { getAllDocuments, getDocumentById, updateDocumentProperty } from '../../services/firebase';
+import { getAllDocuments, getDocumentById, queryDocuments, updateDocumentProperty } from '../../services/firebase';
 import './graph_view.css';
 import MainHeader from '../../components/header/MainHeader';
 import Sidebar from '../../components/sidebar/Sidebar';
@@ -17,6 +17,7 @@ const randomColor = () => {
     return `#${red}${green}${blue}`;
 }
 const GraphView = () => {
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const [nodeList, setNodeList] = useState([]);
     const [edgeList, setEdgeList] = useState([]);
 
@@ -130,10 +131,10 @@ const GraphView = () => {
     useEffect(() => {
         const fetchNotesAndFiles = async () => {
             try {
-                const fetchedNotes = await getAllDocuments("notes");
-                const fetchedFiles = await getAllDocuments("files");
-                const fetchedFolders = await getAllDocuments("folders");
-                const fetchedEdges = await getAllDocuments("edges");
+                const fetchedNotes = await queryDocuments("notes", "owner", "==", userId);
+
+                const fetchedFiles = await queryDocuments("files", "owner", "==", userId);
+                const fetchedFolders = await queryDocuments("folders", "owner", "==", userId);
                 const folders = fetchedFolders.map(item => ({
                     id: item.id,
                     title: item.folder_name,

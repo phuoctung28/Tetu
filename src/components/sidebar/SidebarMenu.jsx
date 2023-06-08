@@ -11,10 +11,12 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
     const [folderValue, setFolderValue] = useState('');
     const [pageValue, setPageValue] = useState('');
     const [folders, setFolders] = useState([]);
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     useEffect(() => {
+        // console.log("user :", userId);
         const loadFolders = async () => {
             try {
-                const folderData = await queryDocuments("folders", "owner", "==", "abc");
+                const folderData = await queryDocuments("folders", "owner", "==", userId);
                 // console.log(folderData);
                 setFolders(folderData);
             } catch (error) {
@@ -29,7 +31,7 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
             const folderData = {
                 files: [],
                 notes: [],
-                owner: "zzz",
+                owner: userId,
                 folder_name: folderValue
             }
             // console.log(folders)

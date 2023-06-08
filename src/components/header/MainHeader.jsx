@@ -48,7 +48,7 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                         icon={<SaveOutlined style={{ color: '#596A77' }} />} />
                 </Tooltip>
 
-                <Popconfirm
+                {/* <Popconfirm
                     title="Confirm Delete"
                     description="Are you sure to delete this note?"
                     // onConfirm={signOut}
@@ -56,10 +56,8 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                     okText="Yes"
                     cancelText="No"
                 >
-                    {/* <Tooltip title="Delete note"> */}
                     <Button className='btn-toolbar' shape="circle" icon={<DeleteOutlined style={{ color: '#596A77' }} />} />
-                    {/* </Tooltip> */}
-                </Popconfirm>
+                </Popconfirm> */}
                 {
                     showButton && <Button
                         type={dualNote ? "primary" : "default"}

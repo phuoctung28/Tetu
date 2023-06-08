@@ -4,7 +4,7 @@ import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
-import { getAllDocument } from '../../services/firebase';
+import { getAllDocument, queryDocuments } from '../../services/firebase';
 import moment from 'moment';
 
 const { Content } = Layout;
@@ -64,10 +64,12 @@ const getMonthData = (value) => {
 };
 const CalendarView = () => {
     const [fetchedData, setFetchedData] = useState();
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     useEffect(() => {
         const fetchNoteData = async () => {
             try {
-                const fetchedNote = await getAllDocument("notes");
+                const fetchedNote = await queryDocuments('notes', 'owner', '==', userId);
+                // console.log("fetch note:", fetchedNote);
                 setFetchedData(fetchedNote);
             } catch (err) {
                 console.error(err);

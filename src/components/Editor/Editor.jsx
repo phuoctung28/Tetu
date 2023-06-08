@@ -87,9 +87,9 @@ const TetuEditor = ({ editorData, setNoteContent }) => {
         // await editor.data(editorData);
     };
     useEffect(() => {
-        // if (ejInstance.current === null) {
-        // }
-        initEditor();
+        if (ejInstance.current === null) {
+            initEditor();
+        }
 
         return () => {
             ejInstance?.current?.destroy();
