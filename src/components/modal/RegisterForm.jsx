@@ -40,10 +40,13 @@ const RegisterForm = () => {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
 
     // SignIn with Email, password
     const handleRegister = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -55,10 +58,12 @@ const RegisterForm = () => {
                 name: name
             }
             localStorage.setItem("user", JSON.stringify(loginUser));
+            setLoading(false);
             message.success("Login success!");
             navigate("/home");
         } catch (error) {
-            //  console.log(error.message);
+            console.log(error.message);
+            setLoading(false);
             setErrorRegister(error.message);
         }
     };
@@ -82,9 +87,8 @@ const RegisterForm = () => {
             localStorage.setItem("user", JSON.stringify(loginUser));
             message.success("Login success!");
             navigate("/home");
-
         } catch (error) {
-            // console.log('error: ', error);
+            console.log('error: ', error);
         }
     }
 
@@ -139,7 +143,8 @@ const RegisterForm = () => {
                         {errorRegister && <span>Email has already existed!</span>}
                     </div>
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }}>
-                        <Button onClick={handleRegister} type="primary" htmlType="submit" size="large" className="login-form-button">
+                        <Button loading={loading} onClick={handleRegister} type="primary" htmlType="submit" size="large" className="login-form-button">
+
                             Register!
                         </Button>
                     </Form.Item>
