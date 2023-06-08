@@ -1,4 +1,4 @@
-import { Badge, Button, Calendar, Layout } from 'antd';
+import { Badge, Button, Calendar, Divider, Layout } from 'antd';
 import React, { useState, useEffect } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
@@ -119,7 +119,7 @@ const CalendarView = () => {
             <ul className="events">
                 {filteredData.map((item) => (
                     <li key={item.title}>
-                        <Button type="text" onClick={() => navigate(`/note/${item.id}`)}>
+                        <Button type="text" onClick={() => navigate(`/note/${item.id}`, { state: { name: item.title } }, { replace: true })}>
                             <Badge color="blue" text={item.title} />
                             {/* {item.content} */}
                         </Button>
@@ -139,8 +139,12 @@ const CalendarView = () => {
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
-                <Content style={{ margin: '0', overflow: 'initial', }} >
-                    <Calendar cellRender={cellRender} />
+                <Content className="calendar-container">
+                    <div className="calendar-view-title">
+                        <h2>Calendar view mode</h2>
+                        <p>View your notes and documents arranged by date, month, or year</p>
+                    </div>
+                    <Calendar className="calendar-component" cellRender={cellRender} />
                 </Content>
             </Layout>
         </Layout>
