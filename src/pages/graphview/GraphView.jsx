@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Badge, Layout, Modal, Tag, message } from 'antd';
+import {  Badge, Layout, Modal, message } from 'antd';
 import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { createDocument, getAllDocuments, getDocumentById, updateDocumentProperty } from '../../services/firebase';
+import { getAllDocuments, getDocumentById, updateDocumentProperty } from '../../services/firebase';
 import './graph_view.css';
 import MainHeader from '../../components/header/MainHeader';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Graph from 'react-graph-vis';
-import moment from 'moment';
 import { useNavigate } from 'react-router';
-import { getDocument } from 'pdfjs-dist';
 
 const { Content } = Layout;
 
@@ -109,28 +107,6 @@ const GraphView = () => {
         interaction: { hover: true },
         filter: 'nodes',
     };
-
-    const createNode = (x, y) => {
-        const color = randomColor();
-        setState(({ graph: { nodes, edges }, counter, ...rest }) => {
-            const id = counter + 1;
-            const from = Math.floor(Math.random() * (counter - 1)) + 1;
-            return {
-                graph: {
-                    nodes: [
-                        ...nodes,
-                        { id, label: `Node ${id}`, color, x, y }
-                    ],
-                    edges: [
-                        ...edges,
-                        { from, to: id }
-                    ]
-                },
-                counter: id,
-                ...rest
-            }
-        });
-    }
 
     const [modal, contextHolder] = Modal.useModal();
 

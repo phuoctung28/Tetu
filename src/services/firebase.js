@@ -12,7 +12,6 @@ import {
     query,
     updateDoc,
     where,
-    deleteField,
     arrayRemove,
     arrayUnion
 } from "firebase/firestore";

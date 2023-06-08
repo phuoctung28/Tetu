@@ -1,23 +1,23 @@
-import React, {useState} from 'react';
-import {Input, Modal} from 'antd';
-import {getDocumentById, queryDocumentsCondition} from "../../services/firebase";
+import React, { useState } from 'react';
+import { Input, Modal } from 'antd';
+import { getDocumentById, queryDocumentsCondition } from "../../services/firebase";
 import { BookOutlined, FilePdfOutlined } from '@ant-design/icons';
-import "./Search.css"
-import {FileType} from "../../enums/FileType";
-import {useNavigate} from "react-router-dom";
-const SearchComponent = ({isOpened, handleOpenSearch}) => {
-    const [searchText, setSearchText] = useState('Test 000');
+import "./Search.css";
+import { FileType } from "../../enums/FileType";
+import { useNavigate } from "react-router-dom";
+
+const SearchComponent = ({ isOpened, handleOpenSearch }) => {
+    const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
-    function onKeyPress(event) {
-        event.preventDefault();
+
+    const onKeyPress = (event) => {
         if (event.ctrlKey && event.key === 'k') {
-            handleOpenSearch()
+            handleOpenSearch();
         }
-    }
+    };
 
     const onNavigateFile = async (type, key) => {
-        console.log(type, key)
         if (type === FileType.Note) {
             navigate(`../note/${key}`, { replace: true });
         } else if (type === FileType.Pdf) {
@@ -27,30 +27,31 @@ const SearchComponent = ({isOpened, handleOpenSearch}) => {
         }
     };
 
-    document.onkeydown = onKeyPress;
     const handleSearch = async () => {
         const notesConditions = [
-            {field: 'title', operator: '>=', value: searchText},
-            {field: 'title', operator: '<=', value: `${searchText} + '\uf8ff'`},
+            { field: 'title', operator: '>=', value: searchText },
+            { field: 'title', operator: '<=', value: `${searchText}\uf8ff` },
         ];
         const filesConditions = [
-            {field: 'name', operator: '>=', value: searchText},
-            {field: 'name', operator: '<=', value: `${searchText} + '\uf8ff'`},
+            { field: 'name', operator: '>=', value: searchText },
+            { field: 'name', operator: '<=', value: `${searchText}\uf8ff` },
         ];
         const notes = await queryDocumentsCondition("notes", notesConditions);
         const files = await queryDocumentsCondition("files", filesConditions);
         setSearchResults([...notes, ...files]);
     };
+
     return (
         <Modal
             open={isOpened}
             title="Search notes and files"
             footer={null}
             onCancel={handleOpenSearch}
+            onKeyPress={onKeyPress}
         >
             <Input.Search
                 value={searchText}
-                onChange={e => setSearchText(e.target.value)}
+                onChange={(e) => setSearchText(e.target.value)}
                 onSearch={handleSearch}
                 enterButton
                 autoFocus
@@ -66,7 +67,7 @@ const SearchComponent = ({isOpened, handleOpenSearch}) => {
                             </div>
                         )}
                         {result.name && (
-                            <div onClick={() => onNavigateFile(FileType.Pdf, result?.fileUrl)} className="result-item">
+                            <div onClick={() => onNavigateFile(FileType.Pdf, result.id)} className="result-item">
                                 <FilePdfOutlined />
                                 <span className="result-text">{result.name}</span>
                             </div>
