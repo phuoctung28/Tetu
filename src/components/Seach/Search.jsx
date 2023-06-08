@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Input, Modal } from 'antd';
 import { getDocumentById, queryDocumentsCondition } from "../../services/firebase";
 import { BookOutlined, FilePdfOutlined } from '@ant-design/icons';
@@ -10,20 +10,46 @@ const SearchComponent = ({ isOpened, handleOpenSearch }) => {
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const navigate = useNavigate();
+    useEffect(() => {
+        const ctrl1 = (e: KeyboardEvent) => e.ctrlKey && e.key === "k";
 
-    const onKeyPress = (event) => {
-        if (event.ctrlKey && event.key === 'k') {
-            handleOpenSearch();
-        }
-    };
+        const handler = (e: KeyboardEvent) => {
+            if (ctrl1(e)) {
+                handleOpenSearch();
+            }
+        };
 
-    const onNavigateFile = async (type, key) => {
+        const ignore = (e: KeyboardEvent) => {
+            if (ctrl1(e)) {
+                e.preventDefault();
+            }
+        };
+
+        window.addEventListener("keyup", handler);
+        window.addEventListener("keydown", ignore);
+
+        return () => {
+            window.removeEventListener("keyup", handler);
+            window.removeEventListener("keydown", ignore);
+        };
+    }, []);
+
+    // window.onbeforeunload = onKeyPress;
+    const onNavigateFile = async (type, key, name) => {
         if (type === FileType.Note) {
-            navigate(`../note/${key}`, { replace: true });
+            await navigate(`/note/${key}`, { state: { name: name } }, { replace: true });
+            setSearchText('');
+            setSearchResults([])
+            handleOpenSearch();
+
         } else if (type === FileType.Pdf) {
             const file = await getDocumentById('files', key);
             const url = file?.url;
             navigate(`/file`, { state: { fileUrl: url }, replace: true });
+            setSearchText('');
+            setSearchResults([])
+            handleOpenSearch();
+
         }
     };
 
@@ -47,7 +73,6 @@ const SearchComponent = ({ isOpened, handleOpenSearch }) => {
             title="Search notes and files"
             footer={null}
             onCancel={handleOpenSearch}
-            onKeyPress={onKeyPress}
         >
             <Input.Search
                 value={searchText}

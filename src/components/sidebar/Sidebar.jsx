@@ -1,15 +1,15 @@
-import {Button, Layout, Avatar, Tooltip, Divider, Popover} from 'antd';
-import '../../assets/styles/sidebar.css';
-import {EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined} from '@ant-design/icons';
-import {useNavigate} from 'react-router-dom';
-import {useState} from 'react';
+import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm, Modal } from 'antd';
+import { EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined } from '@ant-design/icons';
+import { auth } from '../../services/firebase';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import SidebarMenu from './SidebarMenu';
 import "../../assets/styles/sidebar.css";
 import NewItem from './NewItem';
 
-const {Sider} = Layout;
+const { Sider } = Layout;
 
-const Sidebar = ({currentPage}) => {
+const Sidebar = ({ currentPage, currentTitle }) => {
 
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -31,10 +31,10 @@ const Sidebar = ({currentPage}) => {
             background: 'white'
         }}>
             <div className='sider-top'
-                 style={{margin: '0 0 10px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                style={{ margin: '0 0 10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Avatar
                     shape="square"
-                    style={{verticalAlign: 'middle', marginRight: 10}}
+                    style={{ verticalAlign: 'middle', marginRight: 10 }}
                     size="small"
                     gap={4}
                     src={currentUser?.profilePic}>
@@ -45,34 +45,35 @@ const Sidebar = ({currentPage}) => {
             <div className='quicktool-container'>
 
                 <Tooltip title="Table view">
-                    <Button size="small" icon={<TableOutlined/>} onClick={() => {
+                    <Button size="small" icon={<TableOutlined />} onClick={() => {
                         navigate("/table")
-                    }}/>
+                    }} />
                 </Tooltip>
                 <Tooltip title="Calendar view">
-                    <Button size="small" icon={<CalendarOutlined/>} onClick={() => {
+                    <Button size="small" icon={<CalendarOutlined />} onClick={() => {
                         navigate("/calendar")
-                    }}/>
+                    }} />
                 </Tooltip>
                 <Tooltip title="Graph view">
-                    <Button size="small" icon={<ShareAltOutlined/>} onClick={() => {
+                    <Button size="small" icon={<ShareAltOutlined />} onClick={() => {
                         navigate("/graph")
-                    }}/>
+                    }} />
                 </Tooltip>
                 <Popover
-                    content={<NewItem/>}
+                    content={<NewItem />}
                     placement='rightTop'
                     trigger="click"
                     open={open}
                     onOpenChange={handleOpenChange}
                 >
-                    <Button size="small" icon={<EllipsisOutlined/>}/>
+                    <Button size="small" icon={<EllipsisOutlined />} />
                 </Popover>
             </div>
-            <Divider/>
+            <Divider />
             {/* <SideMenu /> */}
             <SidebarMenu
                 currentPage={currentPage}
+                currentTitle={currentTitle}
             />
         </Sider>
     );

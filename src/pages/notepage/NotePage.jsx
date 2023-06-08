@@ -5,7 +5,7 @@ import Metadata from '../../components/collapse/Metadata';
 import TetuEditor from "../../components/Editor/Editor";
 import Sidebar from '../../components/sidebar/Sidebar';
 import { useParams } from "react-router-dom";
-import './note_page.css';
+import './note-page.css';
 
 const { Content } = Layout;
 

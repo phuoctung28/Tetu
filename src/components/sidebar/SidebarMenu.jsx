@@ -4,7 +4,8 @@ import { FolderAddOutlined } from '@ant-design/icons';
 import { createDocument, queryDocuments } from "../../services/firebase";
 import TeTuMenu from "../menu/Menu";
 
-const SidebarMenu = ({ currentPage }) => {
+const SidebarMenu = ({ currentPage, currentTitle }) => {
+
     // const user_id = JSON.parse(localStorage.getItem("user")).user_id;
     const [folderModalVisible, setFolderModalVisible] = useState(false);
     const [folderValue, setFolderValue] = useState('');
@@ -13,7 +14,7 @@ const SidebarMenu = ({ currentPage }) => {
     useEffect(() => {
         const loadFolders = async () => {
             try {
-                const folderData = await queryDocuments("folders", "owner", "==", "abc");
+                const folderData = await queryDocuments("folders", "owner", "==", "JWwEYRA6yARL9pjMrDDOgG9cbpF3");
                 // console.log(folderData);
                 setFolders(folderData);
             } catch (error) {
@@ -58,7 +59,12 @@ const SidebarMenu = ({ currentPage }) => {
             </div>
 
             {folders.map((data) =>
-                <TeTuMenu key={data.id} folderData={data} currentPage={currentPage} />
+                <TeTuMenu
+                    key={data.id}
+                    folderData={data}
+                    currentPage={currentPage}
+                    currentTitle={currentTitle} />
+
             )}
             <Modal
                 title="Create New Folder"

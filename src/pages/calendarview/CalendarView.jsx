@@ -8,55 +8,55 @@ import { getAllDocument } from '../../services/firebase';
 import moment from 'moment';
 
 const { Content } = Layout;
-const getListData = (value) => {
-    let listData;
-    switch (value.date()) {
-        case 8:
-            listData = [
-                {
-                    type: 'warning',
-                    title: 'This is warning event.',
-                    url: '/',
-                },
-                {
-                    type: 'success',
-                    title: 'This is usual event.',
-                    url: '/',
-                },
-            ];
-            break;
-        case 10:
-            listData = [
-                {
-                    type: 'success',
-                    title: 'This is usual event.',
-                    url: '/',
-                },
-                {
-                    type: 'error',
-                    title: 'This is error event.',
-                    url: '/',
-                },
-            ];
-            break;
-        case 15:
-            listData = [
-                {
-                    type: 'success',
-                    title: 'This is very long usual event...',
-                    url: '/',
-                },
-                {
-                    type: 'error',
-                    title: 'This is error event 1.',
-                    url: '/',
-                },
-            ];
-            break;
-        default:
-    }
-    return listData || [];
-};
+// const getListData = (value) => {
+//     let listData;
+//     switch (value.date()) {
+//         case 8:
+//             listData = [
+//                 {
+//                     type: 'warning',
+//                     title: 'This is warning event.',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'success',
+//                     title: 'This is usual event.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         case 10:
+//             listData = [
+//                 {
+//                     type: 'success',
+//                     title: 'This is usual event.',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'error',
+//                     title: 'This is error event.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         case 15:
+//             listData = [
+//                 {
+//                     type: 'success',
+//                     title: 'This is very long usual event...',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'error',
+//                     title: 'This is error event 1.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         default:
+//     }
+//     return listData || [];
+// };
 const getMonthData = (value) => {
     if (value.month() === 8) {
         return 1394;
@@ -106,7 +106,7 @@ const CalendarView = () => {
     const navigate = useNavigate();
 
     const dateCellRender = (value) => {
-        const listData = getListData(value);
+        // const listData = getListData(value);
         const firebaseData = transformData(fetchedData);
         const filteredData = firebaseData.filter((item) =>
             moment(moment(item.dateTime).format('L'))
