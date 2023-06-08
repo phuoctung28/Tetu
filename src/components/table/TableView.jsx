@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
-import {getDocumentById, queryDocuments} from '../../services/firebase';
+import { deleteArrayElement, deleteDocument, getDocumentById, queryDocuments } from '../../services/firebase';
 import { columns } from './ColumnType';
 import '../../assets/styles/table.css';
 import moment from 'moment/moment';

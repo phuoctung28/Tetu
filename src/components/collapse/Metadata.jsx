@@ -1,21 +1,28 @@
 import { Collapse, DatePicker, Space, Input, Tag, Tooltip, Select, theme } from 'antd';
-import { CalendarOutlined, TagsOutlined, SwitcherOutlined, NumberOutlined, PlusOutlined } from '@ant-design/icons';
+import { CalendarTwoTone, TagsTwoTone, SwitcherTwoTone, NumberOutlined, PlusOutlined } from '@ant-design/icons';
 import "../../assets/styles/metadata.css";
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
+import { updateDocumentProperty } from '../../services/firebase';
 
 const { Panel } = Collapse;
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+
 
 const statusOptions = [
     { value: 'To-do', },
     { value: 'In progress', },
     { value: 'Done', },
-    { value: 'Canceled', },
+    { value: 'Closed', },
+];
+
+
+const options = [
+    { value: "Self-study", label: "Self-study" },
+    { value: "In-class note", label: "In-class note" },
+    { value: "Revision", label: "Revision" },
+    { value: "Assignment", label: "Assignment" },
+    { value: "Project", label: "Project" },
+    { value: "Presentation", label: "Presentation" }
 ];
 
 const tagRender = (props) => {
@@ -39,59 +46,12 @@ const tagRender = (props) => {
     );
 };
 
-const Metadata = () => {
-    const onChange = (key) => {
-        // console.log(key);
-    };
+const Metadata = ({ noteData }) => {
+    const { token } = theme.useToken();
+
     const panelStyle = {
         border: 'none',
         fontWeight: 600,
-    };
-    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
-
-    const { token } = theme.useToken();
-    const [tags, setTags] = useState(['Tag 1',]);
-    const [inputVisible, setInputVisible] = useState(false);
-    const [inputValue, setInputValue] = useState('');
-    const [editInputIndex, setEditInputIndex] = useState(-1);
-    const [editInputValue, setEditInputValue] = useState('');
-    const inputRef = useRef(null);
-    const editInputRef = useRef(null);
-    useEffect(() => {
-        if (inputVisible) {
-            inputRef.current?.focus();
-        }
-    }, [inputVisible]);
-    useEffect(() => {
-        editInputRef.current?.focus();
-    }, [inputValue]);
-    const handleClose = (removedTag) => {
-        const newTags = tags.filter((tag) => tag !== removedTag);
-        // console.log(newTags);
-        setTags(newTags);
-    };
-    const showInput = () => {
-        setInputVisible(true);
-    };
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-    const handleInputConfirm = () => {
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            setTags([...tags, inputValue]);
-        }
-        setInputVisible(false);
-        setInputValue('');
-    };
-    const handleEditInputChange = (e) => {
-        setEditInputValue(e.target.value);
-    };
-    const handleEditInputConfirm = () => {
-        const newTags = [...tags];
-        newTags[editInputIndex] = editInputValue;
-        setTags(newTags);
-        setEditInputIndex(-1);
-        setInputValue('');
     };
     const tagInputStyle = {
         width: 78,
@@ -101,49 +61,158 @@ const Metadata = () => {
         background: token.colorBgContainer,
         borderStyle: 'dashed',
     };
-    const options = [
-        { value: "In-class note", label: "In-class note" },
-        { value: "Revision", label: "Revision" },
-        { value: "Assignment", label: "Assignment" },
-        { value: "Project", label: "Project" },
-        { value: "Presentation", label: "Presentation" }
-    ];
+    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD'];
+
+    const [tags, setTags] = useState([]);
+    const [inputVisible, setInputVisible] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [editInputIndex, setEditInputIndex] = useState(-1);
+    const [editInputValue, setEditInputValue] = useState('');
+    const inputRef = useRef(null);
+    const editInputRef = useRef(null);
+
+
+    useEffect(() => {
+        setTags(noteData.meta_data?.tags || []);
+    }, [noteData.meta_data?.tags]);
+    // console.log("TAGS:", tags);
+
+    useEffect(() => {
+        if (inputVisible) {
+            inputRef.current?.focus();
+        }
+    }, [inputVisible]);
+
+    useEffect(() => {
+        editInputRef.current?.focus();
+    }, [inputValue]);
+
+    const handleClose = async (removedTag) => {
+        const newTags = tags.filter((tag) => tag !== removedTag);
+        // console.log(newTags);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, tags: newTags });
+        }
+        catch (error) {
+            console.error('Error updating tags:', error);
+        }
+        setTags(newTags);
+    };
+
+    const showInput = () => {
+        setInputVisible(true);
+    };
+
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+    };
+
+    const handleInputConfirm = async () => {
+        if (inputValue && tags.indexOf(inputValue) === -1) {
+            setTags([...tags, inputValue]);
+        }
+        // console.log("TAGS: ", [...tags, inputValue]);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, tags: [...tags, inputValue] });
+        }
+        catch (error) {
+            console.error('Error updating tags:', error);
+        }
+        setInputVisible(false);
+        setInputValue('');
+    };
+
+    const handleEditInputChange = (e) => {
+        setEditInputValue(e.target.value);
+    };
+
+    const handleEditInputConfirm = async () => {
+        const newTags = [...tags];
+        newTags[editInputIndex] = editInputValue;
+        setTags(newTags);
+        // console.log("EDIT TAGS: ", newTags);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, tags: newTags });
+        }
+        catch (error) {
+            console.error('Error updating tags:', error);
+        }
+        setEditInputIndex(-1);
+        setInputValue('');
+    };
+
+    const handleDatePicker = async (date, dateString) => {
+        console.log("datepicker:", date);
+        console.log("datestring: ", dateString);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, datetime: dateString });
+        }
+        catch (error) {
+            console.error('Error updating date:', error);
+        }
+    }
+
+    const handleSelectStatus = async (value) => {
+        console.log("select status: ", value);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, status: [value] });
+        }
+        catch (error) {
+            console.error('Error updating status:', error);
+        }
+    }
+
+    const handleSelectType = async (value) => {
+        console.log("select type: ", value);
+        try {
+            await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, type: [value] });
+        }
+        catch (error) {
+            console.error('Error updating type:', error);
+        }
+
+    }
+
     return (
         <div className="container-metadata">
-            <Collapse defaultActiveKey={['']} onChange={onChange} ghost bordered={true}>
+            <Collapse defaultActiveKey={['']} ghost bordered={true}>
                 <Panel header="Metadata" key="1" style={panelStyle}>
                     {/* <p className="metadata-item">{text}</p> */}
                     <Space className="metadata-list" direction='vertical' size={10}>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <CalendarOutlined /> Date
+                                <CalendarTwoTone /> Date
                             </div>
                             <div className="item-detail">
-                                <DatePicker size="small" defaultValue={dayjs('01/01/2015', dateFormatList[0])}
+                                <DatePicker
+                                    size="small"
+                                    // defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
+                                    defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
+                                    onChange={handleDatePicker}
+
                                     format={dateFormatList} />
                             </div>
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <NumberOutlined /> Status
+                                <NumberOutlined style={{ color: "#1677ff" }} /> Status
                             </div>
                             <div className="item-detail">
                                 <Select
                                     // mode="multiple"
                                     showArrow
                                     tagRender={tagRender}
-                                    defaultValue={['To-do']}
-                                    style={{
-                                        width: '150px',
-                                    }}
+                                    defaultValue={noteData.meta_data?.status}
+                                    style={{ width: '150px', }}
                                     size="small"
                                     options={statusOptions}
+                                    onChange={handleSelectStatus}
                                 />
                             </div>
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <TagsOutlined /> Tag
+                                <TagsTwoTone /> Tag
                             </div>
                             <div className="item-detail">
                                 <Space size={[0, 8]} wrap>
@@ -218,25 +287,25 @@ const Metadata = () => {
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <SwitcherOutlined /> Type
+                                <SwitcherTwoTone /> Type
                             </div>
                             <div className="item-detail">
                                 <Select
                                     // mode="tags"
                                     size="small"
                                     placeholder="Select or Create"
-                                    defaultValue={["In-class note"]}
-                                    style={{
-                                        width: '150px',
-                                    }}
+                                    // defaultValue={["Self-study"]}
+                                    defaultValue={noteData.meta_data?.type}
+                                    style={{ width: '150px', }}
                                     options={options}
+                                    onChange={handleSelectType}
                                 />
                             </div>
                         </div>
                     </Space>
                 </Panel>
                 <Panel header="Outline" key="2" style={panelStyle}>
-                    <p>{text}</p>
+                    <span>This feature is in development...</span>
                 </Panel>
             </Collapse>
         </div>

@@ -40,7 +40,7 @@ export const createRef = (collection, documentId) => {
 }
 // Create a document in a Firestore collection
 export const createDocument = async (collections, data) => {
-    try {
+    try {   
         return await addDoc(collection(db, collections), data);
     } catch (error) {
         console.error('Error creating document:', error);

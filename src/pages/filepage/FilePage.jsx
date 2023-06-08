@@ -5,6 +5,7 @@ import MainHeader from '../../components/header/MainHeader';
 import './file_page.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import NoteEditor from '../notepage/NoteEditor';
+
 import {Panel, PanelGroup, PanelResizeHandle} from "react-resizable-panels";
 import {useLocation} from 'react-router-dom';
 import {createDocument, getDocumentById, queryDocuments} from "../../services/firebase";

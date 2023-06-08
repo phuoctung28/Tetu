@@ -41,7 +41,7 @@ const GraphView = () => {
             color: "#73A2FF",
             width: 0.15,
             smooth: {
-                // enabled: true,
+                enabled: true,
                 type: "continuous",
                 // type: "diagonalCross",
                 // roundness: 0.5
@@ -300,8 +300,8 @@ const GraphView = () => {
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
-                <Content style={{ margin: '0', }} >
-                    <div className="graph-container">
+                <Content className="graph-container" >
+                    <div className="graph-wrapper">
                         {contextHolder}
                         <Graph
                             className="graph-component"

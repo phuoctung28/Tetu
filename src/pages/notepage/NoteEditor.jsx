@@ -1,6 +1,5 @@
 import { theme, Input, } from 'antd';
 import React, { useState, useEffect } from 'react';
-import './note_editor.css';
 import Metadata from '../../components/collapse/Metadata';
 
 const { TextArea } = Input;
