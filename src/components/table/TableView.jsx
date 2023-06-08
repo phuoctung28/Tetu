@@ -1,202 +1,77 @@
-import "../../assets/styles/table.css";
-import { Button, Space, Table, Tag, Badge } from 'antd';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
-// import { tableData } from "./tableData";
-import { getAllDocuments } from "../../services/firebase";
-
-const columns = [
-    {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title',
-        render: (text) => <a href="/table">{text}</a>,
-    },
-    {
-        title: 'Type',
-        key: 'type',
-        dataIndex: 'type',
-        align: 'center',
-        render: (_, { type }) => (
-            <Tag
-                color={
-                    type === 'Note'
-                        ? 'blue'
-                        : (type === 'File'
-                            ? 'green'
-                            : 'purple')
-                }
-                key={type}
-            >
-                {String(type).toUpperCase()}
-
-            </Tag >
-
-        ),
-        filters: [
-            {
-                text: 'Note',
-                value: 'Note',
-            },
-            {
-                text: 'File',
-                value: 'File',
-            },
-            {
-                text: 'Canvas',
-                value: 'Canvas',
-            }
-        ],
-        onFilter: (value, record) => record.type.indexOf(value) === 0,
-    },
-    {
-        title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-        render: (_, record) => (
-            // <Space size="middle">
-            //    <a href="/table">Invite {record.name}</a>
-            // </Space>
-            <Badge
-                color={
-                    record.status === 'To-do'
-                        ? 'yellow'
-                        : (record.status === 'In progress'
-                            ? 'blue'
-                            : 'green'
-                        )
-                }
-                text={record.status}
-            />
-        ),
-        filters: [
-            {
-                text: 'To-do',
-                value: 'To-do',
-            },
-            {
-                text: 'In progress',
-                value: 'In progress',
-            },
-            {
-                text: 'Done',
-                value: 'Done',
-            }
-        ],
-        onFilter: (value, record) => record.status.indexOf(value) === 0,
-    },
-    {
-        title: 'Date',
-        dataIndex: 'date',
-        key: 'date',
-        sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
-    },
-    {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    return (
-                        <Tag key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
-    },
-
-    {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-            <Space size="middle">
-                <a href="/table">Delete</a>
-            </Space>
-        ),
-    },
-];
+import React, { useEffect, useState } from 'react';
+import { Table } from 'antd';
+import { deleteArrayElement, deleteDocument, getDocumentById, queryDocuments } from '../../services/firebase';
+import { columns } from './ColumnType';
+import '../../assets/styles/table.css';
+import moment from 'moment/moment';
+import { FileType } from '../../enums/FileType';
 
 const TableView = () => {
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const start = () => {
-        setLoading(true);
-        // ajax request after empty completing
-        setTimeout(() => {
-            setSelectedRowKeys([]);
-            setLoading(false);
-        }, 1000);
-    };
-    const onSelectChange = (newSelectedRowKeys) => {
-        //   console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-        setSelectedRowKeys(newSelectedRowKeys);
-    };
-    const rowSelection = {
-        selectedRowKeys,
-        onChange: onSelectChange,
-    };
-    const hasSelected = selectedRowKeys.length > 0;
+    const [notes, setNotes] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [table, setTable] = useState([]);
 
-    const [tblData, setTblData] = useState([]);
-    useEffect(() => {
-        const fetchNotesAndFiles = async () => {
-            try {
-                const fetchedNotes = await getAllDocuments("notes");
-                const fetchedFiles = await getAllDocuments("files");
-                const notes = fetchedNotes.map(item => ({
-                    // ...item, 
-                    key: item.id,
-                    title: item.title,
-                    status: item?.meta_data?.status || "To-do",
-                    date: item?.meta_data?.datetime || moment('05/01/2023').format('L'),
-                    tags: item?.meta_data?.tags || ['note 1'],
-                    type: "Note",
+    const loadFoldersAndNotes = async () => {
+        try {
+            const folderData = await queryDocuments('folders', 'owner', '==', 'abc');
 
-                }));
-                const files = fetchedFiles.map(item => ({
-                    // ...item,
-                    key: item.id,
-                    title: item.name,
-                    status: "Done",
-                    date: moment('05/01/2023').format('L'),
-                    tags: [''],
-                    type: "File",
-                }));
-                const arrData = [...notes, ...files];
-                setTblData(arrData);
-            } catch (error) {
-                console.error('Error fetching notes and files:', error);
+            const fetchedNotes = [];
+            const fetchedFiles = [];
+
+            for (const folder of folderData) {
+                for (const noteId of folder.notes) {
+                    const note = await getDocumentById('notes', noteId);
+                    fetchedNotes.push({ item_id: noteId, item: note });
+                }
+
+                for (const fileId of folder.files) {
+                    const file = await getDocumentById('files', fileId);
+                    fetchedFiles.push({ item_id: fileId, item: file });
+                }
             }
-        };
 
-        fetchNotesAndFiles();
+            setNotes(fetchedNotes);
+            setFiles(fetchedFiles);
+        } catch (error) {
+            console.error('Error fetching folders and notes:', error);
+        }
+    };
+
+    const mapToModel = () => {
+        const notesModel = notes.map((note) => ({
+            key: note.item_id,
+            title: note.item?.title,
+            status: note.item?.meta_data?.status?.[0] || 'To-do',
+            date: moment(note.item?.meta_data?.datetime).format('YYYY-MM-DD') || moment('05-31-2023').format('YYYY-MM-DD'),
+            tags: note.item?.meta_data?.tags || [],
+            type: FileType.Note,
+        }));
+
+        const filesModel = files.map((file) => ({
+            key: file.item_id,
+            title: file.item?.name,
+            status: 'Reading',
+            date: moment().format('YYYY-MM-DD'),
+            tags: [],
+            type: FileType.Pdf,
+        }));
+
+        setTable([...notesModel, ...filesModel]);
+    };
+
+    useEffect(() => {
+        loadFoldersAndNotes();
     }, []);
-    console.log("TABLE DATA:", tblData);
-    return (
-        <div>
-            <div
-                style={{
-                    marginBottom: 16,
-                }}
-            >
-                <Button type="primary" onClick={start} disabled={!hasSelected} loading={loading}>
-                    Reload
-                </Button>
-                <span
-                    style={{
-                        marginLeft: 8,
-                    }}
-                >
-                    {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-                </span>
-            </div>
-            <Table rowSelection={rowSelection} columns={columns} dataSource={tblData} />
 
-        </div >
+    useEffect(() => {
+        mapToModel();
+    }, [notes, files]);
+
+    return (
+        <>
+            <Table columns={columns} dataSource={table} />
+        </>
     );
 };
-export default TableView;
 
+export default TableView;

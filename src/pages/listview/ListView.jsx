@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Layout, } from 'antd';
 import MainHeader from '../../components/header/MainHeader';
 import './list_view.css';

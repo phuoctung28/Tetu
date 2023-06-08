@@ -109,18 +109,6 @@ export const deleteDocument = async (collection, id) => {
     }
 };
 
-export const deleteDocumentField = async (collection, documentId, fieldName) => {
-    try {
-        const ref = doc(db, collection, documentId);
-        await updateDoc(ref, {
-            [fieldName]: deleteField()
-        });
-    } catch (error) {
-        console.log("Error deleting field:", error);
-        throw error;
-    }
-};
-
 export const deleteArrayElement = async (collection, documentId, fieldName, element) => {
     try {
         const ref = doc(db, collection, documentId);
@@ -176,6 +164,28 @@ export const getAllDocument = async (collections) => {
     console.error("Error getting documents:", error);
     throw error;
   }
+};
+
+export const queryDocumentsCondition = async (collectionPath, conditions) => {
+   try {
+      const documents = [];
+      let queryRef = collection(db, collectionPath);
+
+      conditions.forEach(condition => {
+         const { field, operator, value } = condition;
+         queryRef = query(queryRef, where(field, operator, value));
+      });
+
+      const querySnapshot = await getDocs(queryRef);
+      querySnapshot.forEach((doc) => {
+         documents.push({ id: doc.id, ...doc.data() });
+      });
+
+      return documents;
+   } catch (error) {
+      console.error('Error querying documents:', error);
+      throw error;
+   }
 };
 
 export const getDocumentById = async (collections, id) => {
@@ -238,38 +248,9 @@ export const deleteFile = async (fileURL) => {
     }
 };
 
-// Get download URL
-export const getFileDownloadURL = async (fileURL) => {
-    try {
-        const fileRef = storage.refFromURL(fileURL);
-        return fileRef.getDownloadURL();
-    } catch (error) {
-        console.error('Error getting file download URL:', error);
-        throw error;
-    }
-};
-
-
 // Authentication 
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const database = getFirestore(app);
 
-// const provider = new GoogleAuthProvider();
-// export const signInWithGoogle = () => {
-//    signInWithPopup(auth, provider)
-//       .then((result) => {
-//          console.log(result);
-//          const name = result.user.displayName;
-//          const email = result.user.email;
-//          const profilePic = result.user.photoURL;
-
-//          localStorage.setItem("name", name);
-//          localStorage.setItem("email", email);
-//          localStorage.setItem("profilePic", profilePic);
-//       })
-//       .catch((error) => {
-//          console.log(error);
-//       })
-// }
 

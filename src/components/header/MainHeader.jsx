@@ -1,39 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import logo from '../../assets/images/logo.png';
-import { Breadcrumb, Button, Input, Popconfirm, Tooltip } from 'antd';
-import { PushpinOutlined, SplitCellsOutlined, DeleteOutlined, SaveOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Popconfirm, Tooltip } from 'antd';
+import { PushpinOutlined, SplitCellsOutlined, SaveOutlined, SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 import '../../assets/styles/main_header.css';
-
-const { Search } = Input;
-
-const onSearch = (value) => {
-    // console.log(value);
-};
+import { useNavigate } from 'react-router-dom';
+import SearchComponent from "../Seach/Search";
 
 const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData, saveNoteContent }) => {
+    const navigate = useNavigate();
+    const [isSearchOpened, setIsSearchOpened] = useState(false);
+    // const [crumbItem, setCrumbItem] = useState([]);
+    // useEffect(() => {
+    //     if (noteData) {
+    //         const crumbs = [noteData.location, noteData.title].map(crumb => {
+    //             return { title: <span>{crumb}</span> }
+    //         });
+    //         setCrumbItem(crumbs);
+    //     }
+    // }, [noteData]);
     const handleLogoClick = () => {
-        window.location.href = '/home';
+        navigate("/home")
     };
-    const [crumbItem, setCrumbItem] = useState([]);
-    useEffect(() => {
-        if (noteData) {
-            const crumbs = [noteData.location, noteData.title].map(crumb => {
-                return { title: <span>{crumb}</span> }
-            });
-            setCrumbItem(crumbs);
-        }
-    }, [noteData]);
-
+    const handleOpenSearch = () => {
+        setIsSearchOpened(!isSearchOpened);
+    };
     return (
         <div className='header-container'>
             <div className='header-left'>
                 <a href="/home" className='btn-logo' onClick={handleLogoClick}>
                     <img src={logo} alt="logo tetu" />
                 </a>
-                {noteData && <Breadcrumb
+                {/* {noteData && <Breadcrumb
                     className='breadcrumb'
                     items={crumbItem} />
-                }
+                } */}
             </div>
             <div>
                 <Tooltip title="Pin note">
@@ -70,12 +70,12 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                         Dual Note
                     </Button>
                 }
-                <Search
-                    placeholder="Search..."
-                    onSearch={onSearch}
-                    style={{ width: 200, }}
-                    size='middle'
-                />
+                <Tooltip title="Search">
+                    <Button className='btn-toolbar' shape="circle"
+                        onClick={() => setIsSearchOpened(!isSearchOpened)}
+                        icon={<SearchOutlined style={{ color: '#596A77' }} />} />
+                </Tooltip>
+                <SearchComponent isOpened={isSearchOpened} handleOpenSearch={handleOpenSearch} />
             </div>
         </div>
     );
