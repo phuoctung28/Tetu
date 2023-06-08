@@ -7,7 +7,6 @@ import TetuEditor from '../../components/Editor/Editor';
 import './note_editor.css';
 import { getDocumentById, queryDocuments, updateDocument, updateDocumentProperty } from "../../services/firebase";
 import { useLocation, useParams } from "react-router-dom";
-import { useCallback } from 'react';
 
 const { Content } = Layout;
 
@@ -38,6 +37,7 @@ const Notebook = () => {
                     noteId: pageId,
                     folderId: folder[0].id,
                 });
+                // console.log("NOTE CONTENT:", fetchedNote.content);
                 setNoteContent(fetchedNote.content);
 
             } catch (error) {
@@ -101,17 +101,19 @@ const Notebook = () => {
             <Layout className="site-layout" style={{ marginLeft: 200, }}>
                 <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} />
                 <Content className="notebook-container">
-                    <div className='note-space-container' style={{ padding: 40, background: colorBgContainer, }}>
-                        <div className='note-title-container'>
-                            <Input
-                                value={title}
-                                className="note-title"
-                                onChange={changeTitle}
-                                onPressEnter={handleKeyUp}
-                                // placeholder="Untitled"
-                                bordered={false} />
+                    <div className="note-space-container" style={{ padding: 40, background: colorBgContainer, }}>
+                        <div className="note-header">
+                            <div className='note-title-container'>
+                                <Input
+                                    value={title}
+                                    className="note-title"
+                                    onChange={changeTitle}
+                                    onPressEnter={handleKeyUp}
+                                    // placeholder="Untitled"
+                                    bordered={false} />
+                            </div>
+                            <Metadata noteData={noteData} />
                         </div>
-                        <Metadata noteData={noteData} />
                         <TetuEditor
                             editorData={noteData.content || ""}
                             setNoteContent={setNoteContent} />

@@ -55,7 +55,7 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
 
     useEffect(() => {
         fetchNotesAndFiles();
-        console.log("current title: ", currentTitle);
+        // console.log("current title: ", currentTitle);s
     }, [currentTitle]);
 
 

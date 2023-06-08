@@ -47,11 +47,14 @@
     overflow: auto;
     height: 100vh;
     background: white;
+    scrollbar-gutter: stable both-edges;
 }
 
 .note-title {
     font-size: 28px;
     font-weight: 600;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
 
 ::placeholder, ::-webkit-input-placeholder {

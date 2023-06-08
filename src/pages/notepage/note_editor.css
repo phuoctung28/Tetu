@@ -1,4 +1,10 @@
 .note-space-container {
     width: 50%;
+    min-width: 800px;
+    margin: 0 auto;
+}
+
+.note-header {
+    width: 90%;
     margin: 0 auto;
 }

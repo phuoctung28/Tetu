@@ -30,64 +30,71 @@ const DEFAULT_INITIAL_DATA = {
 
 const TetuEditor = ({ editorData, setNoteContent }) => {
     const [editorValue, setEditorValue] = useState('');
-    // const ejInstance = useRef();
-    // const initEditor = () => {
-    //     const editor = new EditorJS({
-    //         holder: 'editorjs',
-    //         onReady: () => {
-    //             ejInstance.current = editor;
-    //             // new Undo({ editor });
-    //             new DragDrop(editor);
-    //         },
-    //         autofocus: true,
-    //         data: DEFAULT_INITIAL_DATA,
-    //         onChange: async () => {
-    //             let content = await editor.saver.save();
-    //             console.log(content);
-    //         },
-    //         tools: {
-    //             header: {
-    //                 class: Header,
-    //                 inlineToolbar: ['link'],
-    //                 shortcut: 'CTRL+SHIFT+H',
-    //             },
-    //             table: Table,
-    //             underline: {
-    //                 class: Underline,
-    //                 shortcut: 'CTRL+U',
-    //             },
-    //             marker: {
-    //                 class: Marker,
-    //                 shortcut: 'CTRL+M',
-    //             },
-    //             inlineCode: {
-    //                 class: InlineCode,
-    //                 shortcut: 'CTRL+E'
-    //             },
-    //             list: List,
-    //             code: Code,
-    //             image: Image,
-    //             checklist: CheckList,
-    //             paragraph: {
-    //                 class: Paragraph,
-    //                 inlineToolbar: true,
-    //                 config: {
-    //                     placeholder: 'Press "TAB" for commands...'
-    //                 }
-    //             },
-    //         },
-    //     });
-    // };
-    // useEffect(() => {
-    //     if (ejInstance.current === null) {
-    //         initEditor();
-    //     }
+    const ejInstance = useRef();
+    const initEditor = async () => {
+        const editor = await new EditorJS({
+            holder: 'editorjs',
+            onReady: () => {
+                ejInstance.current = editor;
+                new Undo({ editor });
+                new DragDrop(editor);
+            },
+            autofocus: true,
+            data: editorData,
+            onChange: async () => {
+                let content = await editor.saver.save();
+                console.log(content);
+                setEditorValue(content);
+                setNoteContent(content);
+            },
+            tools: {
+                header: {
+                    class: Header,
+                    inlineToolbar: ['link'],
+                    shortcut: 'CTRL+SHIFT+H',
+                },
+                table: Table,
+                underline: {
+                    class: Underline,
+                    shortcut: 'CTRL+U',
+                },
+                marker: {
+                    class: Marker,
+                    shortcut: 'CTRL+M',
+                },
+                inlineCode: {
+                    class: InlineCode,
+                    shortcut: 'CTRL+E'
+                },
+                list: {
+                    class: List,
+                    shortcut: 'CTRL+SHIFT+L'
+                },
+                code: Code,
+                image: Image,
+                checklist: CheckList,
+                paragraph: {
+                    class: Paragraph,
+                    inlineToolbar: true,
+                    config: {
+                        placeholder: 'Press "TAB" for commands...',
+                        preserveBlank: true,
+                    }
+                },
+            },
+        });
 
-    //     return () => {
-    //         ejInstance?.current?.destroy();
-    //         ejInstance.current = null;
-    //     };
-    // }, []);
+        // await editor.data(editorData);
+    };
+    useEffect(() => {
+        initEditor();
+        // if (ejInstance.current === null) {}
+
+        return () => {
+            ejInstance?.current?.destroy();
+            ejInstance.current = null;
+        };
+    }, [editorData]);
 
     useEffect(() => {
         setEditorValue(editorData);
@@ -100,8 +107,8 @@ const TetuEditor = ({ editorData, setNoteContent }) => {
 
     return (
         <div className="editor-container">
-            {/* <div holder='editorjs' id='editorjs'></div> */}
-            <ReactQuill
+            <div id='editorjs'></div>
+            {/* <ReactQuill
                 value={editorValue}
                 onChange={handleChange}
                 placeholder="Enter here"
@@ -125,7 +132,7 @@ const TetuEditor = ({ editorData, setNoteContent }) => {
                     'link',
                     // 'image',
                 ]}
-            />
+            /> */}
         </div>
     );
 };
