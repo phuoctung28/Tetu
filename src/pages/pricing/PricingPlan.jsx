@@ -4,7 +4,6 @@ import cross from "../../assets/icons/cross.svg";
 import qrPayment from "../../assets/images/qrpayment.jpg";
 import './pricing_page.css';
 import { Modal } from "antd";
-import PaypalCheckoutBtn from '../../components/PaypalCheckoutBtn';
 
 const PricingPlan = () => {
    const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,7 +85,7 @@ const PricingPlan = () => {
             onCancel={handleCancel}
             footer={null}
          >
-            <img src={qrPayment} className='qrPayment' />
+            <img src={qrPayment} alt={"payment"} className='qrPayment' />
          </Modal>
       </div>
    )

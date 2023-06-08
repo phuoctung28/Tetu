@@ -1,7 +1,6 @@
-import {Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm} from 'antd';
+import {Button, Layout, Avatar, Tooltip, Divider, Popover} from 'antd';
 import '../../assets/styles/sidebar.css';
 import {EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined} from '@ant-design/icons';
-import {auth} from '../../services/firebase';
 import {useNavigate} from 'react-router-dom';
 import {useState} from 'react';
 import SidebarMenu from './SidebarMenu';
