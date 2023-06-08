@@ -43,7 +43,7 @@
 }
 
 .dictionary-container {
-    width: 250px;
+    width: 300px;
     height: calc(100vh - 50px);
     overflow: hidden;
     margin: 0;
@@ -59,7 +59,7 @@
     border-top: 0.4px solid #e0e2e6;
     border-bottom: 0.4px solid #e0e2e6;
     padding: 15px 10px;
-
+    position: relative;
 }
 
 .dictionary-header {
@@ -79,10 +79,16 @@
     align-items: center;
 }
 
-.item-head {
+/* .item-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
+} */
+
+.item-audio {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .item-word {
@@ -90,6 +96,12 @@
     font-weight: 500;
     color: #208cf1;
     margin: 0;
+}
+
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .item-word-type {
