@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Divider, message } from 'antd';
-import { auth, provider, database } from "../../services/firebase";
+import { auth, provider, database, getDocumentById } from "../../services/firebase";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import google from '../../assets/icons/google.png';
@@ -47,7 +47,7 @@ const LoginForm = () => {
             const userSnap = await getDoc(usersCollectionRef);
             // console.log("Login: ", userSnap.data());
             const loginUser = userSnap.data();
-            localStorage.setItem("user", JSON.stringify({ ...loginUser, user_id: user.uid }));
+            localStorage.setItem("user", JSON.stringify(loginUser));
             setLoading(false);
             message.success("Login success!");
             navigate("/home");
@@ -65,15 +65,21 @@ const LoginForm = () => {
             const user = userCredential.user;
             const email = user.email;
 
-            const usersCollectionRef = doc(database, 'users', user.uid);
-            await setDoc(usersCollectionRef, { email, googleAuth: true });
+            const fetchedUser = await getDocumentById("users", user.uid);
 
             const loginUser = {
                 user_id: user.uid,
                 email: user.email,
                 name: user.displayName,
                 profilePic: user.photoURL,
+                accountType: fetchedUser?.accountType || "basic",
+                googleAuth: true
             }
+
+            const usersCollectionRef = doc(database, 'users', user.uid);
+            await setDoc(usersCollectionRef, loginUser);
+            console.log("google user:", user);
+
             localStorage.setItem("user", JSON.stringify(loginUser));
             message.success("Login success!");
             navigate("/home");
