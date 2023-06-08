@@ -49,31 +49,6 @@ export const createDocument = async (collections, data) => {
     }
 };
 
-// Read a document from a Firestore collection
-export const getDocument = async (collection, id) => {
-    try {
-        const docRef = await db.collection(collection).doc(id).get();
-        if (docRef.exists) {
-            return {id: docRef.id, ...docRef.data()};
-        } else {
-            throw new Error('Document not found.');
-        }
-    } catch (error) {
-        console.error('Error getting document:', error);
-        throw error;
-    }
-};
-
-// Update a document in a Firestore collection
-export const updateDocument = async (ref, data) => {
-    try {
-        await updateDoc(ref, data);
-    } catch (error) {
-        console.error('Error updating document:', error);
-        throw error;
-    }
-};
-
 // Function to update a document
 export const updateDocumentProperty = async (collection, documentId, field, data) => {
     try {
@@ -105,18 +80,6 @@ export const deleteDocument = async (collection, id) => {
         await deleteDoc(doc(db, collection, id));
     } catch (error) {
         console.error('Error deleting document:', error);
-        throw error;
-    }
-};
-
-export const deleteDocumentField = async (collection, documentId, fieldName) => {
-    try {
-        const ref = doc(db, collection, documentId);
-        await updateDoc(ref, {
-            [fieldName]: deleteField()
-        });
-    } catch (error) {
-        console.log("Error deleting field:", error);
         throw error;
     }
 };
@@ -161,6 +124,28 @@ export const getAllDocument = async (collections) => {
     console.error("Error getting documents:", error);
     throw error;
   }
+};
+
+export const queryDocumentsCondition = async (collectionPath, conditions) => {
+   try {
+      const documents = [];
+      let queryRef = collection(db, collectionPath);
+
+      conditions.forEach(condition => {
+         const { field, operator, value } = condition;
+         queryRef = query(queryRef, where(field, operator, value));
+      });
+
+      const querySnapshot = await getDocs(queryRef);
+      querySnapshot.forEach((doc) => {
+         documents.push({ id: doc.id, ...doc.data() });
+      });
+
+      return documents;
+   } catch (error) {
+      console.error('Error querying documents:', error);
+      throw error;
+   }
 };
 
 export const getDocumentById = async (collections, id) => {
@@ -223,38 +208,9 @@ export const deleteFile = async (fileURL) => {
     }
 };
 
-// Get download URL
-export const getFileDownloadURL = async (fileURL) => {
-    try {
-        const fileRef = storage.refFromURL(fileURL);
-        return fileRef.getDownloadURL();
-    } catch (error) {
-        console.error('Error getting file download URL:', error);
-        throw error;
-    }
-};
-
-
 // Authentication 
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const database = getFirestore(app);
 
-// const provider = new GoogleAuthProvider();
-// export const signInWithGoogle = () => {
-//    signInWithPopup(auth, provider)
-//       .then((result) => {
-//          console.log(result);
-//          const name = result.user.displayName;
-//          const email = result.user.email;
-//          const profilePic = result.user.photoURL;
-
-//          localStorage.setItem("name", name);
-//          localStorage.setItem("email", email);
-//          localStorage.setItem("profilePic", profilePic);
-//       })
-//       .catch((error) => {
-//          console.log(error);
-//       })
-// }
 
