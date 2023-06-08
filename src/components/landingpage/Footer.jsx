@@ -92,7 +92,7 @@ function Footer() {
 
                     {/* Copyrights note */}
                     <div className="copyright-note">
-                        Made by <a href="https://www.facebook.com/tetu.v1" target="_blank" className="company-name">DolphinGroup</a>. All rights reserved.
+                        Made by <a href="https://www.facebook.com/tetu.v1" target="_blank" rel="noopener" className="company-name">DolphinGroup</a>. All rights reserved.
                     </div>
                 </div>
             </div>

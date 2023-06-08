@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Modal, Tooltip } from 'antd';
-import { AppstoreAddOutlined, FolderAddOutlined } from '@ant-design/icons';
+import { FolderAddOutlined } from '@ant-design/icons';
 import { createDocument, queryDocuments } from "../../services/firebase";
 import TeTuMenu from "../menu/Menu";
 

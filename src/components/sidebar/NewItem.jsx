@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Popconfirm, Tooltip, message } from 'antd';
+import {Button, Popconfirm, message, Tooltip} from 'antd';
 import '../../assets/styles/sidebar.css';
 import { CreditCardOutlined, UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
 import { auth } from "../../services/firebase";
@@ -30,7 +30,6 @@ const NewItem = () => {
             <Popconfirm
                 title="Confirm log out?"
                 onConfirm={signOut}
-                // onCancel={cancel}
                 okText="Yes"
                 cancelText="No">
                 <Tooltip title="Sign out">
