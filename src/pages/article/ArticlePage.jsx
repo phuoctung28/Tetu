@@ -15,16 +15,17 @@ const ArticlePage = () => {
     const [selectedText, setSelectText] = useState("");
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const [dictData, setDictData] = useState([]);
-    useEffect(() => {
-        const loadDictData = async () => {
-            try {
-                const fetchedDict = await queryDocuments("dictionary", "owner", "==", userId);
-                setDictData(fetchedDict);
-                // console.log("FETCH DICT: ", fetchedDict);
-            } catch (error) {
-                console.log("Error load dictionary!");
-            }
+    const loadDictData = async () => {
+        try {
+            // console.log("user:", userId);
+            const fetchedDict = await queryDocuments("dictionary", "owner", "==", userId);
+            setDictData(fetchedDict);
+            // console.log("FETCH DICT: ", fetchedDict);
+        } catch (error) {
+            console.log("Error load dictionary!");
         }
+    }
+    useEffect(() => {
         loadDictData();
     }, []);
 
@@ -33,7 +34,7 @@ const ArticlePage = () => {
     }
 
     const handleMouseUp = () => {
-        const currentSelectedText = window.getSelection().toString().trim();
+        const currentSelectedText = window.getSelection().toString().trim().toLowerCase();
         setSelectText(currentSelectedText)
         // console.log(`Selected text: ${currentSelectedText}`);
     }
@@ -66,10 +67,10 @@ const ArticlePage = () => {
 
             const persistData = {
                 word: selectedText,
-                audio: audio,
-                phonetic: dataJ[0]?.phonetic,
-                part_of_speech: dataJ[0]?.meanings[0]?.partOfSpeech,
-                meaning: dataJ[0]?.meanings[0]?.definitions[0]?.definition,
+                audio: audio || "",
+                phonetic: dataJ[0]?.phonetic || "",
+                part_of_speech: dataJ[0]?.meanings[0]?.partOfSpeech || "",
+                meaning: dataJ[0]?.meanings[0]?.definitions[0]?.definition || "",
                 owner: userId,
             };
 
@@ -77,6 +78,7 @@ const ArticlePage = () => {
             try {
                 await createDocument("dictionary", persistData);
                 message.success("Store vocab successfully!");
+                loadDictData();
             } catch (error) {
                 console.log(error);
             }
@@ -86,6 +88,11 @@ const ArticlePage = () => {
     };
 
     const playAudio = (audioData) => {
+        // console.log("Audio:", typeof audioData);
+        if (!audioData || audioData.length === 0) {
+            message.info("No audio found!");
+            return;
+        }
         let current_audio = new Audio(audioData);
         current_audio.play();
     }
