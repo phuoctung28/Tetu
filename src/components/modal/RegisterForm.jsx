@@ -19,7 +19,7 @@ const layout = {
 };
 
 const onFinish = (values) => {
-    console.log(values);
+    //    console.log(values);
 };
 
 /* eslint-disable no-template-curly-in-string */
@@ -46,6 +46,7 @@ const RegisterForm = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -143,6 +144,7 @@ const RegisterForm = () => {
                     </div>
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 0, }}>
                         <Button loading={loading} onClick={handleRegister} type="primary" htmlType="submit" size="large" className="login-form-button">
+
                             Register!
                         </Button>
                     </Form.Item>

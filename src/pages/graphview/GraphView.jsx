@@ -12,7 +12,6 @@ import { getDocument } from 'pdfjs-dist';
 
 const { Content } = Layout;
 
-
 const randomColor = () => {
     const red = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
     const green = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
@@ -319,6 +318,7 @@ const GraphView = () => {
             // edgesView.refresh();
         })
     );
+
     return (
         <Layout hasSider>
             <Sidebar />
@@ -374,6 +374,7 @@ const GraphView = () => {
                 </Content>
             </Layout>
         </Layout >
+
     );
 };
 export default GraphView;

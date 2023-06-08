@@ -2,9 +2,9 @@ import { Collapse, DatePicker, Space, Input, Tag, Tooltip, Select, theme } from 
 import { CalendarOutlined, TagsOutlined, SwitcherOutlined, NumberOutlined, PlusOutlined } from '@ant-design/icons';
 import "../../assets/styles/metadata.css";
 import dayjs from 'dayjs';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const {Panel} = Collapse;
+const { Panel } = Collapse;
 const text = `
   A dog is a type of domesticated animal.
   Known for its loyalty and faithfulness,
@@ -12,14 +12,14 @@ const text = `
 `;
 
 const statusOptions = [
-    {value: 'To-do',},
-    {value: 'In progress',},
-    {value: 'Done',},
-    {value: 'Canceled',},
+    { value: 'To-do', },
+    { value: 'In progress', },
+    { value: 'Done', },
+    { value: 'Canceled', },
 ];
 
 const tagRender = (props) => {
-    const {label, value, closable, onClose} = props;
+    const { label, value, closable, onClose } = props;
     const onPreventMouseDown = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -41,7 +41,7 @@ const tagRender = (props) => {
 
 const Metadata = () => {
     const onChange = (key) => {
-        console.log(key);
+        // console.log(key);
     };
     const panelStyle = {
         border: 'none',
@@ -49,7 +49,7 @@ const Metadata = () => {
     };
     const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
-    const {token} = theme.useToken();
+    const { token } = theme.useToken();
     const [tags, setTags] = useState(['Tag 1',]);
     const [inputVisible, setInputVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
@@ -67,7 +67,7 @@ const Metadata = () => {
     }, [inputValue]);
     const handleClose = (removedTag) => {
         const newTags = tags.filter((tag) => tag !== removedTag);
-        console.log(newTags);
+        // console.log(newTags);
         setTags(newTags);
     };
     const showInput = () => {
@@ -102,11 +102,11 @@ const Metadata = () => {
         borderStyle: 'dashed',
     };
     const options = [
-        {value: "In-class note", label: "In-class note"},
-        {value: "Revision", label: "Revision"},
-        {value: "Assignment", label: "Assignment"},
-        {value: "Project", label: "Project"},
-        {value: "Presentation", label: "Presentation"}
+        { value: "In-class note", label: "In-class note" },
+        { value: "Revision", label: "Revision" },
+        { value: "Assignment", label: "Assignment" },
+        { value: "Project", label: "Project" },
+        { value: "Presentation", label: "Presentation" }
     ];
     return (
         <div className="container-metadata">
@@ -116,16 +116,16 @@ const Metadata = () => {
                     <Space className="metadata-list" direction='vertical' size={10}>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <CalendarOutlined/> Date
+                                <CalendarOutlined /> Date
                             </div>
                             <div className="item-detail">
                                 <DatePicker size="small" defaultValue={dayjs('01/01/2015', dateFormatList[0])}
-                                            format={dateFormatList}/>
+                                    format={dateFormatList} />
                             </div>
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <NumberOutlined/> Status
+                                <NumberOutlined /> Status
                             </div>
                             <div className="item-detail">
                                 <Select
@@ -143,7 +143,7 @@ const Metadata = () => {
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <TagsOutlined/> Tag
+                                <TagsOutlined /> Tag
                             </div>
                             <div className="item-detail">
                                 <Space size={[0, 8]} wrap>
@@ -174,17 +174,17 @@ const Metadata = () => {
                                                     }}
                                                     onClose={() => handleClose(tag)}
                                                 >
-                                       <span
-                                           onDoubleClick={(e) => {
-                                               if (index !== 0) {
-                                                   setEditInputIndex(index);
-                                                   setEditInputValue(tag);
-                                                   e.preventDefault();
-                                               }
-                                           }}
-                                       >
-                                          {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                                       </span>
+                                                    <span
+                                                        onDoubleClick={(e) => {
+                                                            if (index !== 0) {
+                                                                setEditInputIndex(index);
+                                                                setEditInputValue(tag);
+                                                                e.preventDefault();
+                                                            }
+                                                        }}
+                                                    >
+                                                        {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                                    </span>
                                                 </Tag>
                                             );
                                             return isLongTag ? (
@@ -210,7 +210,7 @@ const Metadata = () => {
                                         />
                                     ) : (
                                         <Tag style={tagPlusStyle} onClick={showInput}>
-                                            <PlusOutlined/> New Tag
+                                            <PlusOutlined /> New Tag
                                         </Tag>
                                     )}
                                 </Space>
@@ -218,7 +218,7 @@ const Metadata = () => {
                         </div>
                         <div className="metadata-item">
                             <div className="item-title">
-                                <SwitcherOutlined/> Type
+                                <SwitcherOutlined /> Type
                             </div>
                             <div className="item-detail">
                                 <Select

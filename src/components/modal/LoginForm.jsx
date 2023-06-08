@@ -14,7 +14,9 @@ const layout = {
     wrapperCol: { span: 24, },
 };
 
-const onFinish = (values) => { console.log(values); };
+const onFinish = (values) => {
+    // console.log(values); 
+};
 
 /* eslint-disable no-template-curly-in-string */
 const validateMessages = {
@@ -52,7 +54,7 @@ const LoginForm = () => {
         } catch (error) {
             setLoading(false);
             setError(true);
-            console.log('error: ', error);
+            // console.log('error: ', error);
         }
     };
 
@@ -76,7 +78,7 @@ const LoginForm = () => {
             navigate("/home");
 
         } catch (error) {
-            console.log('error: ', error);
+            // console.log('error: ', error);
         }
     }
 
