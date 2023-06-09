@@ -94,6 +94,8 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
                 }
                 setNotes([]);
                 setFiles([]);
+
+                // window.location.reload(false);
             } else if (deleteItemType === FileType.Note) {
                 await deleteArrayElement('folders', folder.id, 'notes', deleteItemId);
                 await deleteDocument('notes', deleteItemId);

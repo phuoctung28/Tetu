@@ -24,9 +24,12 @@ const NewItem = () => {
             <Button className="new-item" type="text" icon={<CreditCardOutlined />} onClick={() => { navigate("/pricing") }}>
                 Choose plan
             </Button>
-            <Button className="new-item" type="text" icon={<HistoryOutlined />} >
-                Transactions
-            </Button>
+            <Tooltip placement="right" title="This feature is in development" >
+                <Button className="new-item" type="text" icon={<HistoryOutlined />} >
+                    Transactions
+                </Button>
+            </Tooltip>
+
             <Popconfirm
                 title="Confirm log out?"
                 onConfirm={signOut}
