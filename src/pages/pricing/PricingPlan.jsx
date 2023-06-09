@@ -17,7 +17,7 @@ const PricingPlan = () => {
     const navigate = useNavigate();
     useEffect(() => {
         setTimeout(() => {
-            message.success("Update account type successfully!");
+            message.success("Update account type successfully! Now you are a premium user");
             navigate("/user-profile")
         }, 15000)
     }, [isModalOpen])
