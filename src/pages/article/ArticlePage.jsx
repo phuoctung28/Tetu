@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PlayCircleOutlined, PlayCircleFilled, PlayCircleTwoTone, TableOutlined, DeleteOutlined, SortAscendingOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, Layout, Modal, Space, message } from 'antd';
 import MainHeader from '../../components/header/MainHeader';
 import Sidebar from '../../components/sidebar/Sidebar';
 import './article_page.css';
-import { createDocument, getAllDocuments, queryDocuments } from '../../services/firebase';
+import { createDocument, getAllDocuments, getDocumentById, queryDocuments } from '../../services/firebase';
 
 const { Content } = Layout;
 
 
 const ArticlePage = () => {
-    const [dualNote, setDualNote] = useState(false);
     const [selectedText, setSelectText] = useState("");
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
+    const [article, setArticle] = useState({});
     const [dictData, setDictData] = useState([]);
     const navigate = useNavigate();
+    const { articleId } = useParams();
 
+    const loadArticleData = async () => {
+        try {
+            console.log("article id:", articleId);
+            const fetchedArticle = await getDocumentById("articles", articleId);
+            setArticle(fetchedArticle);
+        } catch (error) {
+            console.log("Error load article!", error);
+        }
+    }
     const loadDictData = async () => {
         try {
             // console.log("user:", userId);
@@ -28,12 +38,9 @@ const ArticlePage = () => {
         }
     }
     useEffect(() => {
+        loadArticleData();
         loadDictData();
     }, []);
-
-    const handleToggleDualNote = () => {
-        setDualNote(!dualNote);
-    }
 
     const handleMouseUp = () => {
         const currentSelectedText = window.getSelection().toString().trim().toLowerCase();
@@ -103,21 +110,20 @@ const ArticlePage = () => {
         <Layout hasSider>
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
+                <MainHeader showButton={true} />
                 <Content className="article-section" style={{ margin: '0', overflow: 'initial', }} >
                     <div className="article-container">
                         <div className="article-wrapper">
                             <div className="article">
-                                <h2 className="article-title">VIETMAP: The path to a leading digital maps brand</h2>
+                                <h2 className="article-title">{article.title}</h2>
                                 <div className="article-origin">
-                                    <a href="https://tuoitrenews.vn/news/business/20230525/vietmap-the-path-to-a-leading-digital-maps-brand/73337.html">Original article</a>
+                                    <a href={article.url} rel="noreferrer" target='_blank'>Original article</a>
                                 </div>
                                 <Dropdown
                                     menu={{ items, onClick }}
                                     trigger={['contextMenu']}>
-
                                     <div className="article-content" onMouseUp={handleMouseUp}>
-                                        Vietmap Application Joint Stock Company (VIETMAP JSC) has dedicated significant resources, personnel, and cutting-edge technology to gathering comprehensive and real-time traffic data across all 63 provinces and cities of Vietnam. Significant investment for intricate traffic data   Vietmap experts dedicate their investments toward researching and implementing advanced technologies like Internet of Things (IoT), Artificial Intelligence (AI), Big Data, and various others to enhance their capabilities of traffic data collection and processing. Furthermore, the company utilizes various specialized facilities to collect data, ensuring more comprehensive, precise, and consecutive information.  The brand consistently endeavors to utilize advanced technology and stay up to date with the latest trends, resulting in the acquisition of highly accurate and reliable traffic information. In addition, the company places a strong emphasis on investing in a team of exceptionally skilled professionals specializing in Maps API. These experts promptly respond to changes in information and data within Vietnam’s traffic system to meet the diverse needs of their customers and challenges in the market.  According to their introduction, the two finest pieces of navigation software, Vietmap S2 and Vietmap Live, have been highly praised by Vietnamese drivers.   Vietmap S2 is the offline navigation software exclusively designed for Android car display, offering accurate and remarkably stable traffic alert data that is updated every three months. And Vietmap Live is a hybrid navigation application developed to use on mobile and synchronize with Apple CarPlay and Android Auto. Vietmap Live’s traffic data is updated weekly and it automatically accesses the latest information when users connect to 4G or the Internet, without any intervention.   Both pieces of navigation software claim to be the most demanding applications that excel in terms of comprehensive warning data systems, precise navigation algorithms, and personalized features supporting user driving behavior, according to a company representative. These applications also offer various and beneficial features for a safe and sound journey.  The optimal navigation software is one that is continuously updated with real-time data collected in the most efficient and effective method. However, achieving 100-percent compatibility between real-world data and map data remains an impossible goal for any mapping company worldwide. The organization vows to deliver real-time and accurate data from real data collection, ensuring precision and responsiveness in addressing dynamic traffic conditions.
+                                        {article.content}
                                     </div>
                                 </Dropdown>
                             </div>

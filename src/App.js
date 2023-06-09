@@ -31,6 +31,7 @@ function App() {
                     <Route path="/graph" element={<GraphView />} />
                     <Route path="/calendar" element={<CalendarView />} />
                     <Route path="/article" element={<ArticlePage />} />
+                    <Route path="/article/:articleId" element={<ArticlePage />} />
                     <Route path="/dictionary" element={<DictionaryList />} />
                 </Routes >
             </BrowserRouter >
