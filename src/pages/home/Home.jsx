@@ -106,7 +106,7 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={700}>
+                    <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={700} footer={null}>
                         <div className="canvas-modal">
                             <h2>Canvas board is in development</h2>
                             <img className="canvas-img" src={canvas} alt="loading..." />
