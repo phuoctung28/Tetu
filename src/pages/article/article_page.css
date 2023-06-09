@@ -51,7 +51,7 @@
 }
 
 .dictionary-list {
-    height: 100%;
+    height: calc(100vh - 140px);
     overflow-y: auto;
 }
 
@@ -64,6 +64,7 @@
 
 .dictionary-header {
     padding: 10px 15px;
+    border-bottom: 0.5px solid #e0e2e6;
 }
 
 .dictionary-header h2 {
