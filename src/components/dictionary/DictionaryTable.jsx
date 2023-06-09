@@ -112,7 +112,13 @@ const DictionaryTable = () => {
     const hasSelected = selectedRowKeys.length > 0;
     return (
         <div>
-            <Table rowSelection={rowSelection} columns={columns} dataSource={wordList} />
+            <Table
+                pagination={{
+                    position: ["topRight"],
+                }}
+                rowSelection={rowSelection}
+                columns={columns}
+                dataSource={wordList} />
         </div>
     );
 };
