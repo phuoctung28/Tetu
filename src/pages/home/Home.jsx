@@ -16,7 +16,7 @@ const navItems = [
     // { title: 'Read Document', key: '1', icon: <FileTwoTone className='nav_icon' />, navLink: '' },
     { title: 'New Session', key: '2', icon: <FolderAddTwoTone className='nav_icon' />, navLink: '' },
     // { title: 'New Notebook', key: '3', icon: <BookTwoTone className='nav_icon' />, navLink: '/note' },
-    { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav_icon' />, navLink: '' },
+    // { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav_icon' />, navLink: '' },
     { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav_icon' />, navLink: '' },
     { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav_icon' />, navLink: '' },
 
@@ -28,13 +28,21 @@ const Home = () => {
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
     const handleOpenChange = (newOpen) => {
         setOpen(newOpen);
     };
 
     const devMsg = (msgTitle) => message.info(msgTitle + " is in development!");
     const handleUploadFile = () => { };
-
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
     return (
         <Layout hasSider>
             <Sidebar />
@@ -67,6 +75,12 @@ const Home = () => {
                                             <Text style={{ fontSize: '20px' }} strong>Read Articles</Text>
                                         </button>
                                     </Col>
+                                    <Col className="gutter-row" span={6}>
+                                        <button onClick={showModal} className='nav-btn' >
+                                            <AppstoreTwoTone className='nav_icon' />
+                                            <Text style={{ fontSize: '20px' }} strong>New Canvas</Text>
+                                        </button>
+                                    </Col>
                                     {navItems.map((item, index) => (
                                         <Col key={index} className="gutter-row" span={6}>
                                             <button onClick={() => devMsg(item.title)} className='nav-btn' >
@@ -75,7 +89,7 @@ const Home = () => {
                                             </button>
                                         </Col>
                                     ))}
-   
+
                                 </Row>
                             </div>
                         </div>
@@ -107,6 +121,13 @@ const Home = () => {
 
                     >
                         <ArticleList />
+                    </Modal>
+                    <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={700} footer={null}>
+                        <div className="canvas-modal">
+                            <h2>Canvas board is in development</h2>
+                            <img className="canvas-img" src={canvas} alt="loading..." />
+                            <p>Stay tuned!</p>
+                        </div>
                     </Modal>
                 </Content>
             </Layout>
