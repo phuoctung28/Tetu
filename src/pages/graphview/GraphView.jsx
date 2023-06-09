@@ -143,8 +143,8 @@ const GraphView = () => {
         const fetchNotesAndFiles = async () => {
             try {
                 const fetchedNotes = await queryDocuments('notes', 'owner', '==', userId);
-                const fetchedFiles = await getAllDocuments('files', 'owner', '==', userId);
-                const fetchedFolders = await getAllDocuments('folders', 'owner', '==', userId);
+                const fetchedFiles = await queryDocuments('files', 'owner', '==', userId);
+                const fetchedFolders = await queryDocuments('folders', 'owner', '==', userId);
                 const folders = fetchedFolders.map((item) => ({
                     id: item.id,
                     title: item.folder_name,
@@ -228,6 +228,7 @@ const GraphView = () => {
                 doubleClick: ({ nodes }) => {
                     if (nodes.length > 0) {
                         let filters = nodeList.filter((item) => item.id === nodes[0]);
+                        console.log("Filter:", filters[0]);
                         if (filters[0].type !== 'folder') {
                             modal.confirm({
                                 title: 'Confirm',
@@ -237,8 +238,14 @@ const GraphView = () => {
                                 cancelText: 'Cancel',
                                 onOk: () => {
                                     if (filters.length > 0) {
-                                        const url = `/${filters[0].type}/${nodes[0]}`;
-                                        navigate(url);
+                                        const typeUrl = filters[0].type.trim();
+                                        const idUrl = nodes[0].trim();
+                                        console.log("TYPE: ", typeUrl);
+                                        console.log("ID: ", idUrl);
+                                        const url = `/${typeUrl}/${idUrl}`;
+                                        if (typeUrl === "note")
+                                            navigate(url);
+
                                     }
                                 },
                             });

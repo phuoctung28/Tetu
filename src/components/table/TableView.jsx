@@ -43,7 +43,7 @@ const TableView = () => {
             title: note.item?.title,
             status: note.item?.meta_data?.status?.[0] || 'To-do',
             noteType: note.item?.meta_data?.type || "Self-study",
-            date: moment(note.item?.meta_data?.datetime).format('DD/MM/YYYY') || moment(new Date()).format('DD/MM/YYYY'),
+            date: moment(note.item?.meta_data?.datetime).format('L') || moment(new Date()).format('DD/MM/YYYY'),
             tags: note.item?.meta_data?.tags || [],
             type: FileType.Note,
         }));
