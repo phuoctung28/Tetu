@@ -11,22 +11,22 @@ import './note-book.css';
 
 const { Content } = Layout;
 
-const Notebook = () => {
+const Notebook = ({page}) => {
     const { token: { colorBgContainer }, } = theme.useToken();
 
-    const [title, setTitle] = useState("Untitled");
+    const [title, setTitle] = useState(page?.title);
     const [noteData, setNoteData] = useState({});
     const [currentPage, setCurrentPage] = useState({});
     const { pageId } = useParams();
     const location = useLocation();
     const data = location.state;
-    const [currentTitle, setCurrentTitle] = useState(data.name);
+    const [currentTitle, setCurrentTitle] = useState(data?.name);
     const [noteContent, setNoteContent] = useState("");
 
     useEffect(() => {
         const fetchNote = async () => {
             try {
-                const fetchedNote = await getDocumentById("notes", pageId);
+                const fetchedNote = await getDocumentById("notes", pageId || page.id);
                 const folder = await queryDocuments("folders", "notes", "array-contains", pageId);
                 setNoteData({
                     ...fetchedNote,
@@ -39,7 +39,6 @@ const Notebook = () => {
                     noteId: pageId,
                     folderId: folder[0].id,
                 });
-                // console.log("NOTE CONTENT:", fetchedNote.content);
                 setNoteContent(fetchedNote.content);
 
             } catch (error) {
@@ -100,18 +99,17 @@ const Notebook = () => {
     return (
         <Layout hasSider>
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
-            <Layout className="site-layout" style={{ marginLeft: 200, }}>
+            <Layout className="site-layout">
                 <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} />
                 <Content className="notebook-wrapper">
                     <div className="note-space-container">
                         <div className="note-header">
                             <div className="note-title-container">
                                 <Input
-                                    value={title}
+                                    value={currentTitle || title}
                                     className="note-title"
                                     onChange={changeTitle}
                                     onPressEnter={handleKeyUp}
-                                    // placeholder="Untitled"
                                     bordered={false} />
                             </div>
                             <Metadata noteData={noteData} />
