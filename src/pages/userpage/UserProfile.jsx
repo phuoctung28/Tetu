@@ -10,6 +10,7 @@ const { Content } = Layout;
 
 const UserProfile = () => {
     const [user, setUser] = useState({});
+    const currentUser = JSON.parse(localStorage.getItem("user"));
     useEffect(() => {
         const loginUser = JSON.parse(localStorage.getItem("user"));
         // console.log("login user: ", loginUser);
@@ -38,8 +39,8 @@ const UserProfile = () => {
                             style={{ verticalAlign: 'middle', marginRight: 10 }}
                             size={70}
                             gap={4}
-                            src={user?.profilePic}>
-                            {/* {user?.profilePic ? '' : user.name.split(' ').at(-1).charAt(0)} */}
+                            src={currentUser?.profilePic}>
+                            {currentUser?.profilePic ? '' : currentUser?.name.split(' ').at(-1).charAt(0)}
                         </Avatar>
                         <Descriptions title="User Info">
                             <Descriptions.Item label="Name">{user.name}</Descriptions.Item>

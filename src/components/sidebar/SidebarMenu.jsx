@@ -62,6 +62,7 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
 
             {folders.map((data) =>
                 <TeTuMenu
+                    userId={userId}
                     key={data.id}
                     folderData={data}
                     currentPage={currentPage}

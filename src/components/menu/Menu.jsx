@@ -15,8 +15,9 @@ import {
     updateDocumentProperty,
     updateExistedDocumentArray, uploadFile,
 } from '../../services/firebase';
+import moment from 'moment/moment';
 
-const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
+const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
 
     const [pageModalVisible, setPageModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -195,16 +196,18 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
 
     const handleNoteUpdate = async () => {
         setConfirmLoading(true);
+        console.log("datetime: ", moment(new Date()).format("DD/MM/YYYY"));
         try {
             const newNote = {
                 title: noteValue,
                 content: "",
                 meta_data: {
-                    datetime: dayjs(new Date().toJSON().slice(0, 10)),
+                    datetime: moment(new Date()).format("DD/MM/YYYY"),
                     status: ["To-do"],
                     tags: [],
                     type: ["Self-study"],
-                }
+                },
+                owner: userId,
             };
             const noteRef = await createDocument('notes', newNote);
             const noteId = noteRef.id;
@@ -216,7 +219,7 @@ const TeTuMenu = ({ folderData, currentPage, currentTitle }) => {
             setNotes((prevNotes) => [...prevNotes, { item_id: noteId, item: note }]);
             setNoteValue('');
             const newNotePath = `/note/${noteId}`;
-            await navigate(newNotePath);
+            await navigate(newNotePath, { state: { name: noteValue }, replace: true });
             setConfirmLoading(false);
         } catch (error) {
             console.error('Error updating document:', error);
