@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Modal, Tooltip } from 'antd';
-import { AppstoreAddOutlined, FolderAddOutlined } from '@ant-design/icons';
+import { FolderAddOutlined } from '@ant-design/icons';
 import { createDocument, queryDocuments } from "../../services/firebase";
 import TeTuMenu from "../menu/Menu";
 
-const SidebarMenu = ({ currentPage }) => {
+const SidebarMenu = ({ currentPage, currentTitle }) => {
+
     // const user_id = JSON.parse(localStorage.getItem("user")).user_id;
     const [folderModalVisible, setFolderModalVisible] = useState(false);
     const [folderValue, setFolderValue] = useState('');
     const [pageValue, setPageValue] = useState('');
     const [folders, setFolders] = useState([]);
-    // console.log("CURRENT PAGE:", currentPage);
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     useEffect(() => {
+        // console.log("user :", userId);
         const loadFolders = async () => {
             try {
-                const folderData = await queryDocuments("folders", "owner", "==", "abc");
+                const folderData = await queryDocuments("folders", "owner", "==", userId);
                 // console.log(folderData);
                 setFolders(folderData);
             } catch (error) {
@@ -29,7 +31,7 @@ const SidebarMenu = ({ currentPage }) => {
             const folderData = {
                 files: [],
                 notes: [],
-                owner: "zzz",
+                owner: userId,
                 folder_name: folderValue
             }
             // console.log(folders)
@@ -59,7 +61,13 @@ const SidebarMenu = ({ currentPage }) => {
             </div>
 
             {folders.map((data) =>
-                <TeTuMenu key={data.id} folderData={data} currentPage={currentPage} />
+                <TeTuMenu
+                    userId={userId}
+                    key={data.id}
+                    folderData={data}
+                    currentPage={currentPage}
+                    currentTitle={currentTitle} />
+
             )}
             <Modal
                 title="Create New Folder"

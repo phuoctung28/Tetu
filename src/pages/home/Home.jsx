@@ -6,6 +6,8 @@ import './home.css';
 import ReadDocument from '../../components/popover/ReadDocument';
 import Sidebar from '../../components/sidebar/Sidebar';
 import ArticleList from '../../components/modal/ArticleList';
+import canvas from '../../assets/images/canvas.gif';
+import { useNavigate } from 'react-router-dom';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -17,6 +19,7 @@ const navItems = [
     { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav_icon' />, navLink: '' },
     { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav_icon' />, navLink: '' },
     { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav_icon' />, navLink: '' },
+
     { title: 'Citation Box', key: '7', icon: <WalletTwoTone className='nav_icon' />, navLink: '' },
     { title: 'Revision', key: '8', icon: <SecurityScanTwoTone className='nav_icon' />, navLink: '' },
 ];
@@ -24,6 +27,7 @@ const navItems = [
 const Home = () => {
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const handleOpenChange = (newOpen) => {
         setOpen(newOpen);
     };
@@ -71,6 +75,7 @@ const Home = () => {
                                             </button>
                                         </Col>
                                     ))}
+   
                                 </Row>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Button, Modal} from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button, Modal } from 'antd';
 import "./landing_page.css";
 import RegisterForm from '../../components/modal/RegisterForm';
 import LoginForm from '../../components/modal/LoginForm';
@@ -12,8 +12,9 @@ import hero from '../../assets/images/hero.png';
 import android from '../../assets/images/playstore.png';
 import apple from '../../assets/images/applestore.png';
 import features from "../../components/landingpage/featureData";
+import mobile from '../../assets/images/mobile.png';
 
-const CallToAction = ({setOpenModal2}) => {
+const CallToAction = ({ setOpenModal2 }) => {
     return (<div className="cta-container">
         <h1 className="cta-title">
             It's time to sharpen your workflows! 🚀
@@ -28,6 +29,7 @@ const CallToAction = ({setOpenModal2}) => {
 const LandingPage = () => {
     const [openModal, setOpenModal] = useState(false);
     const [openModal2, setOpenModal2] = useState(false);
+    const [openModal3, setOpenModal3] = useState(false);
     const [top, setTop] = useState(true);
     useEffect(() => {
         AOS.init();
@@ -44,7 +46,7 @@ const LandingPage = () => {
             <div className={`landing-header ${(!top) && `scroll`}`}>
                 <div className="landing-header-wrapper">
                     <button className='logo-btn'>
-                        <img src={logo} alt="logo" className='img-logo'/>
+                        <img src={logo} alt="logo" className='img-logo' />
                     </button>
                     <div className='nav-tab'>
                         <a href="#home" className='nav-item active'>Home</a>
@@ -59,20 +61,20 @@ const LandingPage = () => {
                 </div>
             </div>
             <div id="home" className='hero-head'>
-                <h1 id='tagline'>✨ <span id='highlighted'>Knowledge</span> at your <br/><span
+                <h1 id='tagline'>✨ <span id='highlighted'>Knowledge</span> at your <br /><span
                     id='underlined'>fingertips.</span></h1>
                 <p className='desc'>🎉 Learning and document reading solution</p>
                 <div className='btn-cta'>
-                    <a href="/">
-                        <img src={android} alt="android"/>
-                    </a>
-                    <a href="/">
-                        <img src={apple} alt="apple  "/>
-                    </a>
+                    <button onClick={() => setOpenModal3(true)}>
+                        <img src={android} alt="android" />
+                    </button>
+                    <button onClick={() => setOpenModal3(true)}>
+                        <img src={apple} alt="apple" />
+                    </button>
                 </div>
             </div>
             <div className='hero-image'>
-                <img src={hero} alt='hero' className='hero-img'/>
+                <img src={hero} alt='hero' className='hero-img' />
             </div>
             <div className="content-wrapper" data-aos="fade-up">
                 <div className="content-container">
@@ -101,9 +103,9 @@ const LandingPage = () => {
                     </section>
                 </div>
             </div>
-            <CallToAction setOpenModal2={setOpenModal2}/>
+            <CallToAction setOpenModal2={setOpenModal2} />
             <div id="contact">
-                <Footer/>
+                <Footer />
             </div>
 
             <Modal
@@ -114,7 +116,7 @@ const LandingPage = () => {
                 onCancel={() => setOpenModal(false)}
                 footer={null}
             >
-                <LoginForm/>
+                <LoginForm />
             </Modal>
             <Modal
                 title=""
@@ -124,8 +126,24 @@ const LandingPage = () => {
                 onCancel={() => setOpenModal2(false)}
                 footer={null}
             >
-                <RegisterForm/>
+                <RegisterForm />
             </Modal>
+            <Modal
+                title=""
+                centered
+                width={1200}
+                open={openModal3}
+                onOk={() => setOpenModal3(false)}
+                onCancel={() => setOpenModal3(false)}
+                footer={null}
+            >
+                <div className="mobile-intro-container">
+                    <img src={mobile} alt="modile-intro" />
+                    <h3>TETU mobile app version is still in the development phase</h3>
+                    <h2>Keep following to get latest announcement about the realse date!</h2>
+                </div>
+            </Modal>
+
         </div>);
 };
 

@@ -6,6 +6,13 @@ import "../../assets/styles/read_document.css";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useNavigate } from 'react-router-dom';
 import ArticleList from '../modal/ArticleList';
+import {
+    createDocument,
+    createRef,
+    queryDocuments,
+    updateExistedDocumentArray,
+    uploadFile
+} from "../../services/firebase";
 
 const ReadDocument = () => {
     const navigate = useNavigate();
@@ -27,28 +34,38 @@ const ReadDocument = () => {
     };
 
     const handleFileChange = async (event) => {
-        const fileObj = event.target.files && event.target.files[0];
-        if (!fileObj) return;
+        try {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+            const fileUrl = await uploadFile(file);
+            const fileRef = await createDocument("files", {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                url: fileUrl,
+            });
+            const fileId = fileRef.id;
 
-        event.target.value = null;
-        const storageRef = ref(getStorage(), `/files/${fileObj.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, fileObj);
-
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                // console.log("Upload progress: ", progress);
-                enterLoading(0);
-            },
-            (err) => console.log(err),
-            () => {
-                getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                    console.log("File url: ", url);
-                    navigate(`/file`, { state: { fileUrl: url }, replace: true });
-                });
+            const folders = await queryDocuments("folders", "folder_name", "==", "Folder Attachment");
+            const folder = folders[0];
+            console.log(folder)
+            if (folder == null) {
+                await createDocument("folders", {
+                    folder_name: "Folder Attachment",
+                    owner: "abc",
+                    notes: [],
+                    files: [fileId],
+                })
+            } else {
+                const folderId = folder.id;
+                const folderRef = createRef("folders", folderId);
+                await updateExistedDocumentArray(folderRef, "files", fileId);
             }
-        );
+            navigate(`/file`, { state: { fileUrl: fileUrl }, replace: true });
+        } catch (e) {
+            console.log(e)
+        }
+
     };
 
     const inputRef = useRef(null);

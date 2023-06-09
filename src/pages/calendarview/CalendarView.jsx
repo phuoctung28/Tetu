@@ -1,62 +1,62 @@
-import { Badge, Button, Calendar, Layout } from 'antd';
+import { Badge, Button, Calendar, Divider, Layout } from 'antd';
 import React, { useState, useEffect } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { useNavigate } from 'react-router-dom';
-import { getAllDocument } from '../../services/firebase';
+import { getAllDocument, queryDocuments } from '../../services/firebase';
 import moment from 'moment';
 
 const { Content } = Layout;
-const getListData = (value) => {
-    let listData;
-    switch (value.date()) {
-        case 8:
-            listData = [
-                {
-                    type: 'warning',
-                    title: 'This is warning event.',
-                    url: '/',
-                },
-                {
-                    type: 'success',
-                    title: 'This is usual event.',
-                    url: '/',
-                },
-            ];
-            break;
-        case 10:
-            listData = [
-                {
-                    type: 'success',
-                    title: 'This is usual event.',
-                    url: '/',
-                },
-                {
-                    type: 'error',
-                    title: 'This is error event.',
-                    url: '/',
-                },
-            ];
-            break;
-        case 15:
-            listData = [
-                {
-                    type: 'success',
-                    title: 'This is very long usual event...',
-                    url: '/',
-                },
-                {
-                    type: 'error',
-                    title: 'This is error event 1.',
-                    url: '/',
-                },
-            ];
-            break;
-        default:
-    }
-    return listData || [];
-};
+// const getListData = (value) => {
+//     let listData;
+//     switch (value.date()) {
+//         case 8:
+//             listData = [
+//                 {
+//                     type: 'warning',
+//                     title: 'This is warning event.',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'success',
+//                     title: 'This is usual event.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         case 10:
+//             listData = [
+//                 {
+//                     type: 'success',
+//                     title: 'This is usual event.',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'error',
+//                     title: 'This is error event.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         case 15:
+//             listData = [
+//                 {
+//                     type: 'success',
+//                     title: 'This is very long usual event...',
+//                     url: '/',
+//                 },
+//                 {
+//                     type: 'error',
+//                     title: 'This is error event 1.',
+//                     url: '/',
+//                 },
+//             ];
+//             break;
+//         default:
+//     }
+//     return listData || [];
+// };
 const getMonthData = (value) => {
     if (value.month() === 8) {
         return 1394;
@@ -64,10 +64,12 @@ const getMonthData = (value) => {
 };
 const CalendarView = () => {
     const [fetchedData, setFetchedData] = useState();
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     useEffect(() => {
         const fetchNoteData = async () => {
             try {
-                const fetchedNote = await getAllDocument("notes");
+                const fetchedNote = await queryDocuments('notes', 'owner', '==', userId);
+                // console.log("fetch note:", fetchedNote);
                 setFetchedData(fetchedNote);
             } catch (err) {
                 console.error(err);
@@ -106,7 +108,7 @@ const CalendarView = () => {
     const navigate = useNavigate();
 
     const dateCellRender = (value) => {
-        const listData = getListData(value);
+        // const listData = getListData(value);
         const firebaseData = transformData(fetchedData);
         const filteredData = firebaseData.filter((item) =>
             moment(moment(item.dateTime).format('L'))
@@ -117,7 +119,7 @@ const CalendarView = () => {
             <ul className="events">
                 {filteredData.map((item) => (
                     <li key={item.title}>
-                        <Button type="text" onClick={() => navigate(`/note/${item.id}`)}>
+                        <Button type="text" onClick={() => navigate(`/note/${item.id}`, { state: { name: item.title } }, { replace: true })}>
                             <Badge color="blue" text={item.title} />
                             {/* {item.content} */}
                         </Button>
@@ -137,8 +139,12 @@ const CalendarView = () => {
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
-                <Content style={{ margin: '0', overflow: 'initial', }} >
-                    <Calendar cellRender={cellRender} />
+                <Content className="calendar-container">
+                    <div className="calendar-view-title">
+                        <h2>Calendar view mode</h2>
+                        <p>View your notes and documents arranged by date, month, or year</p>
+                    </div>
+                    <Calendar className="calendar-component" cellRender={cellRender} />
                 </Content>
             </Layout>
         </Layout>

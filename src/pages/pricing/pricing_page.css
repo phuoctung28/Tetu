@@ -1,107 +1,107 @@
 .pricing-plan-container {
-   width: 100%;
-   height: calc(100vh - 50px);
-   background-color: #fff;
-   display: flex;
-   align-items: center;
-   justify-content: center;
+    width: 100%;
+    height: calc(100vh - 50px);
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pricing-content {
-   display: flex;
-   align-items: center;
-   justify-content: space-around;
-   gap: 20px;
-   width: 60%;
-   height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+    width: 60%;
+    height: 100%;
 }
 
 .pricing-plan-basic,
 .pricing-plan-premium {
-   width: 400px;
-   height: 550px;
-   border-radius: 24px;
-   border: 0.5px solid #b4bcc0;
-   padding: 30px;
-   position: relative;
+    width: 400px;
+    height: 550px;
+    border-radius: 24px;
+    border: 0.5px solid #b4bcc0;
+    padding: 30px;
+    position: relative;
 }
 
 .pricing-plan-basic:hover,
 .pricing-plan-premium:hover {
-   border: 1px solid #65b8e2;
+    border: 1px solid #65b8e2;
 }
 
-li {
-   list-style: none;
+.benefits li.options {
+    list-style: none;
 }
 
 .btn-select-plan {
-   width: 300px;
-   background-color: #b4bcc0;
-   color: #fff;
-   padding: 8px;
-   cursor: pointer;
-   border-radius: 8px;
-   text-align: center;
-   margin: 0 auto;
-   font-weight: 600;
-   position: absolute;
-   bottom: 30px;
-   left: 50%;
-   transform: translateX(-50%);
+    width: 300px;
+    background-color: #b4bcc0;
+    color: #fff;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    text-align: center;
+    margin: 0 auto;
+    font-weight: 600;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .btn-select-plan.premium {
-   background-color: #3682f3;
-   color: #fff;
+    background-color: #3682f3;
+    color: #fff;
 }
 
 .btn-select-plan.premium:hover {
-   background-color: #1b6fec;
+    background-color: #1b6fec;
 }
 
 .plan-heading {
-   text-align: center;
+    text-align: center;
 }
 
 .plan-title {
-   font-size: 26px;
-   font-weight: 600;
-   color: #223138;
-   margin: 10px auto;
+    font-size: 26px;
+    font-weight: 600;
+    color: #223138;
+    margin: 10px auto;
 }
 
 .pricing-plan-premium .plan-title {
-   color: #f5ab0d;
+    color: #f5ab0d;
 }
 
 .price-text {
-   font-size: 34px;
-   font-weight: 800;
-   color: #b6c0c5;
-   margin: 10px auto;
+    font-size: 34px;
+    font-weight: 800;
+    color: #b6c0c5;
+    margin: 10px auto;
 }
 
 .options {
-   display: flex;
-   align-items: center;
-   gap: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .options p {
-   font-size: 18px;
-   font-weight: 600;
-   color: #223138;
+    font-size: 18px;
+    font-weight: 600;
+    color: #223138;
 }
 
 .basic p {
-   color: #cfd4d6;
+    color: #cfd4d6;
 }
 
 .qrPayment {
-   width: 100%;
+    width: 100%;
 }
 
 .ant-modal-title {
-   text-align: center;
+    text-align: center;
 }

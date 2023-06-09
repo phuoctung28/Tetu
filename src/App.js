@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import LandingPage from './pages/landingpage/LandingPage';
-import NotePage from './pages/notepage/NotePage';
 import FilePage from './pages/filepage/FilePage';
 import PricingPage from './pages/pricing/PricingPage';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -14,7 +13,7 @@ import TeTuMenu from "./components/menu/Menu";
 import CalendarView from './pages/calendarview/CalendarView';
 import ArticlePage from './pages/article/ArticlePage';
 import DictionaryList from './pages/dictionary/DictionaryList';
-
+import UserProfile from './pages/userpage/UserProfile';
 function App() {
     return (
         <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
@@ -25,6 +24,7 @@ function App() {
                     <Route path="/note/:pageId" element={<Notebook />} />
                     <Route path="/test2" element={<TeTuMenu />} />
                     <Route path="/file" element={<FilePage />} />
+                    <Route path="/file/:fileId" element={<FilePage />} />
                     <Route path="/test" element={<DraggableEditor />} />
                     <Route path="/pricing" element={<PricingPage />} />
                     <Route path="/table" element={<ListView />} />
@@ -33,6 +33,7 @@ function App() {
                     <Route path="/article" element={<ArticlePage />} />
                     <Route path="/article/:articleId" element={<ArticlePage />} />
                     <Route path="/dictionary" element={<DictionaryList />} />
+                    <Route path="/user-profile" element={<UserProfile />} />
                 </Routes >
             </BrowserRouter >
         </PayPalScriptProvider >

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dropdown, Input, Menu, Modal } from 'antd';
-import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined } from '@ant-design/icons';
+import { Dropdown, Input, Menu, Modal } from 'antd';
+import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined, FileAddOutlined, UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { FileType } from '../../enums/FileType';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
+
 import './menu.css';
 import {
     createDocument,
@@ -13,8 +15,10 @@ import {
     updateDocumentProperty,
     updateExistedDocumentArray, uploadFile,
 } from '../../services/firebase';
+import moment from 'moment/moment';
 
-const TeTuMenu = ({ folderData, currentPage }) => {
+const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
+
     const [pageModalVisible, setPageModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [deleteItemId, setDeleteItemId] = useState(null);
@@ -29,8 +33,27 @@ const TeTuMenu = ({ folderData, currentPage }) => {
     const [renameItemType, setRenameItemType] = useState(null);
     const [renameItemValue, setRenameItemValue] = useState('');
     const [folder, setFolderData] = useState(folderData);
-    const [openKeys, setOpenKeys] = useState('');
-    const [selectedKeys, setSelectedKeys] = useState('');
+    const fetchNotesAndFiles = async () => {
+        try {
+            const fetchedNotes = await Promise.all(
+                folder.notes.map(async (noteId) => {
+                    const note = await getDocumentById('notes', noteId);
+                    return { item_id: noteId, item: note };
+                })
+            );
+            setNotes(fetchedNotes);
+
+            const fetchedFiles = await Promise.all(
+                folder.files.map(async (fileId) => {
+                    const file = await getDocumentById('files', fileId);
+                    return { item_id: fileId, item: file };
+                })
+            );
+            setFiles(fetchedFiles);
+        } catch (error) {
+            console.error('Error fetching notes and files:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchNotesAndFiles = async () => {
@@ -49,14 +72,15 @@ const TeTuMenu = ({ folderData, currentPage }) => {
                         return { item_id: fileId, item: file };
                     })
                 );
+                console.log(fetchedFiles)
                 setFiles(fetchedFiles);
             } catch (error) {
                 console.error('Error fetching notes and files:', error);
             }
         };
-
         fetchNotesAndFiles();
-    }, []);
+        // console.log("current title: ", currentTitle);s
+    }, [currentTitle]);
 
     const handleFileDelete = async () => {
         setConfirmLoading(true);
@@ -71,10 +95,12 @@ const TeTuMenu = ({ folderData, currentPage }) => {
                 }
                 setNotes([]);
                 setFiles([]);
+                // window.location.reload();
             } else if (deleteItemType === FileType.Note) {
                 await deleteArrayElement('folders', folder.id, 'notes', deleteItemId);
                 await deleteDocument('notes', deleteItemId);
                 setNotes((prevNotes) => prevNotes.filter((note) => note.item_id !== deleteItemId));
+                window.location.reload();
             } else {
                 await deleteArrayElement('folders', folder.id, 'files', deleteItemId);
                 await deleteDocument('files', deleteItemId);
@@ -99,7 +125,6 @@ const TeTuMenu = ({ folderData, currentPage }) => {
         } else if (key === 'addNewFile') {
             handleFileInputClick();
         } else if (key === 'renameFile') {
-            // console.log(item)
             const renameItemId = item.item_id || folder.id;
             const renameItemValue = item.folder_name || item.item.name || item.item.title || ''
             setRenameItemId(renameItemId);
@@ -134,27 +159,24 @@ const TeTuMenu = ({ folderData, currentPage }) => {
 
                 const fileData = { item_id: fileId, item: file };
                 setFiles((prevFiles) => [...prevFiles, fileData]);
-                // console.log("File uploaded successfully");
             } catch (error) {
                 console.error("Error uploading file:", error);
             }
         }
     };
 
-    const handleNavigateFile = async (key, fileType) => {
+    const handleNavigateFile = async (key, fileType, name) => {
         if (fileType === FileType.Note) {
-            await navigate(`../note/${key}`, { replace: true });
+            await navigate(`/note/${key}`, { state: { name: name } }, { replace: true });
         } else if (fileType === FileType.Pdf) {
             const file = await getDocumentById("files", key);
             const url = file?.url;
-            navigate(`/file`, { state: { fileUrl: url }, replace: true });
+            navigate(`/file/${key}`, { state: { fileUrl: url }, replace: true });
         }
     }
+
     const handleRename = async () => {
         setConfirmLoading(true);
-        // console.log(renameItemId)
-        // console.log(renameItemValue)
-        // console.log(renameItemType)
         try {
             if (renameItemType === FileType.Folder) {
                 await updateDocumentProperty("folders", renameItemId, 'folder_name', renameItemValue);
@@ -177,9 +199,18 @@ const TeTuMenu = ({ folderData, currentPage }) => {
 
     const handleNoteUpdate = async () => {
         setConfirmLoading(true);
+        console.log("datetime: ", moment(new Date()).format("DD/MM/YYYY"));
         try {
             const newNote = {
                 title: noteValue,
+                content: "",
+                meta_data: {
+                    datetime: moment(new Date()).format("DD/MM/YYYY"),
+                    status: ["To-do"],
+                    tags: [],
+                    type: ["Self-study"],
+                },
+                owner: userId,
             };
             const noteRef = await createDocument('notes', newNote);
             const noteId = noteRef.id;
@@ -191,8 +222,7 @@ const TeTuMenu = ({ folderData, currentPage }) => {
             setNotes((prevNotes) => [...prevNotes, { item_id: noteId, item: note }]);
             setNoteValue('');
             const newNotePath = `/note/${noteId}`;
-            await navigate(newNotePath);
-            // console.log('Note and document updated successfully');
+            await navigate(newNotePath, { state: { name: noteValue }, replace: true });
             setConfirmLoading(false);
         } catch (error) {
             console.error('Error updating document:', error);
@@ -213,21 +243,21 @@ const TeTuMenu = ({ folderData, currentPage }) => {
                             <>
                                 <Menu.Item key="createNewPage"
                                     onClick={() => handleMenuClick('createNewPage', item, fileType)}>
-                                    New Note
+                                    <FileAddOutlined /> New Note
                                 </Menu.Item>
                                 <Menu.Item key="addNewFile"
                                     onClick={() => handleMenuClick('addNewFile', item, fileType)}>
-                                    Add new file
+                                    <UploadOutlined /> Add File
                                 </Menu.Item>
                             </>
                         )}
                         {fileType !== FileType.Pdf && (
                             <Menu.Item key="renameFile" onClick={() => handleMenuClick('renameFile', item, fileType)}>
-                                {fileType.fileType === FileType.Note ? 'Rename Note' : 'Rename Folder'}
+                                <EditOutlined /> {fileType === FileType.Note ? 'Rename Note' : 'Rename Folder'}
                             </Menu.Item>
                         )}
                         <Menu.Item key="deleteFile" onClick={() => handleMenuClick('deleteFile', item, fileType)}>
-                            {fileType.fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
+                            <DeleteOutlined /> {fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
                         </Menu.Item>
                     </Menu>
                 }
@@ -239,12 +269,16 @@ const TeTuMenu = ({ folderData, currentPage }) => {
             </Dropdown>
         );
     };
-
+    // console.log("Open: ", currentPage?.folderId);
+    // console.log("Select: ", currentPage?.noteId);
     return (
         <>
-            <Menu mode="inline"
-                selectedKeys={currentPage?.noteId ? [currentPage.noteId] : undefined}
-                openKeys={currentPage?.folderId ? [currentPage.folderId] : undefined}>
+
+            <Menu
+                mode="inline"
+            // defaultSelectedKeys={currentPage?.noteId ? [currentPage.noteId] : undefined}
+            // openKeys={currentPage?.folderId === folderData.id ? [currentPage.folderId] : undefined}
+            >
                 <Menu.SubMenu
                     key={folder.id}
                     title={
@@ -256,16 +290,15 @@ const TeTuMenu = ({ folderData, currentPage }) => {
                     icon={<FolderOutlined />}
                 >
                     {notes.map((note) => (
-                        <Menu.Item onClick={() => handleNavigateFile(note.item_id, FileType.Note)} key={note.item_id}
-                            icon={<BookOutlined />} style={{ minWidth: '160px' }}>
-                            <span className="file-name">{note?.item?.title}</span>
+
+                        <Menu.Item key={note.item_id} icon={<BookOutlined />} style={{ minWidth: '160px' }}>
+                            <span onClick={() => handleNavigateFile(note.item_id, FileType.Note)} className="file-name">{note?.item?.title}</span>
                             <DropDown fileType={FileType.Note} item={note} />
                         </Menu.Item>
                     ))}
                     {files.map((file) => (
-                        <Menu.Item onClick={() => handleNavigateFile(file.item_id, FileType.Pdf)} key={file.item_id}
-                            icon={<FilePdfOutlined />} style={{ minWidth: '160px' }}>
-                            <span className="file-name">{file.item.name}</span>
+                        <Menu.Item key={file.item_id} icon={<FilePdfOutlined />} style={{ minWidth: '160px' }}>
+                            <span onClick={() => handleNavigateFile(file.item_id, FileType.Pdf)} className="file-name">{file.item.name}</span>
                             <DropDown fileType={FileType.Pdf} item={file} />
                         </Menu.Item>
                     ))}

@@ -1,14 +1,13 @@
 import { theme, Input, } from 'antd';
 import React, { useState, useEffect } from 'react';
-import './note_editor.css';
 import Metadata from '../../components/collapse/Metadata';
 
 const { TextArea } = Input;
 
-const Notebook = () => {
+const Notebook = ({note}) => {
    const { token: { colorBgContainer }, } = theme.useToken();
-
-   const [title, setTitle] = useState("Untitled");
+    console.log(note)
+   const [title, setTitle] = useState(note?.title);
    useEffect(() => {
       // This will run when the page first loads and whenever the title changes
       document.title = title;
@@ -28,11 +27,10 @@ const Notebook = () => {
       <div style={{ padding: 40, background: colorBgContainer, }}>
          <div className='note-title-container'>
             <Input
-               // value="Untitled"
+               value={title}
                className="note-title"
                onChange={changeTitle}
                onPressEnter={handleKeyUp}
-               placeholder="Untitled"
                bordered={false} />
          </div>
          <Metadata />
@@ -41,6 +39,7 @@ const Notebook = () => {
                rows={10}
                className='text-editor'
                placeholder='Type "/" for command'
+               defaultValue={note.content}
                bordered={false} />;
          </div>
       </div>
