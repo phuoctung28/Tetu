@@ -47,7 +47,7 @@ const LoginForm = () => {
             const userSnap = await getDoc(usersCollectionRef);
             // console.log("Login: ", userSnap.data());
             const loginUser = userSnap.data();
-            localStorage.setItem("user", JSON.stringify(loginUser));
+            localStorage.setItem("user", JSON.stringify({ ...loginUser, user_id: user.uid }));
             setLoading(false);
             message.success("Login success!");
             navigate("/home");

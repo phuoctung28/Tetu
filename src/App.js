@@ -11,6 +11,8 @@ import GraphView from './pages/graphview/GraphView';
 import Notebook from './pages/notepage/Notebook';
 import TeTuMenu from "./components/menu/Menu";
 import CalendarView from './pages/calendarview/CalendarView';
+import ArticlePage from './pages/article/ArticlePage';
+import DictionaryList from './pages/dictionary/DictionaryList';
 import UserProfile from './pages/userpage/UserProfile';
 function App() {
     return (
@@ -28,6 +30,9 @@ function App() {
                     <Route path="/table" element={<ListView />} />
                     <Route path="/graph" element={<GraphView />} />
                     <Route path="/calendar" element={<CalendarView />} />
+                    <Route path="/article" element={<ArticlePage />} />
+                    <Route path="/article/:articleId" element={<ArticlePage />} />
+                    <Route path="/dictionary" element={<DictionaryList />} />
                     <Route path="/user-profile" element={<UserProfile />} />
                 </Routes >
             </BrowserRouter >

@@ -1,10 +1,11 @@
 import { Layout, Typography, Col, Row, Popover, message, Modal } from 'antd';
-import { FileTwoTone, FolderAddTwoTone, BookTwoTone, StarTwoTone, AppstoreTwoTone, CalendarTwoTone, WalletTwoTone, SecurityScanTwoTone } from '@ant-design/icons';
+import { FileTwoTone, FolderAddTwoTone, FileTextTwoTone, StarTwoTone, AppstoreTwoTone, CalendarTwoTone, WalletTwoTone, SecurityScanTwoTone, ReadOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './home.css';
 import ReadDocument from '../../components/popover/ReadDocument';
 import Sidebar from '../../components/sidebar/Sidebar';
+import ArticleList from '../../components/modal/ArticleList';
 import canvas from '../../assets/images/canvas.gif';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,16 +15,18 @@ const { Title, Text } = Typography;
 const navItems = [
     // { title: 'Read Document', key: '1', icon: <FileTwoTone className='nav_icon' />, navLink: '' },
     { title: 'New Session', key: '2', icon: <FolderAddTwoTone className='nav_icon' />, navLink: '' },
-    { title: 'New Notebook', key: '3', icon: <BookTwoTone className='nav_icon' />, navLink: '' },
-    // { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav_icon' />, navLink: '' },
-    { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav_icon' />, navLink: '/graph' },
-    { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav_icon' />, navLink: '/calendar' },
+    // { title: 'New Notebook', key: '3', icon: <BookTwoTone className='nav_icon' />, navLink: '/note' },
+    { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav_icon' />, navLink: '' },
+    { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav_icon' />, navLink: '' },
+    { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav_icon' />, navLink: '' },
+
     { title: 'Citation Box', key: '7', icon: <WalletTwoTone className='nav_icon' />, navLink: '' },
     { title: 'Revision', key: '8', icon: <SecurityScanTwoTone className='nav_icon' />, navLink: '' },
 ];
 
 const Home = () => {
     const [open, setOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleOpenChange = (newOpen) => {
         setOpen(newOpen);
@@ -31,16 +34,7 @@ const Home = () => {
 
     const devMsg = (msgTitle) => message.info(msgTitle + " is in development!");
     const handleUploadFile = () => { };
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
-    const navigate = useNavigate();
+
     return (
         <Layout hasSider>
             <Sidebar />
@@ -68,25 +62,20 @@ const Home = () => {
                                         </Popover>
                                     </Col>
                                     <Col className="gutter-row" span={6}>
-                                        <button onClick={showModal} className='nav-btn' >
-                                            <AppstoreTwoTone className='nav_icon' />
-                                            <Text style={{ fontSize: '20px' }} strong>New Canvas</Text>
+                                        <button onClick={() => setOpenModal(true)} className='nav-btn' >
+                                            <FileTextTwoTone className='nav_icon' />
+                                            <Text style={{ fontSize: '20px' }} strong>Read Articles</Text>
                                         </button>
                                     </Col>
-                                    {navItems.map((item, index) => {
-                                        let btnAction = () => devMsg(item.title);
-                                        if (item.navLink && item.navLink.length > 0)
-                                            btnAction = () => navigate(item.navLink)
-                                        return (
-                                            <Col key={index} className="gutter-row" span={6} >
-                                                <button onClick={btnAction} className='nav-btn' >
-                                                    {item.icon}
-                                                    <Text style={{ fontSize: '20px' }} strong>{item.title}</Text>
-                                                </button>
-                                            </Col>
-                                        )
-
-                                    })}
+                                    {navItems.map((item, index) => (
+                                        <Col key={index} className="gutter-row" span={6}>
+                                            <button onClick={() => devMsg(item.title)} className='nav-btn' >
+                                                {item.icon}
+                                                <Text style={{ fontSize: '20px' }} strong>{item.title}</Text>
+                                            </button>
+                                        </Col>
+                                    ))}
+   
                                 </Row>
                             </div>
                         </div>
@@ -106,16 +95,22 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={700} footer={null}>
-                        <div className="canvas-modal">
-                            <h2>Canvas board is in development</h2>
-                            <img className="canvas-img" src={canvas} alt="loading..." />
-                            <p>Stay tuned!</p>
-                        </div>
+                    <Modal
+                        title="Choose an article"
+                        centered
+                        open={openModal}
+                        onOk={() => setOpenModal(false)}
+                        onCancel={() => setOpenModal(false)}
+                        footer={null}
+                        width={"fit-content"}
+                        style={{ zIndex: 1000 }}
+
+                    >
+                        <ArticleList />
                     </Modal>
                 </Content>
             </Layout>
-        </Layout >
+        </Layout>
     );
 };
 export default Home;

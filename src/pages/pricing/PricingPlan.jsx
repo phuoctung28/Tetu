@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import check from "../../assets/icons/check.svg";
 import cross from "../../assets/icons/cross.svg";
 import qrPayment from "../../assets/images/qrpayment.jpg";
 import './pricing_page.css';
-import { Modal } from "antd";
+import { Modal, message } from "antd";
+import { useNavigate } from 'react-router';
 
 const PricingPlan = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +14,13 @@ const PricingPlan = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const navigate = useNavigate();
+    useEffect(() => {
+        setTimeout(() => {
+            message.success("Update account type successfully!");
+            navigate("/user-profile")
+        }, 15000)
+    }, [isModalOpen])
     return (
         <div>
             <div className="pricing-plan-container">

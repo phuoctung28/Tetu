@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { UploadOutlined, ReadOutlined } from '@ant-design/icons';
-import { Divider, Tooltip } from 'antd';
+import { Divider, Modal, Tooltip } from 'antd';
 import { Button, Input, Space } from 'antd';
 import "../../assets/styles/read_document.css";
 import { getStorage, ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useNavigate } from 'react-router-dom';
+import ArticleList from '../modal/ArticleList';
 import {
     createDocument,
     createRef,
@@ -15,6 +16,7 @@ import {
 
 const ReadDocument = () => {
     const navigate = useNavigate();
+    
     const [loadings, setLoadings] = useState([]);
     const enterLoading = (index) => {
         setLoadings((prevLoadings) => {
@@ -98,13 +100,14 @@ const ReadDocument = () => {
                     </Tooltip>
                 </Space.Compact>
             </div>
-            <Divider plain>or</Divider>
+            {/* <Divider plain>or</Divider>
             <Button
-                onClick={handleClick}
+                onClick={() => setOpenModal(true)}
                 className="btn-read-doc"
                 icon={<ReadOutlined />} >
                 Read articles
             </Button>
+             */}
         </div>
     )
 }

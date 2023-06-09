@@ -52,7 +52,7 @@ const TetuEditor = ({ editorData, setNoteContent }) => {
                     inlineToolbar: ['link'],
                     shortcut: 'CTRL+SHIFT+H',
                 },
-                table: Table,
+                // table: Table,
                 underline: {
                     class: Underline,
                     shortcut: 'CTRL+U',

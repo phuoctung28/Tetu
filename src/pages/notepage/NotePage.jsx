@@ -39,7 +39,7 @@ const NotePage = () => {
             <MainHeader />
             <Content className="notebook-container" style={{ margin: '0', overflow: 'initial', }} >
                <div style={{ padding: 40, background: colorBgContainer, }}>
-                  <div className='note-title-container'>
+                  <div className="note-title-container">
                      <Input
                         className="note-title"
                         onPressEnter={handleKeyUp}
