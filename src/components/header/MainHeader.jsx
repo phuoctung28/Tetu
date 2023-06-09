@@ -36,7 +36,7 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                 } */}
             </div>
             <div>
-                <Tooltip title="Pin note">
+                <Tooltip title="Pin note is in development">
                     <Button className='btn-toolbar' shape="circle"
                         icon={<PushpinOutlined style={{ color: '#596A77' }} />} />
                 </Tooltip>
