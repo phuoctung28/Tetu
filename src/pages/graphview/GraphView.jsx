@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {Badge, Layout, message, Modal} from 'antd';
-import {ExclamationCircleOutlined, InfoCircleOutlined} from '@ant-design/icons';
-import {getAllDocuments, getDocumentById, updateDocumentProperty} from '../../services/firebase';
+import React, { useEffect, useState } from 'react';
+import { Badge, Layout, message, Modal } from 'antd';
+import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { getAllDocuments, getDocumentById, queryDocuments, updateDocumentProperty } from '../../services/firebase';
 import './graph_view.css';
 import MainHeader from '../../components/header/MainHeader';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Graph from 'react-graph-vis';
-import {useNavigate} from 'react-router';
+import { useNavigate } from 'react-router';
 
-const {Content} = Layout;
+const { Content } = Layout;
 
 const GraphView = () => {
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const [nodeList, setNodeList] = useState([]);
     const [edgeList, setEdgeList] = useState([]);
     const [edgesFilterValues, setEdgesFilterValues] = useState({
@@ -93,7 +94,7 @@ const GraphView = () => {
             deleteNode: false,
             editEdge: false,
         },
-        interaction: {hover: true},
+        interaction: { hover: true },
         filter: 'nodes',
     };
 
@@ -141,10 +142,9 @@ const GraphView = () => {
     useEffect(() => {
         const fetchNotesAndFiles = async () => {
             try {
-                const fetchedNotes = await getAllDocuments('notes');
-                const fetchedFiles = await getAllDocuments('files');
-                const fetchedFolders = await getAllDocuments('folders');
-                const fetchedEdges = await getAllDocuments('edges');
+                const fetchedNotes = await queryDocuments('notes', 'owner', '==', userId);
+                const fetchedFiles = await queryDocuments('files', 'owner', '==', userId);
+                const fetchedFolders = await queryDocuments('folders', 'owner', '==', userId);
                 const folders = fetchedFolders.map((item) => ({
                     id: item.id,
                     title: item.folder_name,
@@ -213,32 +213,39 @@ const GraphView = () => {
             edges: [],
         },
         events: {
-            select: ({nodes, edges}) => {
+            select: ({ nodes, edges }) => {
                 console.log('Selected nodes:', nodes);
                 console.log('Selected edges:', edges);
             },
         },
     });
-    const {graph, events} = state;
+    const { graph, events } = state;
 
     useEffect(() => {
         setState({
             ...state,
             events: {
-                doubleClick: ({nodes}) => {
+                doubleClick: ({ nodes }) => {
                     if (nodes.length > 0) {
                         let filters = nodeList.filter((item) => item.id === nodes[0]);
+                        console.log("Filter:", filters[0]);
                         if (filters[0].type !== 'folder') {
                             modal.confirm({
                                 title: 'Confirm',
-                                icon: <ExclamationCircleOutlined/>,
+                                icon: <ExclamationCircleOutlined />,
                                 content: 'Open this item?',
                                 okText: 'Open',
                                 cancelText: 'Cancel',
                                 onOk: () => {
                                     if (filters.length > 0) {
-                                        const url = `/${filters[0].type}/${nodes[0]}`;
-                                        navigate(url);
+                                        const typeUrl = filters[0].type.trim();
+                                        const idUrl = nodes[0].trim();
+                                        console.log("TYPE: ", typeUrl);
+                                        console.log("ID: ", idUrl);
+                                        const url = `/${typeUrl}/${idUrl}`;
+                                        if (typeUrl === "note")
+                                            navigate(url);
+
                                     }
                                 },
                             });
@@ -251,12 +258,12 @@ const GraphView = () => {
     const edgeFilters = document.getElementsByName('edgesFilter');
     edgeFilters.forEach((filter) =>
         filter.addEventListener('change', (e) => {
-            const {value, checked} = e.target;
+            const { value, checked } = e.target;
             edgesFilterValues[value] = checked;
         })
     );
     const handleEdgeFilterChange = (e) => {
-        const {value, checked} = e.target;
+        const { value, checked } = e.target;
         setEdgesFilterValues((prevValues) => ({
             ...prevValues,
             [value]: checked,
@@ -264,9 +271,9 @@ const GraphView = () => {
     };
     return (
         <Layout hasSider>
-            <Sidebar/>
-            <Layout className="site-layout" style={{marginLeft: 200}}>
-                <MainHeader/>
+            <Sidebar />
+            <Layout className="site-layout" style={{ marginLeft: 200 }}>
+                <MainHeader />
                 <Content className="graph-container">
                     <div className="graph-wrapper">
                         {contextHolder}
@@ -282,12 +289,12 @@ const GraphView = () => {
                         />
                         <div className="info-panel">
                             <div>Node Types</div>
-                            <Badge className="info-panel-item" text="Folder" color="#2b7ce9"/>
-                            <Badge className="info-panel-item" text="Note" color="#6da7f5"/>
-                            <Badge className="info-panel-item" text="File" color="#DAEAFF"/>
+                            <Badge className="info-panel-item" text="Folder" color="#2b7ce9" />
+                            <Badge className="info-panel-item" text="Note" color="#6da7f5" />
+                            <Badge className="info-panel-item" text="File" color="#DAEAFF" />
                         </div>
                         <div className="support-info-panel">
-                            <InfoCircleOutlined style={{color: '#96b4db'}}/>
+                            <InfoCircleOutlined style={{ color: '#96b4db' }} />
                             <span> Please reload page if the graph doesn't display correctly</span>
                         </div>
                         <div className="filter-panel">

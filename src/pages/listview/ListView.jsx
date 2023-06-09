@@ -13,8 +13,14 @@ const ListView = () => {
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
-                <Content style={{ margin: '0', overflow: 'initial', }} >
-                    <TableView />
+                <Content className="table-container">
+                    <div className="table-view-title">
+                        <h2>List of notes and files</h2>
+                        <p>You can search, filter by type, tags or sort by date</p>
+                    </div>
+                    <div className="table-component" >
+                        <TableView />
+                    </div>
                 </Content>
             </Layout>
         </Layout>

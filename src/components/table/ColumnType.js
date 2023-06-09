@@ -1,8 +1,8 @@
-import {Badge, Tag} from "antd";
+import { Badge, Tag } from "antd";
 import moment from "moment/moment";
-import {useNavigate} from "react-router-dom";
-import {FileType} from "../../enums/FileType";
-import {getDocumentById} from "../../services/firebase";
+import { useNavigate } from "react-router-dom";
+import { FileType } from "../../enums/FileType";
+import { getDocumentById } from "../../services/firebase";
 
 
 const CustomRender = ({ text, record }) => {
@@ -11,7 +11,7 @@ const CustomRender = ({ text, record }) => {
     const type = record.type;
     const onNavigateFile = async () => {
         if (type === FileType.Note) {
-            navigate(`../note/${key}`, { replace: true });
+            navigate(`../note/${key}`, { state: { name: text }, replace: true });
         } else if (type === FileType.Pdf) {
             const file = await getDocumentById('files', key);
             const url = file?.url;
@@ -19,7 +19,7 @@ const CustomRender = ({ text, record }) => {
         }
     };
 
-    return <span style={{color: "blue", cursor: "pointer"}} onClick={onNavigateFile}>{text}</span>;
+    return <span style={{ color: "#1F99FF", cursor: "pointer" }} onClick={onNavigateFile}>{text}</span>;
 };
 
 export const columns = [
@@ -27,8 +27,7 @@ export const columns = [
         title: 'Title',
         dataIndex: 'title',
         key: 'title',
-        render: (text, record) => <CustomRender
-            text={text} record={record} />,
+        render: (text, record) => <CustomRender text={text} record={record} />,
     },
     {
         title: 'Type',
@@ -46,18 +45,18 @@ export const columns = [
                 }
                 key={type}
             >
-                {type}
+                {String(type).toUpperCase()}
             </Tag>
 
         ),
         filters: [
             {
-                text: 'Note',
-                value: 'Note',
+                text: 'NOTE',
+                value: 'note',
             },
             {
-                text: 'File',
-                value: 'File',
+                text: 'PDF',
+                value: 'pdf',
             }
         ],
         onFilter: (value, record) => record.type.indexOf(value) === 0,
@@ -72,8 +71,8 @@ export const columns = [
                     record.status.localeCompare('To-do')
                         ? 'yellow'
                         : (record.status.localeCompare('In progress')
-                                ? 'blue'
-                                : 'green'
+                            ? 'blue'
+                            : 'green'
                         )
                 }
                 text={record.status}
@@ -96,6 +95,34 @@ export const columns = [
         onFilter: (value, record) => record.status.indexOf(value) === 0,
     },
     {
+        title: 'Note Type',
+        dataIndex: 'noteType',
+        key: 'noteType',
+        render: (_, record) => (
+            <Tag
+                color={'purple'}
+                key={record.noteType}
+            >
+                {String(record.noteType).toUpperCase()}
+            </Tag>
+        ),
+        filters: [
+            {
+                text: 'Revision',
+                value: 'Revision',
+            },
+            {
+                text: 'In-class note',
+                value: 'In-class note',
+            },
+            {
+                text: 'Self-study',
+                value: 'Self-study',
+            }
+        ],
+        onFilter: (value, record) => record.noteType.indexOf(value) === 0,
+    },
+    {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
@@ -107,13 +134,16 @@ export const columns = [
         dataIndex: 'tags',
         render: (_, { tags }) => (
             <>
-                {tags && tags.length > 0 ? (
+                {/* {tags && tags.length > 0 ? (
                     tags.map((tag) => (
                         <Tag key={tag}>{tag.toUpperCase()}</Tag>
                     ))
                 ) : (
                     <span>No Tags</span>
-                )}
+                )} */}
+                {tags.map((tag) => (
+                    <Tag key={tag}>{tag.toUpperCase()}</Tag>
+                ))}
             </>
         ),
     },

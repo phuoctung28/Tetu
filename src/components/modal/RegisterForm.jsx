@@ -51,12 +51,14 @@ const RegisterForm = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             const usersCollectionRef = doc(database, 'users', user.uid);
-            setDoc(usersCollectionRef, { email: email, name: name });
             const loginUser = {
                 user_id: user.uid,
                 email: email,
-                name: name
+                name: name,
+                accountType: "basic"
             }
+            setDoc(usersCollectionRef, loginUser);
+
             localStorage.setItem("user", JSON.stringify(loginUser));
             setLoading(false);
             message.success("Login success!");

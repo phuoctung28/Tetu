@@ -5,11 +5,12 @@ import MainHeader from '../../components/header/MainHeader';
 import './file_page.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { createDocument, getDocumentById, queryDocuments } from '../../services/firebase';
 import TetuEditor from '../../components/Editor/Editor';
 import NotePage from "../notepage/NotePage";
 import Notebook from "../notepage/Notebook";
+import moment from 'moment';
 
 const FilePage = () => {
     const [dualNote, setDualNote] = useState(false);
@@ -18,14 +19,23 @@ const FilePage = () => {
     const [fetchedNote, setFetchedNote] = useState();
     const location = useLocation();
     const data = location.state;
-
+    const { pageId } = useParams();
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     useEffect(() => {
         const initDualNote = async () => {
-            const pages = await queryDocuments('pages', 'file', '==', data?.fileUrl);
+            const pages = await queryDocuments('pages', 'file', '==', data?.fileUrl || pageId);
             const page = pages[0];
             if (page == null) {
                 const newNote = {
                     title: 'File note',
+                    content: "",
+                    meta_data: {
+                        datetime: moment(new Date()).format("DD/MM/YYYY"),
+                        status: ["To-do"],
+                        tags: [],
+                        type: ["Self-study"],
+                    },
+                    owner: userId,
                 };
                 const noteRef = await createDocument('notes', newNote);
                 const noteId = noteRef.id;
@@ -59,7 +69,7 @@ const FilePage = () => {
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
                 <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
-                <div className="working-space-container" style={{ paddingTop: '50px' }}>
+                <div className="working-space-container">
                     <PanelGroup autoSaveId="example" direction="horizontal">
                         <Panel defaultSize={50}>
                             <PdfViewerComponent style={{ border: 'none' }} pdfUrl={data?.fileUrl} />
@@ -67,7 +77,7 @@ const FilePage = () => {
                         {dualNote && <PanelResizeHandle className="space-divider" />}
                         {dualNote && (
                             <Panel>
-                                <Notebook page={fetchedNote}/>
+                                <Notebook page={fetchedNote} />
                             </Panel>
                         )}
                     </PanelGroup>

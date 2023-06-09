@@ -20,3 +20,35 @@
 .notes-month section {
     font-size: 28px;
 }
+
+.calendar-container {
+    height: calc(100vh - 50px);
+    margin: 50px auto 0;
+    background-color: #fff;
+}
+
+.calendar-view-title {
+    width: 90%;
+    margin: 0 auto;
+    /* border-bottom: 0.5px solid #cfd4da; */
+}
+
+.calendar-view-title h2 {
+    margin: 15px auto 5px;
+    color: #1f99ff;
+}
+
+.calendar-view-title p {
+    color: #7a8694;
+    font-style: italic;
+    margin: 0 0 10px;
+    font-size: 11.5px;
+}
+
+.calendar-component{
+    width: 90%;
+    margin: 0 auto;
+    padding: 15px;
+    border: 0.3px solid #d2d6db;
+    border-radius: 8px;
+}

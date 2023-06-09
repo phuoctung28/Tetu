@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {Button, Popconfirm, message, Tooltip} from 'antd';
+import { Button, Popconfirm, message, Tooltip } from 'antd';
 import '../../assets/styles/sidebar.css';
 import { CreditCardOutlined, UserOutlined, HistoryOutlined, LogoutOutlined } from '@ant-design/icons';
 import { auth } from "../../services/firebase";
@@ -18,15 +18,18 @@ const NewItem = () => {
     };
     return (
         <div className='new-item-container'>
-            <Button className="new-item" type="text" icon={<UserOutlined />} >
+            <Button className="new-item" type="text" icon={<UserOutlined />} onClick={() => { navigate("/user-profile") }} >
                 Profile
             </Button>
             <Button className="new-item" type="text" icon={<CreditCardOutlined />} onClick={() => { navigate("/pricing") }}>
                 Choose plan
             </Button>
-            <Button className="new-item" type="text" icon={<HistoryOutlined />} >
-                Transactions
-            </Button>
+            <Tooltip placement="right" title="This feature is in development" >
+                <Button className="new-item" type="text" icon={<HistoryOutlined />} >
+                    Transactions
+                </Button>
+            </Tooltip>
+
             <Popconfirm
                 title="Confirm log out?"
                 onConfirm={signOut}

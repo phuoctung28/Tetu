@@ -4,6 +4,7 @@ import "../../assets/styles/metadata.css";
 import dayjs from 'dayjs';
 import { useEffect, useRef, useState } from 'react';
 import { updateDocumentProperty } from '../../services/firebase';
+import moment from 'moment';
 
 const { Panel } = Collapse;
 
@@ -70,8 +71,13 @@ const Metadata = ({ noteData }) => {
     const [editInputValue, setEditInputValue] = useState('');
     const inputRef = useRef(null);
     const editInputRef = useRef(null);
+    const [datetimeVal, setDatetimeVal] = useState("");
 
+    useEffect(() => {
+        setDatetimeVal(noteData?.meta_data?.datetime);
+    }, [noteData.meta_data?.datetime]);
 
+    console.log("NOTE DATA:", noteData);
     useEffect(() => {
         setTags(noteData.meta_data?.tags || []);
     }, [noteData.meta_data?.tags]);
@@ -173,6 +179,7 @@ const Metadata = ({ noteData }) => {
 
     }
 
+    // console.log("Date:  ", String(noteData?.meta_data?.datetime))
     return (
         <div className="container-metadata">
             <Collapse defaultActiveKey={['']} ghost bordered={true}>
@@ -186,11 +193,13 @@ const Metadata = ({ noteData }) => {
                             <div className="item-detail">
                                 <DatePicker
                                     size="small"
-                                    // defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
-                                    defaultValue={dayjs(new Date().toJSON().slice(0, 10), dateFormatList[4])}
+                                    defaultValue={
+                                        (datetimeVal && datetimeVal.length > 0)
+                                            ? dayjs(String(datetimeVal), dateFormatList[0])
+                                            : dayjs(new Date(), dateFormatList[0])
+                                    }
                                     onChange={handleDatePicker}
-
-                                    format={dateFormatList} />
+                                    format={dateFormatList[0]} />
                             </div>
                         </div>
                         <div className="metadata-item">

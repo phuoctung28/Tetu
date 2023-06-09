@@ -11,6 +11,7 @@ import GraphView from './pages/graphview/GraphView';
 import Notebook from './pages/notepage/Notebook';
 import TeTuMenu from "./components/menu/Menu";
 import CalendarView from './pages/calendarview/CalendarView';
+import UserProfile from './pages/userpage/UserProfile';
 function App() {
     return (
         <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/table" element={<ListView />} />
                     <Route path="/graph" element={<GraphView />} />
                     <Route path="/calendar" element={<CalendarView />} />
+                    <Route path="/user-profile" element={<UserProfile />} />
                 </Routes >
             </BrowserRouter >
         </PayPalScriptProvider >

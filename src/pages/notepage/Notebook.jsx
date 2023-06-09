@@ -11,7 +11,7 @@ import './note-book.css';
 
 const { Content } = Layout;
 
-const Notebook = ({page}) => {
+const Notebook = ({ page }) => {
     const { token: { colorBgContainer }, } = theme.useToken();
 
     const [title, setTitle] = useState(page?.title);
@@ -22,7 +22,7 @@ const Notebook = ({page}) => {
     const data = location.state;
     const [currentTitle, setCurrentTitle] = useState(data?.name);
     const [noteContent, setNoteContent] = useState("");
-
+    
     useEffect(() => {
         const fetchNote = async () => {
             try {
@@ -91,11 +91,12 @@ const Notebook = ({page}) => {
         // listen to keydown events
         document.addEventListener("keydown", keyDown);
         // stop listening on component destory
+
         return () => {
             document.removeEventListener("keydown", keyDown);
         };
     });
-
+    // window.location.reload();
     return (
         <Layout hasSider>
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />

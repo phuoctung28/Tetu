@@ -10,10 +10,10 @@ const TableView = () => {
     const [notes, setNotes] = useState([]);
     const [files, setFiles] = useState([]);
     const [table, setTable] = useState([]);
-
+    const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const loadFoldersAndNotes = async () => {
         try {
-            const folderData = await queryDocuments('folders', 'owner', '==', 'abc');
+            const folderData = await queryDocuments('folders', 'owner', '==', userId);
 
             const fetchedNotes = [];
             const fetchedFiles = [];
@@ -42,7 +42,8 @@ const TableView = () => {
             key: note.item_id,
             title: note.item?.title,
             status: note.item?.meta_data?.status?.[0] || 'To-do',
-            date: moment(note.item?.meta_data?.datetime).format('YYYY-MM-DD') || moment('05-31-2023').format('YYYY-MM-DD'),
+            noteType: note.item?.meta_data?.type || "Self-study",
+            date: moment(note.item?.meta_data?.datetime).format('L') || moment(new Date()).format('DD/MM/YYYY'),
             tags: note.item?.meta_data?.tags || [],
             type: FileType.Note,
         }));
@@ -50,8 +51,9 @@ const TableView = () => {
         const filesModel = files.map((file) => ({
             key: file.item_id,
             title: file.item?.name,
-            status: 'Reading',
-            date: moment().format('YYYY-MM-DD'),
+            status: 'In progress',
+            noteType: "",
+            date: moment().format('DD/MM/YYYY'),
             tags: [],
             type: FileType.Pdf,
         }));

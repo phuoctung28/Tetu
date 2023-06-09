@@ -1,8 +1,8 @@
 import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm, Modal } from 'antd';
 import { EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined } from '@ant-design/icons';
-import { auth } from '../../services/firebase';
+import { auth, getDocumentById } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SidebarMenu from './SidebarMenu';
 import "../../assets/styles/sidebar.css";
 import NewItem from './NewItem';
@@ -14,6 +14,21 @@ const Sidebar = ({ currentPage, currentTitle }) => {
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("user"));
     // console.log(currentUser);
+    const [user, setUser] = useState({});
+    useEffect(() => {
+        const loginUser = JSON.parse(localStorage.getItem("user"));
+        // console.log("login user: ", loginUser);
+        const fetchUser = async () => {
+            try {
+                const fetchedUser = await getDocumentById("users", loginUser.user_id.trim());
+                setUser(fetchedUser);
+                // console.log("USER: ", fetchedUser);
+            } catch (error) {
+                console.log("Error fetch user")
+            }
+        }
+        fetchUser();
+    }, []);
 
     const [open, setOpen] = useState(false);
     const handleOpenChange = (newOpen) => {
@@ -54,11 +69,15 @@ const Sidebar = ({ currentPage, currentTitle }) => {
                         navigate("/calendar")
                     }} />
                 </Tooltip>
-                <Tooltip title="Graph view">
-                    <Button size="small" icon={<ShareAltOutlined />} onClick={() => {
-                        navigate("/graph")
-                    }} />
-                </Tooltip>
+                {user.accountType === "premium"
+                    ?
+                    <Tooltip title="Graph view">
+                        <Button size="small" icon={<ShareAltOutlined />} onClick={() => {
+                            navigate("/graph")
+                        }} />
+                    </Tooltip>
+                    : <></>
+                }
                 <Popover
                     content={<NewItem />}
                     placement='rightTop'
@@ -75,7 +94,7 @@ const Sidebar = ({ currentPage, currentTitle }) => {
                 currentPage={currentPage}
                 currentTitle={currentTitle}
             />
-        </Sider>
+        </Sider >
     );
 };
 export default Sidebar;
