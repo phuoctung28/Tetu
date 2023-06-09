@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PlayCircleOutlined, PlayCircleFilled, PlayCircleTwoTone, TableOutlined, DeleteOutlined, SortAscendingOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, Layout, Modal, Space, message } from 'antd';
 import MainHeader from '../../components/header/MainHeader';
@@ -15,6 +15,7 @@ const ArticlePage = () => {
     const [selectedText, setSelectText] = useState("");
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const [dictData, setDictData] = useState([]);
+    const navigate = useNavigate();
     useEffect(() => {
         const loadDictData = async () => {
             try {
@@ -86,8 +87,12 @@ const ArticlePage = () => {
     };
 
     const playAudio = (audioData) => {
-        let current_audio = new Audio(audioData);
-        current_audio.play();
+        if (audioData && audioData.length > 0) {
+            let current_audio = new Audio(audioData);
+            current_audio.play();
+        } else {
+            message.warning("No audio found!");
+        }
     }
 
     return (
@@ -117,7 +122,7 @@ const ArticlePage = () => {
                             <div className="dictionary-header">
                                 <h2>Your dictionary</h2>
                                 <div className="dictionary-toolbar">
-                                    <Button type="text" icon={<TableOutlined />} />
+                                    <Button type="text" icon={<TableOutlined />} onClick={() => navigate("/dictionary")} />
                                     <Button type="text" icon={<SearchOutlined />} />
                                     <Button type="text" icon={<SortAscendingOutlined />} />
                                     <Button type="text" icon={<DeleteOutlined />} />

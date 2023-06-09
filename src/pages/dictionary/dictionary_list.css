@@ -1,0 +1,40 @@
+.dictionary-list-container {
+    width: 100%;
+    height: calc(100vh - 50px);
+    margin: 50px auto 0;
+    background-color: #fff;
+}
+
+.dictionary-list-header {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+/* .dictionary-list-title {
+} */
+
+.dictionary-list-title h2 {
+    margin: 15px auto 5px;
+    color: #1f99ff;
+}
+
+.dictionary-list-title p {
+    color: #7a8694;
+    font-style: italic;
+    margin: 0 0 10px;
+    font-size: 11.5px;
+}
+
+.dictionary-component {
+    width: 90%;
+    height: 90%;
+    min-height: 800px;
+    margin: 0 auto;
+    padding: 15px;
+    border: 0.3px solid #d2d6db;
+    border-radius: 8px;
+}

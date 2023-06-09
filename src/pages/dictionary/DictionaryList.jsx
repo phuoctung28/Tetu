@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PlayCircleOutlined, PlayCircleFilled, PlayCircleTwoTone, TableOutlined, DeleteOutlined, SortAscendingOutlined, SearchOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, PlayCircleFilled, PlayCircleTwoTone, TableOutlined, DeleteOutlined, SortAscendingOutlined, SearchOutlined, TagsOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, Layout, Modal, Space, message } from 'antd';
 import MainHeader from '../../components/header/MainHeader';
 import Sidebar from '../../components/sidebar/Sidebar';
@@ -94,8 +94,24 @@ const DictionaryList = () => {
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
-                <Content className="article-section" style={{ margin: '0', overflow: 'initial', }} >
-                    <DictionaryTable />
+                <Content className="dictionary-list-container">
+                    <div className="dictionary-list-header">
+                        <div className="dictionary-list-title">
+                            <h2>Personal dictionary</h2>
+                            <p>Create your own learning session or flashcard with these vocabularies</p>
+                        </div>
+                        <div className="dictionary-list-btn">
+                            <Button
+                                onClick={() => message.info("This feature is in development")}
+                                type="primary"
+                                icon={<TagsOutlined />}>
+                                Create Flashcard
+                            </Button>
+                        </div>
+                    </div>
+                    <div className="dictionary-component" >
+                        <DictionaryTable />
+                    </div>
                 </Content>
             </Layout>
         </Layout >
