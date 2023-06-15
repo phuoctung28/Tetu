@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Layout, message, Modal } from 'antd';
+import { Badge, ColorPicker, Layout, message, Modal, Slider, Switch } from 'antd';
 import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { getAllDocuments, getDocumentById, queryDocuments, updateDocumentProperty } from '../../services/firebase';
 import './graph_view.css';
@@ -12,6 +12,8 @@ const { Content } = Layout;
 
 const GraphView = () => {
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
+
+    const [graphColor, setGraphColor] = useState({ r: 43, g: 124, b: 233, a: 1 });
     const [nodeList, setNodeList] = useState([]);
     const [edgeList, setEdgeList] = useState([]);
     const [edgesFilterValues, setEdgesFilterValues] = useState({
@@ -19,6 +21,54 @@ const GraphView = () => {
         Note: true,
         File: true,
     });
+    const [nodeSize, setNodeSize] = useState(15);
+
+    const handleNodeSize = (newValue) => {
+        // console.log("NODE LIST:", nodeList)
+        const newNodeList = nodeList.map((item, index) => {
+            let newSize = newValue
+            if (item.type === "folder") newSize = newValue + 15
+            return { ...item, size: newSize }
+        })
+        setNodeList(newNodeList);
+        setNodeSize(newValue);
+        setState({
+            ...state,
+            graph: {
+                nodes: newNodeList,
+                edges: edgeList,
+            },
+        });
+    }
+
+    const handleGraphColor = (newColor) => {
+        let cl = newColor.toRgbString()
+        let rgb = cl.substring(4, cl.length - 1)
+            .replace(/ /g, '')
+            .split(',')
+            .map(item => parseInt(item, 10));
+
+        const rgbValue = { r: rgb[0], g: rgb[1], b: rgb[2], a: 1 }
+        // console.log("COLOR:", rgb)
+        setGraphColor(rgbValue);
+
+        const newNodeList = nodeList.map((item, index) => {
+            let newColor = `rgb(${rgbValue.r}, ${rgbValue.g}, ${rgbValue.b}, 1)`;
+            if (item.type === "note")
+                newColor = `rgb(${rgbValue.r + 60}, ${rgbValue.g + 60}, ${rgbValue.b + 60}, 1)`;
+            else if (item.type === "file")
+                newColor = `rgb(${rgbValue.r + 120}, ${rgbValue.g + 120}, ${rgbValue.b + 120}, 1)`;
+            return { ...item, color: newColor }
+        })
+        setNodeList(newNodeList);
+        setState({
+            ...state,
+            graph: {
+                nodes: newNodeList,
+                edges: edgeList,
+            },
+        });
+    }
 
     const options = {
         layout: {
@@ -97,7 +147,10 @@ const GraphView = () => {
         interaction: { hover: true },
         filter: 'nodes',
     };
-
+    const [graphOptions, setGraphOptions] = useState(options);
+    // useEffect(() => {
+    //     setGraphOptions()
+    // }, [graphOptions]);
     const [modal, contextHolder] = Modal.useModal();
 
     const getEdgeFromNoteAndFile = (data) => {
@@ -149,22 +202,28 @@ const GraphView = () => {
                     id: item.id,
                     title: item.folder_name,
                     label: item.folder_name,
-                    color: '#2b7ce9',
+                    color: `rgba(${graphColor.r}, ${graphColor.g}, ${graphColor.b}, ${graphColor.a})`,
                     type: 'folder',
+                    size: nodeSize + 15,
+                    physics: false,
                 }));
                 const notes = fetchedNotes.map((item) => ({
                     id: item.id,
                     title: item.title,
                     label: item.title,
-                    color: '#6da7f5',
+                    color: `rgba(${graphColor.r + 70}, ${graphColor.g + 70}, ${graphColor.b + 70}, ${graphColor.a})`,
                     type: 'note',
+                    size: nodeSize,
+                    // physics: false,
                 }));
                 const files = fetchedFiles.map((item) => ({
                     id: item.id,
                     title: item.name,
                     label: item.name,
-                    color: '#DAEAFF',
+                    color: `rgba(${graphColor.r + 120}, ${graphColor.g + 120}, ${graphColor.b + 120}, ${graphColor.a})`,
                     type: 'file',
+                    size: nodeSize,
+                    // physics: false,
                 }));
                 const noteData = [...folders, ...notes, ...files];
 
@@ -255,6 +314,7 @@ const GraphView = () => {
             },
         });
     }, [nodeList]);
+
     const edgeFilters = document.getElementsByName('edgesFilter');
     edgeFilters.forEach((filter) =>
         filter.addEventListener('change', (e) => {
@@ -269,6 +329,22 @@ const GraphView = () => {
             [value]: checked,
         }));
     };
+    const [showArrow, setShowArrow] = useState(true)
+    const handleToggleArrow = (checked) => {
+        const newOptions = {
+            ...graphOptions,
+            edges: {
+                arrows: {
+                    to: {
+                        enabled: checked,
+                    }
+                }
+            }
+        }
+        setGraphOptions(newOptions);
+        console.log("SHOW ARROW:", checked)
+    }
+
     return (
         <Layout hasSider>
             <Sidebar />
@@ -280,16 +356,37 @@ const GraphView = () => {
                         <Graph
                             className="graph-component"
                             graph={graph}
-                            options={options}
+                            options={graphOptions}
                             events={events}
                             style={{
                                 height: '100%',
                                 backgroundColor: 'transparent',
                             }}
                         />
+                        <div className="display-setting-panel">
+                            <div className="arrow-control">
+                                <p>Arrows</p>
+                                <Switch defaultChecked onChange={handleToggleArrow} />
+                            </div>
+                            <div className="color-control">
+                                <p>Color</p>
+                                <ColorPicker value={graphColor} onChange={handleGraphColor} />
+                            </div>
+                            <div>
+                                <p>Node size</p>
+                                <Slider
+                                    min={5}
+                                    max={20}
+                                    onChange={handleNodeSize}
+                                    value={typeof nodeSize === 'number' ? nodeSize : 0}
+                                />
+                            </div>
+
+
+                        </div>
                         <div className="info-panel">
                             <div>Node Types</div>
-                            <Badge className="info-panel-item" text="Folder" color="#2b7ce9" />
+                            <Badge size="large" className="info-panel-item" text="Folder" color="#2b7ce9" />
                             <Badge className="info-panel-item" text="Note" color="#6da7f5" />
                             <Badge className="info-panel-item" text="File" color="#DAEAFF" />
                         </div>
