@@ -35,10 +35,9 @@ const UserProfile = () => {
                 <MainHeader />
                 <Content className="profile-container">
                     <div className="profile-wrapper">
-                        <h2>
-                            Your profile
-                        </h2>
+                        <h2>Your profile</h2>
                         <Divider />
+
                         <div className="profile-header">
                             <div className="profile-name">
                                 <div className="fullname-title">Name</div>
@@ -54,6 +53,7 @@ const UserProfile = () => {
                             </Avatar>
                         </div>
                         <Divider />
+                        <div className="profile-section-title">Personal</div>
                         <div className="profile-item">
                             <div className="profile-item-title">Email</div>
                             <div className="profile-item-content">{user.email} <Button type="text" icon={<EditOutlined />} /></div>
@@ -65,6 +65,12 @@ const UserProfile = () => {
                             </div>
                         </div>
                         <div className="profile-item">
+                            <div className="profile-item-title">Birthday</div>
+                            <div className="profile-item-content">
+                                31-01-2002
+                            </div>
+                        </div>
+                        <div className="profile-item">
                             <div className="profile-item-title">Phone</div>
                             <div className="profile-item-content">N/A <Button type="text" icon={<EditOutlined />} /></div>
                         </div>
@@ -72,6 +78,8 @@ const UserProfile = () => {
                             <div className="profile-item-title">Address</div>
                             <div className="profile-item-content">N/A <Button type="text" icon={<EditOutlined />} /></div>
                         </div>
+                        <Divider />
+                        <div className="profile-section-title">Account</div>
                         <div className="profile-item">
                             <div className="profile-item-title">Current Plan</div>
                             <div className="profile-item-content">
@@ -82,7 +90,6 @@ const UserProfile = () => {
                                 }
                             </div>
                         </div>
-                        <Divider />
                         <div className="profile-item">
                             <div className="profile-item-title">
                                 Export
@@ -91,7 +98,7 @@ const UserProfile = () => {
                                 Export documents data
                                 <Button type="text" icon={<ExportOutlined />} />
                             </div>
-                        </div>  
+                        </div>
                         <div className="profile-item">
                             <div className="profile-item-title">Log out</div>
                             <div className="profile-item-content profile-item-ctn">

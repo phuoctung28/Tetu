@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Layout, message, theme, } from 'antd';
-
+import { FloatButton, Input, Layout, message, theme, } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import Metadata from '../../components/collapse/Metadata';
 import Sidebar from '../../components/sidebar/Sidebar';
 import MainHeader from '../../components/header/MainHeader';
@@ -97,6 +97,13 @@ const Notebook = ({ page }) => {
     // window.location.reload();
     return (
         <Layout hasSider>
+            <FloatButton
+                icon={<QuestionCircleOutlined />}
+                type="default"
+                style={{
+                    right: 40,
+                }}
+            />
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
             <Layout className="site-layout">
                 <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} />

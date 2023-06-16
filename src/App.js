@@ -14,6 +14,9 @@ import CalendarView from './pages/calendarview/CalendarView';
 import ArticlePage from './pages/article/ArticlePage';
 import DictionaryList from './pages/dictionary/DictionaryList';
 import UserProfile from './pages/userpage/UserProfile';
+import Dashboard from './pages/admin/Dashboard';
+import CheckoutForm from './components/order/Checkout';
+
 function App() {
     return (
         <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
@@ -34,8 +37,11 @@ function App() {
                     <Route path="/article/:articleId" element={<ArticlePage />} />
                     <Route path="/dictionary" element={<DictionaryList />} />
                     <Route path="/user-profile" element={<UserProfile />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/checkout" element={<CheckoutForm />} />
                 </Routes >
             </BrowserRouter >
+
         </PayPalScriptProvider >
     );
 }

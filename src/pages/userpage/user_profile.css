@@ -57,3 +57,9 @@
     gap: 20px;
     align-items: center;
 }
+
+.profile-section-title {
+    color: #1F99FF;
+    font-size: 18px;
+    font-weight: 500;
+}

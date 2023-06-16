@@ -1,0 +1,13 @@
+.dashboard-content-ctn {
+    width: 100%;
+    height: calc(100vh - 50px);
+    background-color: #f7f9fa;
+    margin: 50px auto 0;
+    padding: 20px;
+}
+
+.table-user {
+    /* background-color: #fff; */
+    margin-top: 20px;
+    height: 720px;
+}

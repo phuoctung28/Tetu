@@ -25,6 +25,7 @@
         "antd": "^5.5.0",
         "aos": "^2.3.4",
         "editorjs-drag-drop": "^1.1.13",
+        "editorjs-inline-font-size-tool": "^1.0.1",
         "editorjs-undo": "^2.0.22",
         "express": "^4.18.2",
         "firebase": "^9.22.0",
@@ -33,8 +34,10 @@
         "pdfjs-dist": "^3.4.120",
         "react": "^18.2.0",
         "react-beautiful-dnd": "^13.1.1",
+        "react-countup": "^6.4.2",
         "react-dom": "^18.2.0",
         "react-graph-vis": "^1.0.7",
+        "react-highlight-words": "^0.20.0",
         "react-quill": "^2.0.0",
         "react-resizable-panels": "^0.0.47",
         "react-router-dom": "^6.11.2",
@@ -66,5 +69,8 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "editorjs-text-color-plugin": "^2.0.4"
     }
 }

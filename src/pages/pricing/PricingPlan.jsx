@@ -5,6 +5,7 @@ import qrPayment from "../../assets/images/qrpayment.jpg";
 import './pricing_page.css';
 import { Modal, message } from "antd";
 import { useNavigate } from 'react-router';
+import CheckoutForm from '../../components/order/Checkout';
 
 const PricingPlan = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,12 +16,15 @@ const PricingPlan = () => {
         setIsModalOpen(false);
     };
     const navigate = useNavigate();
-    useEffect(() => {
-        setTimeout(() => {
-            message.success("Update account type successfully! Now you are a premium user");
-            navigate("/user-profile")
-        }, 15000)
-    }, [isModalOpen])
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log("PRICING USER:", user);
+
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         message.success("Update account type successfully! Now you are a premium user");
+    //         navigate("/user-profile")
+    //     }, 15000)
+    // }, [isModalOpen])
     return (
         <div>
             <div className="pricing-plan-container">
@@ -90,12 +94,14 @@ const PricingPlan = () => {
                 </div>
             </div>
             <Modal
-                title="Scan this to finish payment"
+                // title="Scan this to finish payment"
                 open={isModalOpen}
                 onCancel={handleCancel}
                 footer={null}
+                width={800}
             >
-                <img src={qrPayment} alt={"payment"} className='qrPayment' />
+                <CheckoutForm name={user.name} email={user.email} userId={user.user_id} />
+                {/* <img src={qrPayment} alt={"payment"} className='qrPayment' /> */}
             </Modal>
         </div>
     )

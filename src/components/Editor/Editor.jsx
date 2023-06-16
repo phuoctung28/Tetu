@@ -11,6 +11,8 @@ import DragDrop from 'editorjs-drag-drop';
 import Undo from 'editorjs-undo';
 import Paragraph from "@editorjs/paragraph";
 import Underline from '@editorjs/underline';
+import ColorPlugin from "editorjs-text-color-plugin";
+// import FontSize from "editorjs-inline-font-size-tool";
 import 'react-quill/dist/quill.snow.css';
 import './Editor.css';
 
@@ -46,13 +48,28 @@ const TetuEditor = ({ editorData, setNoteContent }) => {
                 setEditorValue(content);
                 setNoteContent(content);
             },
+            placeholder: 'Press "TAB" for commands...',
             tools: {
                 header: {
                     class: Header,
                     inlineToolbar: ['link'],
                     shortcut: 'CTRL+SHIFT+H',
+                    config: {
+                        placeholder: 'Enter a header',
+                        levels: [2, 3, 4],
+                        defaultLevel: 3
+                    }
                 },
                 // table: Table,
+                Color: {
+                    class: ColorPlugin, // if load from CDN, please try: window.ColorPlugin
+                    config: {
+                        colorCollections: ['#EC7878', '#9C27B0', '#673AB7', '#3F51B5', '#0070FF', '#03A9F4', '#00BCD4', '#4CAF50', '#8BC34A', '#CDDC39', '#FFF'],
+                        defaultColor: '#FF1300',
+                        type: 'text',
+                        customPicker: true // add a button to allow selecting any colour  
+                    }
+                },
                 underline: {
                     class: Underline,
                     shortcut: 'CTRL+U',
@@ -80,6 +97,7 @@ const TetuEditor = ({ editorData, setNoteContent }) => {
                         preserveBlank: true,
                     }
                 },
+                // fontSize: FontSize,
             },
         });
 
