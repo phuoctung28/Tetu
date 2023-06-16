@@ -1,5 +1,5 @@
 import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm, Modal } from 'antd';
-import { EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined } from '@ant-design/icons';
+import { EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined, HomeOutlined } from '@ant-design/icons';
 import { auth, getDocumentById } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import NewItem from './NewItem';
 
 const { Sider } = Layout;
 
-const Sidebar = ({ currentPage, currentTitle }) => {
+const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
 
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -58,24 +58,28 @@ const Sidebar = ({ currentPage, currentTitle }) => {
                 <p>{currentUser?.name}</p>
             </div>
             <div className='quicktool-container'>
-
-                <Tooltip title="Table view">
-                    <Button size="small" icon={<TableOutlined />} onClick={() => {
-                        navigate("/table")
-                    }} />
-                </Tooltip>
-                <Tooltip title="Calendar view">
-                    <Button size="small" icon={<CalendarOutlined />} onClick={() => {
-                        navigate("/calendar")
-                    }} />
-                </Tooltip>
+                <Button block size="small" type={pageMenu && pageMenu === "home" ? "primary" : "text"} icon={<HomeOutlined />} onClick={() => {
+                    navigate("/home")
+                }} >
+                    Homepage
+                </Button>
+                <Button block size="small" type={pageMenu && pageMenu === "table" ? "primary" : "text"} icon={<TableOutlined />} onClick={() => {
+                    navigate("/table")
+                }} >
+                    Table view
+                </Button>
+                <Button block size="small" type={pageMenu && pageMenu === "calendar" ? "primary" : "text"} icon={<CalendarOutlined />} onClick={() => {
+                    navigate("/calendar")
+                }} >
+                    Calendar view
+                </Button>
                 {user.accountType === "premium"
                     ?
-                    <Tooltip title="Graph view">
-                        <Button size="small" icon={<ShareAltOutlined />} onClick={() => {
-                            navigate("/graph")
-                        }} />
-                    </Tooltip>
+                    <Button block size="small" type={pageMenu && pageMenu === "graph" ? "primary" : "text"} icon={<ShareAltOutlined />} onClick={() => {
+                        navigate("/graph")
+                    }} >
+                        Graph view
+                    </Button>
                     : <></>
                 }
                 <Popover
@@ -85,7 +89,9 @@ const Sidebar = ({ currentPage, currentTitle }) => {
                     open={open}
                     onOpenChange={handleOpenChange}
                 >
-                    <Button size="small" icon={<EllipsisOutlined />} />
+                    <Button block size="small" type={pageMenu && pageMenu === "more" ? "primary" : "text"} icon={<EllipsisOutlined />}>
+                        More
+                    </Button>
                 </Popover>
             </div>
             <Divider />

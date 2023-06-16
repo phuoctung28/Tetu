@@ -45,7 +45,7 @@ const Home = () => {
     };
     return (
         <Layout hasSider>
-            <Sidebar />
+            <Sidebar pageMenu="home" />
 
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />

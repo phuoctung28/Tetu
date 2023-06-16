@@ -12,8 +12,6 @@ import './note-book.css';
 const { Content } = Layout;
 
 const Notebook = ({ page }) => {
-    const { token: { colorBgContainer }, } = theme.useToken();
-
     const [title, setTitle] = useState(page?.title);
     const [noteData, setNoteData] = useState({});
     const [currentPage, setCurrentPage] = useState({});
@@ -22,7 +20,7 @@ const Notebook = ({ page }) => {
     const data = location.state;
     const [currentTitle, setCurrentTitle] = useState(data?.name);
     const [noteContent, setNoteContent] = useState("");
-    
+
     useEffect(() => {
         const fetchNote = async () => {
             try {

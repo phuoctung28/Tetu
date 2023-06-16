@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from 'antd';
+import { Dropdown, Layout } from 'antd';
 import PdfViewerComponent from '../../components/PdfViewerComponent';
 import MainHeader from '../../components/header/MainHeader';
 import './file_page.css';
@@ -63,7 +63,22 @@ const FilePage = () => {
             setNoteContent(note?.content || '');
         }
     };
+    const [selectedText, setSelectText] = useState("");
+    const handleMouseUp = () => {
+        const currentSelectedText = window.getSelection().toString().trim().toLowerCase();
+        setSelectText(currentSelectedText)
+        console.log(`Selected text: ${currentSelectedText}`);
+    }
+    const items = [
+        {
+            label: 'Add to dictionary',
+            key: '1',
+        },
+    ];
 
+    const onClick = async ({ key }) => {
+        
+    };
     return (
         <Layout hasSider>
             <Sidebar />
@@ -71,8 +86,14 @@ const FilePage = () => {
                 <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
                 <div className="working-space-container">
                     <PanelGroup autoSaveId="example" direction="horizontal">
-                        <Panel defaultSize={50}>
-                            <PdfViewerComponent style={{ border: 'none' }} pdfUrl={data?.fileUrl} />
+                        <Panel defaultSize={50} >
+                            <Dropdown
+                                menu={{ items, onClick }}
+                                trigger={['contextMenu']}>
+                                <div onMouseUp={handleMouseUp}>
+                                    <PdfViewerComponent style={{ border: 'none' }} pdfUrl={data?.fileUrl} />
+                                </div>
+                            </Dropdown>
                         </Panel>
                         {dualNote && <PanelResizeHandle className="space-divider" />}
                         {dualNote && (

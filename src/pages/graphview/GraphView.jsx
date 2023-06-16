@@ -347,7 +347,7 @@ const GraphView = () => {
 
     return (
         <Layout hasSider>
-            <Sidebar />
+            <Sidebar pageMenu="graph"/>
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
                 <MainHeader />
                 <Content className="graph-container">

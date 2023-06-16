@@ -136,7 +136,7 @@ const CalendarView = () => {
     };
     return (
         <Layout hasSider>
-            <Sidebar />
+            <Sidebar pageMenu="calendar" />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
                 <Content className="calendar-container">

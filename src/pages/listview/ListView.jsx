@@ -10,7 +10,7 @@ const { Content } = Layout;
 const ListView = () => {
     return (
         <Layout hasSider>
-            <Sidebar />
+            <Sidebar pageMenu="table"/>
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
                 <Content className="table-container">

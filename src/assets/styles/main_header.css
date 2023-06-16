@@ -43,3 +43,9 @@
 .btn-toolbar {
     margin-right: 20px;
 }
+
+.theme-color {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}

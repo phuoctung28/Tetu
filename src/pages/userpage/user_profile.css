@@ -10,14 +10,50 @@
 }
 
 .profile-wrapper {
-    width: 40%;
+    width: 50%;
     height: fit-content;
-    border: 0.3px solid #c5c8cf;
+    border: 0.3px solid #e4e5e9;
     border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 30px;
+    padding: 20px;
 }
 
+.profile-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-name {
+    width: 200px;
+}
+
+.profile-item {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.profile-item-title {
+    width: 200px;
+    color: #83929c;
+    font-size: 17px;
+}
+
+.fullname-title {
+    color: #83929c;
+    font-size: 14px;
+}
+
+.profile-item-content,
+.fullname {
+    color: #59646d;
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.profile-item-ctn {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
