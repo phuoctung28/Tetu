@@ -40,7 +40,7 @@ export const createRef = (collection, documentId) => {
 }
 // Create a document in a Firestore collection
 export const createDocument = async (collections, data) => {
-    try {   
+    try {
         return await addDoc(collection(db, collections), data);
     } catch (error) {
         console.error('Error creating document:', error);
@@ -166,25 +166,25 @@ export const getAllDocument = async (collections) => {
 };
 
 export const queryDocumentsCondition = async (collectionPath, conditions) => {
-   try {
-      const documents = [];
-      let queryRef = collection(db, collectionPath);
+    try {
+        const documents = [];
+        let queryRef = collection(db, collectionPath);
 
-      conditions.forEach(condition => {
-         const { field, operator, value } = condition;
-         queryRef = query(queryRef, where(field, operator, value));
-      });
+        conditions.forEach(condition => {
+            const { field, operator, value } = condition;
+            queryRef = query(queryRef, where(field, operator, value));
+        });
 
-      const querySnapshot = await getDocs(queryRef);
-      querySnapshot.forEach((doc) => {
-         documents.push({ id: doc.id, ...doc.data() });
-      });
+        const querySnapshot = await getDocs(queryRef);
+        querySnapshot.forEach((doc) => {
+            documents.push({ id: doc.id, ...doc.data() });
+        });
 
-      return documents;
-   } catch (error) {
-      console.error('Error querying documents:', error);
-      throw error;
-   }
+        return documents;
+    } catch (error) {
+        console.error('Error querying documents:', error);
+        throw error;
+    }
 };
 
 export const getDocumentById = async (collections, id) => {

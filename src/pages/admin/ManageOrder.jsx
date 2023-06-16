@@ -7,15 +7,16 @@ import './dashboard.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import TableUser from '../../components/adminTable/TableUser';
 import AdminSidebar from '../../components/adminSidebar/AdminSidebar';
+import TableOrder from '../../components/adminTable/TableOrder';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
-const Dashboard = () => {
+const ManageOrder = () => {
     const formatter = (value) => <CountUp end={value} separator="," />;
     return (
         <Layout hasSider>
-            <AdminSidebar selectedMenuItem="user"/>
+            <AdminSidebar selectedMenuItem="order"/>
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
                 <Content className="dashboard-content-ctn" >
@@ -69,7 +70,7 @@ const Dashboard = () => {
                     </div>
                     <div className="table-user" >
                         <Card style={{ height: "100%" }} bordered={false}>
-                            <TableUser />
+                            <TableOrder />
                         </Card>
                     </div>
                 </Content>
@@ -77,4 +78,4 @@ const Dashboard = () => {
         </Layout>
     );
 };
-export default Dashboard;
+export default ManageOrder;

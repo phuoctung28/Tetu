@@ -28,7 +28,7 @@ const items = [
     getItem('Setting', 'setting', <SettingOutlined />),
 ];
 
-const AdminSidebar = ({ currentPage, currentTitle, pageMenu }) => {
+const AdminSidebar = ({ currentPage, currentTitle, pageMenu, selectedMenuItem }) => {
 
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -55,7 +55,9 @@ const AdminSidebar = ({ currentPage, currentTitle, pageMenu }) => {
     };
     // console.log(currentUser);
     const onClick = (e) => {
-        console.log('click ', e);
+        console.log('click ', e.keyPath[0]);
+        if (e.keyPath[0] === 'user') navigate("/dashboard");
+        if (e.keyPath[0] === 'order') navigate("/manage-order");
     };
     return (
         <Sider className='home-sider' style={{
@@ -123,6 +125,7 @@ const AdminSidebar = ({ currentPage, currentTitle, pageMenu }) => {
                 onClick={onClick}
                 style={{ width: 199, }}
                 defaultSelectedKeys={['user']}
+                selectedKeys={[selectedMenuItem]}
                 mode="inline"
                 items={items}
             />

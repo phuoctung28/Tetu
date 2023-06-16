@@ -77,7 +77,7 @@ const Metadata = ({ noteData }) => {
         setDatetimeVal(noteData?.meta_data?.datetime);
     }, [noteData.meta_data?.datetime]);
 
-    console.log("NOTE DATA:", noteData);
+    // console.log("NOTE DATA:", noteData);
     useEffect(() => {
         setTags(noteData.meta_data?.tags || []);
     }, [noteData.meta_data?.tags]);

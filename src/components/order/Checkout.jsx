@@ -2,9 +2,14 @@ import { useState } from "react";
 import { Button, Divider, Input, Modal, Popconfirm, Space } from "antd";
 import "../../assets/styles/checkout_form.css";
 import qrPayment from "../../assets/images/qrpayment.jpg";
+import moment from 'moment/moment';
+import { createDocument } from "../../services/firebase";
 
 const CheckoutForm = ({ name, email, userId }) => {
-    console.log("Checkout User", name, email, userId);
+    // console.log("Checkout User", name, email, userId);
+    const [phone, setPhone] = useState("");
+    const [address, setAddress] = useState("");
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
         setIsModalOpen(true);
@@ -15,6 +20,34 @@ const CheckoutForm = ({ name, email, userId }) => {
     const handleCheckout = () => {
         showModal();
     };
+
+    const handlePhoneInput = (event) => {
+        console.log("PHONE:", event.target.value)
+        setPhone(event.target.value);
+    }
+
+    const handleAddressInput = (event) => {
+        console.log("ADDRESS:", event.target.value)
+        setAddress(event.target.value);
+    }
+
+    const handleFinishPayment = async () => {
+        try {
+            const newOrder = {
+                userId: userId,
+                name: name,
+                email: email,
+                phone: phone,
+                address: address,
+                status: "paid",
+                createdDate: moment(new Date()).format("DD/MM/YYYY"),
+                processDate: "",
+            }
+            await createDocument("orders", newOrder);
+        } catch (error) {
+            console.log("Error save order data:", error)
+        }
+    }
     return (
         <div className="checkout-container">
             <div className="checkout-left">
@@ -29,14 +62,24 @@ const CheckoutForm = ({ name, email, userId }) => {
                 </div>
                 <div>
                     <div className="checkout-item-title">Phone</div>
-                    <div className="checkout-item-content"><Input placeholder="+84..." /></div>
+                    <div className="checkout-item-content">
+                        <Input
+                            value={phone}
+                            placeholder="+84..."
+                            onChange={handlePhoneInput} />
+                    </div>
                 </div>
                 <div>
                     <div className="checkout-item-title">Address</div>
-                    <div className="checkout-item-content"><Input placeholder="Your address here..." /></div>
+                    <div className="checkout-item-content">
+                        <Input
+                            value={address}
+                            onChange={handleAddressInput}
+                            placeholder="Your address here..." />
+                    </div>
                 </div>
-                <Divider />
-                <Button block >Save Info</Button>
+                {/* <Divider />
+                <Button block >Save Info</Button> */}
             </div>
             <div className="checkout-right">
                 <div className="checkout-right-title">Your cart</div>
@@ -84,7 +127,7 @@ const CheckoutForm = ({ name, email, userId }) => {
                             [YOUR_EMAIL] - TETU PREMIUM
                         </pre>
                         <Space>
-                            <Button type="primary">I've finished payment</Button>
+                            <Button onClick={handleFinishPayment} type="primary">I've finished payment</Button>
                             <Button>Cancel</Button>
                         </Space>
                     </div>

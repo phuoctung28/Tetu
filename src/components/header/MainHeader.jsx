@@ -18,6 +18,7 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
     //         setCrumbItem(crumbs);
     //     }
     // }, [noteData]);
+
     const handleLogoClick = () => {
         navigate("/home")
     };

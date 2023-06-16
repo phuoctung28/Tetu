@@ -16,6 +16,7 @@ import DictionaryList from './pages/dictionary/DictionaryList';
 import UserProfile from './pages/userpage/UserProfile';
 import Dashboard from './pages/admin/Dashboard';
 import CheckoutForm from './components/order/Checkout';
+import ManageOrder from './pages/admin/ManageOrder';
 
 function App() {
     return (
@@ -37,8 +38,9 @@ function App() {
                     <Route path="/article/:articleId" element={<ArticlePage />} />
                     <Route path="/dictionary" element={<DictionaryList />} />
                     <Route path="/user-profile" element={<UserProfile />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/checkout" element={<CheckoutForm />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/manage-order" element={<ManageOrder />} />
                 </Routes >
             </BrowserRouter >
 
