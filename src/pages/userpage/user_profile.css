@@ -1,31 +1,85 @@
 .profile-container {
     width: 100%;
     height: calc(100vh - 50px);
-    background-color: #fff;
+    background-color: #f5f7fe;
     margin: 50px auto 0;
-    display: flex;
-    padding: 40px;
-    justify-content: center;
-    align-items: flex-start;
+    padding: 20px 60px;
+    /* display: grid;
+    gap: 20px 20px;
+    grid-template-columns: auto auto auto; */
 }
 
 .profile-wrapper {
-    width: 50%;
+    /* width: 50%; */
     height: fit-content;
-    border: 0.3px solid #e4e5e9;
+    /* border: 0.3px solid #e4e5e9; */
+    /* border-radius: 8px; */
+    /* padding: 20px; */
+}
+
+.profile-card {
+    margin-bottom: 20px;
+    margin-right: 20px;
     border-radius: 8px;
+    background-color: #fff;
+    box-shadow: rgba(149, 157, 165, 0.068) 0px 8px 24px;
     padding: 20px;
 }
 
-.profile-header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+.profile-intro-card {
+    /* width: 400px; */
+    height: 300px;
+    padding: 10px;
 }
 
-.profile-name {
-    width: 200px;
+.profile-intro-card .intro-card-cover {
+    width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    background-color: #4158D0;
+    background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+
+}
+
+.intro-card-ava {
+    border: 3px solid #fff;
+    margin: 0 !important;
+    /* margin-bottom: 20px !important; */
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+}
+
+.intro-card-stat {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.intro-card-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90px;
+}
+
+
+.intro-card-stat-item div:first-child {
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.intro-card-stat-item div:nth-child(2) {
+    font-size: 16px;
+    color: #a9b5d3;
+}
+
+.profile-info {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(-30px);
 }
 
 .profile-item {
@@ -34,22 +88,34 @@
     margin-top: 20px;
 }
 
+.profile-name {
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.profile-role {
+    font-weight: 500;
+    font-size: 18px;
+    color: #a9b5d3;
+}
+
 .profile-item-title {
-    width: 200px;
+    width: 120px;
     color: #83929c;
     font-size: 17px;
 }
 
-.fullname-title {
-    color: #83929c;
-    font-size: 14px;
-}
-
-.profile-item-content,
-.fullname {
+.profile-item-content {
     color: #59646d;
     font-weight: 600;
     font-size: 17px;
+}
+
+.profile-desc {
+    margin: 10px 0;
+    font-size: 15px;
+    color: #59646d;
+    text-align: justify;
 }
 
 .profile-item-ctn {
@@ -62,4 +128,97 @@
     color: #1F99FF;
     font-size: 18px;
     font-weight: 500;
+}
+
+.profile-storage-card {
+    height: 300px;
+    /* width: 400px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.storage-icon-ctn {
+    margin: 40px auto 15px;
+    width: 80px;
+    height: 80px;
+    background-color: #f5f6f8;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.storage-icon {
+    font-size: 30px;
+    color: #0059ff;
+
+}
+
+.storage-msg {
+    text-align: center;
+}
+
+.storage-msg div:first-child {
+    font-weight: 600;
+    font-size: 22px;
+    color: #546570;
+}
+
+.storage-msg div:nth-child(2) {
+    font-size: 17px;
+    color: #acb3c7;
+}
+
+.storage-progress {
+    width: 100%;
+}
+
+.storage-amount-number {
+    font-weight: 600;
+    font-size: 17px;
+    color: #7a9fd8;
+    text-align: end;
+}
+
+.profile-setting {
+    height: 300px;
+}
+
+.profile-setting .profile-item-content {
+    width: 200px;
+    overflow-wrap: break-word;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+.profile-setting .profile-item-title {
+    width: 80px;
+}
+
+/* 
+.logout-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.logout-section .profile-item-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+} */
+
+.profile-info-card,
+.account-card,
+.notification-card {
+    height: 500px;
+}
+
+.noti-list-wrapper {
+    margin-top: 10px;
+    height: 420px;
+    overflow-y: auto;
 }

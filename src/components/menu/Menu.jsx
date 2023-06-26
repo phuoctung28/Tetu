@@ -144,12 +144,26 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
         if (file) {
             try {
                 const fileUrl = await uploadFile(file);
-
+                const newNote = {
+                    title: 'Note - ' + fileUrl.name,
+                    content: "",
+                    meta_data: {
+                        datetime: moment(new Date()).format("DD/MM/YYYY"),
+                        status: ["To-do"],
+                        tags: [],
+                        type: ["Self-study"],
+                    },
+                    owner: userId,
+                };
+                const noteRef = await createDocument('notes', newNote);
+                const noteId = noteRef.id;
                 const fileRef = await createDocument("files", {
                     name: file.name,
                     size: file.size,
                     type: file.type,
                     url: fileUrl,
+                    owner: userId,
+                    note: noteId,
                 });
                 const fileId = fileRef.id;
 

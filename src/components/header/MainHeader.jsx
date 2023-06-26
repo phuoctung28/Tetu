@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import logo from '../../assets/images/logo.png';
 import { Breadcrumb, Button, Popconfirm, Popover, Tooltip } from 'antd';
-import { BgColorsOutlined, UnorderedListOutlined, PushpinOutlined, SplitCellsOutlined, SaveOutlined, SearchOutlined, DeleteOutlined } from '@ant-design/icons';
+import { BellOutlined, BgColorsOutlined, UnorderedListOutlined, PushpinOutlined, SplitCellsOutlined, SaveOutlined, SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 import '../../assets/styles/main_header.css';
 import { useNavigate } from 'react-router-dom';
 import SearchComponent from "../Seach/Search";
@@ -71,6 +71,13 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                         shape="circle"
                         onClick={saveNoteContent}
                         icon={<SaveOutlined style={{ color: '#596A77' }} />} />
+                </Tooltip>
+                <Tooltip title="Notifications">
+                    <Button
+                        className='btn-toolbar'
+                        shape="circle"
+                        // onClick={saveNoteContent}
+                        icon={<BellOutlined style={{ color: '#596A77' }} />} />
                 </Tooltip>
 
 
