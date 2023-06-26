@@ -261,6 +261,8 @@ const GraphView = () => {
             }
         };
         fetchNotesAndFiles();
+
+        document.title = 'Graph View';
     }, []);
 
     const navigate = useNavigate();
@@ -347,7 +349,7 @@ const GraphView = () => {
 
     return (
         <Layout hasSider>
-            <Sidebar pageMenu="graph"/>
+            <Sidebar pageMenu="graph" />
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
                 <MainHeader />
                 <Content className="graph-container">

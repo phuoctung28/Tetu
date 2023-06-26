@@ -22,11 +22,11 @@ const NewItem = () => {
                 Profile
             </Button>
             <Button className="new-item" type="text" icon={<CreditCardOutlined />} onClick={() => { navigate("/pricing") }}>
-                Choose plan
+                Choose Plan
             </Button>
             <Tooltip placement="right" title="This feature is in development" >
                 <Button className="new-item" type="text" icon={<HistoryOutlined />} >
-                    Transactions
+                    Orders
                 </Button>
             </Tooltip>
 

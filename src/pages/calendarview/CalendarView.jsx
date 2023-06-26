@@ -76,6 +76,7 @@ const CalendarView = () => {
             }
         };
         fetchNoteData();
+        document.title = 'Calendar View';
     }, [])
 
     const transformData = (data) => {
@@ -134,6 +135,8 @@ const CalendarView = () => {
         if (info.type === 'month') return monthCellRender(current);
         return info.originNode;
     };
+
+
     return (
         <Layout hasSider>
             <Sidebar pageMenu="calendar" />

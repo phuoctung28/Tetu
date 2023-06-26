@@ -25,6 +25,9 @@ const PricingPlan = () => {
     //         navigate("/user-profile")
     //     }, 15000)
     // }, [isModalOpen])
+    useEffect(() => {
+        document.title = 'Pricing Plan';
+    }, []);
     return (
         <div>
             <div className="pricing-plan-container">

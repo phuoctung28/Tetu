@@ -61,24 +61,24 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
                 <Button block size="small" type={pageMenu && pageMenu === "home" ? "primary" : "text"} icon={<HomeOutlined />} onClick={() => {
                     navigate("/home")
                 }} >
-                    Homepage
+                    Home Page
                 </Button>
                 <Button block size="small" type={pageMenu && pageMenu === "table" ? "primary" : "text"} icon={<TableOutlined />} onClick={() => {
                     navigate("/table")
                 }} >
-                    Table view
+                    Table View
                 </Button>
                 <Button block size="small" type={pageMenu && pageMenu === "calendar" ? "primary" : "text"} icon={<CalendarOutlined />} onClick={() => {
                     navigate("/calendar")
                 }} >
-                    Calendar view
+                    Calendar View
                 </Button>
                 {user.accountType === "premium"
                     ?
                     <Button block size="small" type={pageMenu && pageMenu === "graph" ? "primary" : "text"} icon={<ShareAltOutlined />} onClick={() => {
                         navigate("/graph")
                     }} >
-                        Graph view
+                        Graph View
                     </Button>
                     : <></>
                 }
