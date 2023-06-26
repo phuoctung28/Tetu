@@ -11,59 +11,49 @@ import './note-book.css';
 
 const { Content } = Layout;
 
-const NoteDual = ({ page, note }) => {
+const NoteDual = ({ noteId }) => {
     // console.log("DUAL DATA:", page)
-    const [title, setTitle] = useState(page?.title);
     const [noteData, setNoteData] = useState({});
     const { pageId } = useParams();
     const location = useLocation();
     const data = location.state;
-    const [currentTitle, setCurrentTitle] = useState(data?.name);
+    const [noteTitle, setNoteTitle] = useState(data?.name);
     const [noteContent, setNoteContent] = useState("");
 
     useEffect(() => {
         const fetchNote = async () => {
             try {
-                const fetchedNote = await getDocumentById("notes", note);
-                const folder = await queryDocuments("folders", "notes", "array-contains", pageId);
-                setNoteData({
-                    ...fetchedNote,
-                    noteId: pageId,
-                    location: folder[0].folder_name
-                });
-                setTitle(fetchedNote.title);
+                console.log("NOTE ID:", noteId);
+                const fetchedNote = await getDocumentById("notes", noteId);
+                // const folder = await queryDocuments("folders", "notes", "array-contains", pageId);
+                // setNoteData({
+                //     ...fetchedNote,
+                //     noteId: pageId,
+                //     location: folder[0].folder_name,
+                // });
+                console.log("NOTE CONTENT: ", fetchedNote);
+                setNoteTitle(fetchedNote.title);
                 setNoteContent(fetchedNote.content);
             } catch (error) {
                 console.error('Error fetching notes and files:', error);
             }
         };
-
-        // fetchNote();
-        // console.log("Note data:", noteData);
-    }, []);
-
-
-    const changeTitle = (event) => {
-        setTitle(event.target.value);
-    };
-
-    useEffect(() => {
-        document.title = title;
-    }, [title]);
+        fetchNote();
+    }, [noteId]);
 
     const handleKeyUp = async (event) => {
         if (event.keyCode === 13) {
             event.preventDefault();
             event.target.blur();
-            await updateDocumentProperty("notes", note, 'title', event.target.value);
-            setCurrentTitle(event.target.value);
+            await updateDocumentProperty("notes", noteId, 'title', event.target.value);
+            setNoteTitle(event.target.value);
         }
     }
 
     const saveNoteContent = async () => {
         console.log("current note content:", noteContent);
         try {
-            await updateDocumentProperty("notes", note, "content", noteContent);
+            await updateDocumentProperty("notes", noteId, "content", noteContent);
             message.success("Save successfully!");
         } catch (error) {
             console.error('Error saving note content:', error);
@@ -83,14 +73,18 @@ const NoteDual = ({ page, note }) => {
             document.removeEventListener("keydown", keyDown);
         };
     });
+
+    const handleChangeNoteTitle = (event) => {
+        setNoteTitle(event.target.value);
+    }
     return (
         <div className="note-space-container">
             <div className="note-header">
                 <div className="note-title-container">
                     <Input
-                        value={currentTitle || title}
+                        value={noteTitle}
                         className="note-title"
-                        onChange={changeTitle}
+                        onChange={handleChangeNoteTitle}
                         onPressEnter={handleKeyUp}
                         bordered={false} />
                 </div>

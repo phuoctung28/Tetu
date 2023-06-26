@@ -70,3 +70,7 @@
 .space-divider:focus {
     background-color: #97ccf7;
 }
+
+.dual-note-panel {
+    background-color: #fff;
+}

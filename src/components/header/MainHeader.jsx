@@ -92,14 +92,17 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                     <Button className='btn-toolbar' shape="circle" icon={<DeleteOutlined style={{ color: '#596A77' }} />} />
                 </Popconfirm> */}
                 {
-                    showButton && <Button
-                        type={dualNote ? "primary" : "default"}
-                        className='btn-toolbar'
-                        icon={<SplitCellsOutlined size="large" style={{ color: dualNote ? '#fff' : '#596A77' }} />}
-                        onClick={handleToggleDualNote}
-                    >
-                        Dual Note
-                    </Button>
+                    showButton &&
+                    <Tooltip title="Ctrl + D">
+                        <Button
+                            type={dualNote ? "primary" : "default"}
+                            className='btn-toolbar'
+                            icon={<SplitCellsOutlined size="large" style={{ color: dualNote ? '#fff' : '#596A77' }} />}
+                            onClick={handleToggleDualNote}
+                        >
+                            Dual Note
+                        </Button>
+                    </Tooltip>
                 }
                 <Tooltip title="Search">
                     <Button className='btn-toolbar' shape="circle"

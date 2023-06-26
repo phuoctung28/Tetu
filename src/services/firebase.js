@@ -210,7 +210,7 @@ export const uploadFile = (file) => {
             uploadTask.on(
                 "state_changed",
                 (snapshot) => {
-                    console.log("Upload in progress");
+                    // console.log("Upload in progress");
                 },
                 (error) => {
                     console.error("Error uploading file:", error);
@@ -219,7 +219,7 @@ export const uploadFile = (file) => {
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref)
                         .then((url) => {
-                            console.log("File uploaded successfully:", url);
+                            // console.log("File uploaded successfully:", url);
                             resolve(url);
                         })
                         .catch((error) => {
