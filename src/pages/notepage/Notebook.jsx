@@ -14,11 +14,11 @@ const { Content } = Layout;
 const Notebook = ({ page }) => {
     const [title, setTitle] = useState("");
     const [noteData, setNoteData] = useState({});
+    const [currentPage, setCurrentPage] = useState({});
     const { noteId } = useParams();
     const location = useLocation();
     const data = location.state;
     const [currentTitle, setCurrentTitle] = useState(data?.name);
-    const [currentPage, setCurrentPage] = useState({});
     const [noteContent, setNoteContent] = useState("");
     const [savingMsg, setSavingMsg] = useState(false);
 
@@ -41,6 +41,11 @@ const Notebook = ({ page }) => {
             console.error('Error fetching notes and files:', error);
         }
     };
+
+    useEffect(() => {
+        fetchNote();
+        // console.log("Note data:", noteData);
+    }, []);
 
     useEffect(() => {
         fetchNote();
@@ -96,9 +101,7 @@ const Notebook = ({ page }) => {
             <FloatButton
                 icon={<QuestionCircleOutlined />}
                 type="default"
-                style={{
-                    right: 40,
-                }}
+                style={{ right: 50, }}
             />
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
             <Layout className="site-layout">
@@ -114,7 +117,7 @@ const Notebook = ({ page }) => {
                                     onPressEnter={handleKeyUp}
                                     bordered={false} />
                             </div>
-                            {noteData && <Metadata noteData={noteData} noteId={noteId} />}
+                            <Metadata noteData={noteData} noteId={noteId} />
                         </div>
                         <TetuEditor
                             editorData={noteData.content || ""}

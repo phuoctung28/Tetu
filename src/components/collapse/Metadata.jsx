@@ -79,14 +79,6 @@ const Metadata = ({ noteData, noteId }) => {
         setStatus(noteData.meta_data?.status);
         setTags(noteData.meta_data?.tags || []);
         setTypes(noteData.meta_data?.type);
-        // console.log("GET METADATA:", noteData);
-    }, []);
-
-    useEffect(() => {
-        setDatetimeVal(noteData?.meta_data?.datetime);
-        setStatus(noteData.meta_data?.status);
-        setTags(noteData.meta_data?.tags || []);
-        setTypes(noteData.meta_data?.type);
         console.log("GET METADATA:", noteData);
     }, [noteData]);
 
