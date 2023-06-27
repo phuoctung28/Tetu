@@ -80,27 +80,27 @@ const GraphView = () => {
             //     min: 10,
             //     max: 30,
             // },
-            font: { 
+            font: {
                 size: 12,
             },
         },
         edges: {
             color: '#73A2FF',
             width: 0.2,
-            // smooth: {
-            //     enabled: true,
-            //     type: 'discrete',
-            // },
+            smooth: {
+                enabled: true,
+                type: 'continuous',
+            },
         },
-        // physics: {
-        //     barnesHut: {
-        //         centralGravity: 0.001,
-        //         springLength: 60,
-        //         springConstant: 0.01,
-        //         damping: 1,
-        //         avoidOverlap: 0.01
-        //     },
-        // },
+        physics: {
+            barnesHut: {
+                centralGravity: 0.001,
+                springLength: 60,
+                springConstant: 0.01,
+                damping: 1,
+                avoidOverlap: 0.01
+            },
+        },
         manipulation: {
             initiallyActive: false,
             addEdge: async function (data, callback) {
@@ -160,6 +160,7 @@ const GraphView = () => {
     //     setGraphOptions()
     // }, [nodeList, edgeList]);
     const [modal, contextHolder] = Modal.useModal();
+
 
     const getEdgeFromNoteAndFile = (data) => {
         let edges = [];
