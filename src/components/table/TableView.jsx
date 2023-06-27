@@ -29,7 +29,7 @@ const TableView = () => {
                     fetchedFiles.push({ item_id: fileId, item: file });
                 }
             }
-
+            console.log("FETCHED NOTES:", fetchedNotes);
             setNotes(fetchedNotes);
             setFiles(fetchedFiles);
         } catch (error) {
@@ -43,7 +43,7 @@ const TableView = () => {
             title: note.item?.title,
             status: note.item?.meta_data?.status?.[0] || 'To-do',
             noteType: note.item?.meta_data?.type || "Self-study",
-            date: moment(note.item?.meta_data?.datetime).format('L') || moment(new Date()).format('DD/MM/YYYY'),
+            date: moment(note.item?.meta_data?.datetime, 'DD/MM/YYYY').format('DD/MM/YYYY') || moment(new Date(), 'DD/MM/YYYY').format('DD/MM/YYYY'),
             tags: note.item?.meta_data?.tags || [],
             type: FileType.Note,
         }));

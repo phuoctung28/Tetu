@@ -86,7 +86,7 @@ const CalendarView = () => {
                 if (e.meta_data) {
                     const { meta_data, title } = e;
                     const datetime = meta_data.datetime;
-                    const formattedDate = moment(datetime).format("DD/MM/YYYY");
+                    const formattedDate = moment(datetime, 'DD/MM/YYYY').format('L');
                     listData.push({
                         id: e.id,
                         title: title,
