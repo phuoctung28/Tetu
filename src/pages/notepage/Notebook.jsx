@@ -11,7 +11,7 @@ import './note-book.css';
 
 const { Content } = Layout;
 
-const Notebook = ({ page }) => {
+const Notebook = () => {
     const [title, setTitle] = useState("");
     const [noteData, setNoteData] = useState({});
     const [currentPage, setCurrentPage] = useState({});
@@ -111,7 +111,7 @@ const Notebook = ({ page }) => {
                         <div className="note-header">
                             <div className="note-title-container">
                                 <Input
-                                    value={currentTitle || title}
+                                    value={title}
                                     className="note-title"
                                     onChange={changeTitle}
                                     onPressEnter={handleKeyUp}
@@ -119,9 +119,10 @@ const Notebook = ({ page }) => {
                             </div>
                             <Metadata noteData={noteData} noteId={noteId} />
                         </div>
-                        <TetuEditor
-                            editorData={noteData.content || ""}
-                            setNoteContent={setNoteContent} />
+                        {noteData && <TetuEditor
+                            key={noteId}
+                            editorData={noteData?.content}
+                            setNoteContent={setNoteContent} />}
                     </div>
                 </Content>
             </Layout>

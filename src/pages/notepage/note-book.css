@@ -39,10 +39,10 @@
 }
 
 .notebook-wrapper {
-    margin: 0;
+    margin-left: 200px;
     padding: 0;
     overflow: auto;
-    width: 100%;
+    /* width: 100%; */
     height: 100vh;
     background: white;
     scrollbar-gutter: stable both-edges;

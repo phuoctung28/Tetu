@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FloatButton, Input, Layout, message, theme, } from 'antd';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Input, Layout, message } from 'antd';
 import Metadata from '../../components/collapse/Metadata';
-import Sidebar from '../../components/sidebar/Sidebar';
-import MainHeader from '../../components/header/MainHeader';
 import TetuEditor from '../../components/Editor/Editor';
-import { getDocumentById, queryDocuments, updateDocumentProperty } from "../../services/firebase";
-import { useLocation, useParams } from "react-router-dom";
+import { getDocumentById, updateDocumentProperty } from "../../services/firebase";
 import './note-book.css';
 
 const { Content } = Layout;
