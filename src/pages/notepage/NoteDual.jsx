@@ -2,29 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { Input, Layout, message } from 'antd';
 import Metadata from '../../components/collapse/Metadata';
 import TetuEditor from '../../components/Editor/Editor';
-import { getDocumentById, updateDocumentProperty } from "../../services/firebase";
+import { getDocumentById, queryDocuments, updateDocumentProperty } from "../../services/firebase";
 import './note-book.css';
 
 const { Content } = Layout;
 
-const NoteDual = ({ noteId, selectedText }) => {
+const NoteDual = ({ noteId, textFromFile }) => {
     // console.log("DUAL DATA:", page)
     const [noteData, setNoteData] = useState({});
     const [noteTitle, setNoteTitle] = useState("");
     const [noteContent, setNoteContent] = useState("");
+    const [currentContent, setCurrentContent] = useState({});
+    const [currentBlocks, setCurrentBlocks] = useState([]);
 
     useEffect(() => {
         const fetchNote = async () => {
             try {
-                console.log("NOTE ID:", noteId);
+                // console.log("NOTE ID:", noteId);
                 const fetchedNote = await getDocumentById("notes", noteId);
-                // const folder = await queryDocuments("folders", "notes", "array-contains", pageId);
-                // setNoteData({
-                //     ...fetchedNote,
-                //     noteId: pageId,
-                //     location: folder[0].folder_name,
-                // });
-                console.log("NOTE CONTENT: ", fetchedNote);
+                setNoteData({
+                    ...fetchedNote,
+                    noteId: noteId,
+                });
+                // console.log("NOTE CONTENT: ", fetchedNote);
                 setNoteTitle(fetchedNote.title);
                 setNoteContent(fetchedNote.content);
             } catch (error) {
@@ -35,8 +35,43 @@ const NoteDual = ({ noteId, selectedText }) => {
     }, [noteId]);
 
     useEffect(() => {
-        console.log("SELECTED TEXT:", selectedText);
-    }, [selectedText]);
+        setCurrentContent(noteData?.content);
+        setCurrentBlocks(noteData?.content?.blocks);
+    }, [noteData]);
+
+    useEffect(() => {
+        // console.log("SELECTED TEXT:", textFromFile);
+        if (textFromFile && textFromFile.length > 0) {
+            if (currentBlocks) {
+                // console.log("CUR BLOCKS:", currentBlocks);
+                let length = currentBlocks?.length;
+                if (length !== 0) {
+                    let newBlock = {
+                        data: {
+                            text: textFromFile,
+                        },
+                        type: "paragraph",
+                    }
+                    let newBlocks = [...currentBlocks, newBlock];
+                    let newContent = {
+                        ...currentContent,
+                        time: new Date().getTime(),
+                        blocks: newBlocks,
+                    };
+                    setCurrentContent(newContent);
+                    setCurrentBlocks(newBlocks);
+                    setNoteContent(newContent);
+                    setNoteData({
+                        ...noteData,
+                        content: newContent,
+                    });
+                }
+            }
+            // let currentContent = [...noteData?.content, addNote];
+            // setNoteContent({ ...noteContent, content: currentContent })
+        }
+    }, [textFromFile]);
+
 
     const handleKeyUp = async (event) => {
         if (event.keyCode === 13) {
