@@ -71,17 +71,11 @@ const Metadata = ({ noteData }) => {
     const [editInputValue, setEditInputValue] = useState('');
     const inputRef = useRef(null);
     const editInputRef = useRef(null);
-    const [datetimeVal, setDatetimeVal] = useState("");
-
-    useEffect(() => {
-        setDatetimeVal(noteData?.meta_data?.datetime);
-        console.log("META DATE: ", noteData?.meta_data?.datetime);
-    }, [noteData.meta_data?.datetime]);
 
     // console.log("NOTE DATA:", noteData);
     useEffect(() => {
         setTags(noteData.meta_data?.tags || []);
-    }, [noteData.meta_data?.tags]);
+    }, [noteData?.meta_data?.tags]);
 
     useEffect(() => {
         if (inputVisible) {
@@ -182,7 +176,6 @@ const Metadata = ({ noteData }) => {
         <div key={noteData.noteId} className="container-metadata">
             <Collapse defaultActiveKey={['1']} ghost bordered={true}>
                 <Panel header="Metadata" key="1" style={panelStyle}>
-                    {/* <p className="metadata-item">{text}</p> */}
                     <Space className="metadata-list" direction='vertical' size={10}>
                         <div className="metadata-item">
                             <div className="item-title">
@@ -192,12 +185,12 @@ const Metadata = ({ noteData }) => {
                                 <DatePicker
                                     size="small"
                                     defaultValue={
-                                        (datetimeVal && datetimeVal.length > 0)
-                                            ? dayjs(String(datetimeVal), dateFormatList[0])
+                                        (noteData?.meta_data?.datetime && noteData?.meta_data?.datetime.length > 0)
+                                            ? dayjs(noteData?.meta_data?.datetime, dateFormatList[0])
                                             : dayjs(new Date(), dateFormatList[0])
                                     }
                                     onChange={handleDatePicker}
-                                    format={dateFormatList[0]} />
+                                    format={dateFormatList} />
                             </div>
                         </div>
                         <div className="metadata-item">

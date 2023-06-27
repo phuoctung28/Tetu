@@ -117,7 +117,7 @@ const Notebook = () => {
                                     onPressEnter={handleKeyUp}
                                     bordered={false} />
                             </div>
-                            <Metadata noteData={noteData} noteId={noteId} />
+                            {noteData != undefined && <Metadata noteData={noteData} noteId={noteId} />}
                         </div>
                         {noteData && <TetuEditor
                             key={noteId}

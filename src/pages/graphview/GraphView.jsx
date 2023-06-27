@@ -63,6 +63,12 @@ const GraphView = () => {
             return { ...item, color: newColor }
         })
         setNodeList(newNodeList);
+        setGraphOptions({
+            ...graphOptions,
+            edges: {
+                color: newColor
+            },
+        });
         setState({
             ...state,
             graph: {
@@ -87,7 +93,8 @@ const GraphView = () => {
             },
         },
         edges: {
-            color: '#73A2FF',
+            color: graphColor,
+            // color: '#73A2FF',
             width: 0.2,
             smooth: {
                 enabled: true,
@@ -348,7 +355,7 @@ const GraphView = () => {
             fetchNotesAndFiles();
 
         document.title = 'Graph View';
-    }, []);
+    }, [folderId]);
 
     const navigate = useNavigate();
 
@@ -468,8 +475,6 @@ const GraphView = () => {
                                     value={typeof nodeSize === 'number' ? nodeSize : 0}
                                 />
                             </div>
-
-
                         </div>
                         <div className="info-panel">
                             <div>Node Types</div>
