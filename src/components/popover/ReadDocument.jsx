@@ -33,11 +33,12 @@ const ReadDocument = () => {
                 newLoadings[index] = false;
                 return newLoadings;
             });
-        }, 2000);
+        }, 5000);
     };
 
     const handleFileChange = async (event) => {
         try {
+            enterLoading(0);
             const file = event.target.files && event.target.files[0];
             if (!file) return;
             const fileUrl = await uploadFile(file);
@@ -51,12 +52,11 @@ const ReadDocument = () => {
             const fileId = fileRef.id;
 
             const fields = ["owner", "folder_name"];
-            const operators = ["===", "==="];
+            const operators = ["==", "=="];
             const values = [user.user_id, "Attachments"];
 
             const folders = await queryDocumentsMultipleConditions("folders", fields, operators, values);
-            
-            console.log("ATTACHMENT FOLDER:", folders);
+
             if (!folders || folders[0] == null) {
                 await createDocument("folders", {
                     folder_name: "Attachments",
@@ -69,8 +69,8 @@ const ReadDocument = () => {
                 const folderRef = createRef("folders", folderId);
                 await updateExistedDocumentArray(folderRef, "files", fileId);
             }
-            navigate(`/file`, { state: { fileUrl: fileUrl }, replace: true });
-            enterLoading(0);
+            navigate(`/file/${fileId}`, { state: { fileUrl: fileUrl }, replace: true });
+
         } catch (e) {
             console.log(e)
         }

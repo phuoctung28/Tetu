@@ -142,9 +142,9 @@ export const queryDocumentsMultipleConditions = async (collections, fields, oper
         const queryConstraints = []
         for (let i = 0; i < fields.length; ++i) {
             if (fields[i] && operators[i] && values[i])
-                queryConstraints.push(where(fields[0], operators[0], values[0]))
+                queryConstraints.push(where(fields[i], operators[i], values[i]))
         }
-        const q = query(collection(db, collections), where(...queryConstraints));
+        const q = query(collection(db, collections), ...queryConstraints);
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
             documents.push({ id: doc.id, ...doc.data() });
