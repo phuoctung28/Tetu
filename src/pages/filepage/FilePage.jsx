@@ -48,7 +48,7 @@ const FilePage = () => {
     const handleMouseUp = () => {
         const currentSelectedText = window.getSelection().toString().trim().toLowerCase();
         setSelectedText(currentSelectedText)
-        console.log(`Selected text: ${currentSelectedText}`);
+        // console.log(`Selected text: ${currentSelectedText}`);
     }
     const items = [{ label: 'Add to note', key: '1', },];
 
@@ -108,7 +108,7 @@ const FilePage = () => {
                         {dualNote && <PanelResizeHandle className="space-divider" />}
                         {dualNote && (
                             <Panel className="dual-note-panel">
-                                <NoteDual noteId={noteId} />
+                                <NoteDual key={noteId} noteId={noteId} selectedText={selectedText} />
                             </Panel>
                         )}
                     </PanelGroup>

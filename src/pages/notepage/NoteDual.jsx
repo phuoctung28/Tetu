@@ -11,13 +11,10 @@ import './note-book.css';
 
 const { Content } = Layout;
 
-const NoteDual = ({ noteId }) => {
+const NoteDual = ({ noteId, selectedText }) => {
     // console.log("DUAL DATA:", page)
     const [noteData, setNoteData] = useState({});
-    const { pageId } = useParams();
-    const location = useLocation();
-    const data = location.state;
-    const [noteTitle, setNoteTitle] = useState(data?.name);
+    const [noteTitle, setNoteTitle] = useState("");
     const [noteContent, setNoteContent] = useState("");
 
     useEffect(() => {
@@ -41,6 +38,10 @@ const NoteDual = ({ noteId }) => {
         fetchNote();
     }, [noteId]);
 
+    useEffect(() => {
+        console.log("SELECTED TEXT:", selectedText);
+    }, [selectedText]);
+
     const handleKeyUp = async (event) => {
         if (event.keyCode === 13) {
             event.preventDefault();
@@ -51,7 +52,6 @@ const NoteDual = ({ noteId }) => {
     }
 
     const saveNoteContent = async () => {
-        console.log("current note content:", noteContent);
         try {
             await updateDocumentProperty("notes", noteId, "content", noteContent);
             message.success("Save successfully!");
@@ -88,7 +88,7 @@ const NoteDual = ({ noteId }) => {
                         onPressEnter={handleKeyUp}
                         bordered={false} />
                 </div>
-                <Metadata noteData={noteData} />
+                <Metadata noteId={noteId} noteData={noteData} />
             </div>
             <TetuEditor
                 editorData={noteData.content || ""}
