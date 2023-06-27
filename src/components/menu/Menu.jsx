@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dropdown, Input, Menu, Modal, Tooltip } from 'antd';
-import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined, FileAddOutlined, UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ShareAltOutlined, BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined, FileAddOutlined, UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { FileType } from '../../enums/FileType';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -274,6 +274,14 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
                         <Menu.Item key="deleteFile" onClick={() => handleMenuClick('deleteFile', item, fileType)}>
                             <DeleteOutlined /> {fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
                         </Menu.Item>
+                        {isFolder && (
+                            <>
+                                <Menu.Item key="folderGraphView"
+                                    onClick={() => navigate(`/graph/${item.id}`)}>
+                                    <ShareAltOutlined /> Graph View
+                                </Menu.Item>
+                            </>
+                        )}
                     </Menu>
                 }
                 trigger={['click']}

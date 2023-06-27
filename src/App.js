@@ -33,6 +33,7 @@ function App() {
                     <Route path="/pricing" element={<PricingPage />} />
                     <Route path="/table" element={<ListView />} />
                     <Route path="/graph" element={<GraphView />} />
+                    <Route path="/graph/:folderId" element={<GraphView />} />
                     <Route path="/calendar" element={<CalendarView />} />
                     <Route path="/article" element={<ArticlePage />} />
                     <Route path="/article/:articleId" element={<ArticlePage />} />
