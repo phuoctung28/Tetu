@@ -20,6 +20,12 @@
     margin-right: 10px;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .btn-logo {
     border: none;
     background-color: transparent;
@@ -40,12 +46,17 @@
     font-size: 20px;
 }
 
-.btn-toolbar {
+/* .btn-toolbar {
     margin-right: 20px;
-}
+} */
 
 .theme-color {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+.saving-msg {
+    font-weight: 600;
+    color: #adb6c5;
 }

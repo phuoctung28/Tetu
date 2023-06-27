@@ -25,7 +25,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/note/:pageId" element={<Notebook />} />
+                    <Route path="/note/:noteId" element={<Notebook />} />
                     <Route path="/test2" element={<TeTuMenu />} />
                     <Route path="/file" element={<FilePage />} />
                     <Route path="/file/:fileId" element={<FilePage />} />

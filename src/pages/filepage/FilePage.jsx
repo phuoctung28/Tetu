@@ -6,10 +6,7 @@ import './file_page.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { useLocation, useParams } from 'react-router-dom';
-import { createDocument, getDocumentById, queryDocuments, getDocument, updateDocumentProperty, updateDocument } from '../../services/firebase';
-import TetuEditor from '../../components/Editor/Editor';
-import NotePage from "../notepage/NotePage";
-import Notebook from "../notepage/Notebook";
+import { getDocumentById } from '../../services/firebase';
 import moment from 'moment';
 import NoteDual from '../notepage/NoteDual';
 
@@ -87,7 +84,7 @@ const FilePage = () => {
             document.removeEventListener("keydown", keyDown);
         };
     });
-    
+
     return (
         <Layout hasSider>
             <Sidebar />

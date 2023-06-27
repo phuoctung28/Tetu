@@ -12,41 +12,40 @@ import './note-book.css';
 const { Content } = Layout;
 
 const Notebook = ({ page }) => {
-    const [title, setTitle] = useState(page?.title);
+    const [title, setTitle] = useState("");
     const [noteData, setNoteData] = useState({});
-    const [currentPage, setCurrentPage] = useState({});
-    const { pageId } = useParams();
+    const { noteId } = useParams();
     const location = useLocation();
     const data = location.state;
     const [currentTitle, setCurrentTitle] = useState(data?.name);
+    const [currentPage, setCurrentPage] = useState({});
     const [noteContent, setNoteContent] = useState("");
+    const [savingMsg, setSavingMsg] = useState(false);
+
+    const fetchNote = async () => {
+        try {
+            const fetchedNote = await getDocumentById("notes", noteId);
+            const folder = await queryDocuments("folders", "notes", "array-contains", noteId);
+            setNoteData({
+                ...fetchedNote,
+                noteId: noteId,
+                location: folder[0].folder_name
+            });
+            setTitle(fetchedNote.title);
+            setCurrentPage({
+                noteId: noteId,
+                folderId: folder[0].id,
+            });
+            setNoteContent(fetchedNote.content);
+        } catch (error) {
+            console.error('Error fetching notes and files:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchNote = async () => {
-            try {
-                const fetchedNote = await getDocumentById("notes", pageId || page.id);
-                const folder = await queryDocuments("folders", "notes", "array-contains", pageId);
-                setNoteData({
-                    ...fetchedNote,
-                    noteId: pageId,
-                    location: folder[0].folder_name
-                });
-                setTitle(fetchedNote.title);
-
-                setCurrentPage({
-                    noteId: pageId,
-                    folderId: folder[0].id,
-                });
-                setNoteContent(fetchedNote.content);
-
-            } catch (error) {
-                console.error('Error fetching notes and files:', error);
-            }
-        };
-
         fetchNote();
         // console.log("Note data:", noteData);
-    }, [pageId]);
+    }, [noteId]);
 
 
     const changeTitle = (event) => {
@@ -61,40 +60,37 @@ const Notebook = ({ page }) => {
         if (event.keyCode === 13) {
             event.preventDefault();
             event.target.blur();
-            await updateDocumentProperty("notes", pageId, 'title', event.target.value);
+            await updateDocumentProperty("notes", noteId, 'title', event.target.value);
             setCurrentTitle(event.target.value);
         }
     }
 
-    const saveNoteContent = async () => {
-        console.log("current note content:", noteContent);
+    const saveNoteContent = async (useKeyboard = true) => {
+        // console.log("current note content:", noteContent);
         try {
-            await updateDocumentProperty("notes", pageId, "content", noteContent);
-            message.success("Save successfully!");
+            setSavingMsg(true);
+            await updateDocumentProperty("notes", noteId, "content", noteContent);
+            setTimeout(() => setSavingMsg(false), 2000);
+            if (useKeyboard !== false)
+                message.success("Save successfully!");
         } catch (error) {
             console.error('Error saving note content:', error);
         }
     }
 
     useEffect(() => {
-        // check if the key is "s" with ctrl key
         const keyDown = (event) => {
             if (event.key === "s" && event.ctrlKey) {
-                // prevent the browser from opening the save dialog
                 event.preventDefault();
-                // call our callback method
-                saveNoteContent();
+                saveNoteContent(false);
             }
         };
-        // listen to keydown events
         document.addEventListener("keydown", keyDown);
-        // stop listening on component destory
-
         return () => {
             document.removeEventListener("keydown", keyDown);
         };
     });
-    // window.location.reload();
+
     return (
         <Layout hasSider>
             <FloatButton
@@ -106,7 +102,7 @@ const Notebook = ({ page }) => {
             />
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
             <Layout className="site-layout">
-                <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} />
+                <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} savingMsg={savingMsg} />
                 <Content className="notebook-wrapper">
                     <div className="note-space-container">
                         <div className="note-header">
@@ -118,7 +114,7 @@ const Notebook = ({ page }) => {
                                     onPressEnter={handleKeyUp}
                                     bordered={false} />
                             </div>
-                            <Metadata noteData={noteData} />
+                            {noteData && <Metadata noteData={noteData} noteId={noteId} />}
                         </div>
                         <TetuEditor
                             editorData={noteData.content || ""}

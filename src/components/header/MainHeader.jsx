@@ -6,7 +6,7 @@ import '../../assets/styles/main_header.css';
 import { useNavigate } from 'react-router-dom';
 import SearchComponent from "../Seach/Search";
 
-const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData, saveNoteContent }) => {
+const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData, saveNoteContent, savingMsg }) => {
     const navigate = useNavigate();
     const [isSearchOpened, setIsSearchOpened] = useState(false);
     // const [crumbItem, setCrumbItem] = useState([]);
@@ -46,7 +46,10 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                     items={crumbItem} />
                 } */}
             </div>
-            <div>
+            <div className='header-right'>
+                {savingMsg && <div className='saving-msg'>
+                    Saving...
+                </div>}
                 <Tooltip title="Pin note is in development">
                     <Button className='btn-toolbar' shape="circle"
                         icon={<PushpinOutlined style={{ color: '#596A77' }} />} />
@@ -79,7 +82,6 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
                         // onClick={saveNoteContent}
                         icon={<BellOutlined style={{ color: '#596A77' }} />} />
                 </Tooltip>
-
 
                 {/* <Popconfirm
                     title="Confirm Delete"
