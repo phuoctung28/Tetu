@@ -14,6 +14,10 @@ import CalendarView from './pages/calendarview/CalendarView';
 import ArticlePage from './pages/article/ArticlePage';
 import DictionaryList from './pages/dictionary/DictionaryList';
 import UserProfile from './pages/userpage/UserProfile';
+import Dashboard from './pages/admin/Dashboard';
+import CheckoutForm from './components/order/Checkout';
+import ManageOrder from './pages/admin/ManageOrder';
+
 function App() {
     return (
         <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
@@ -21,7 +25,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/note/:pageId" element={<Notebook />} />
+                    <Route path="/note/:noteId" element={<Notebook />} />
                     <Route path="/test2" element={<TeTuMenu />} />
                     <Route path="/file" element={<FilePage />} />
                     <Route path="/file/:fileId" element={<FilePage />} />
@@ -34,8 +38,12 @@ function App() {
                     <Route path="/article/:articleId" element={<ArticlePage />} />
                     <Route path="/dictionary" element={<DictionaryList />} />
                     <Route path="/user-profile" element={<UserProfile />} />
+                    <Route path="/checkout" element={<CheckoutForm />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/manage-order" element={<ManageOrder />} />
                 </Routes >
             </BrowserRouter >
+
         </PayPalScriptProvider >
     );
 }

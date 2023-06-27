@@ -72,7 +72,7 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
                         return { item_id: fileId, item: file };
                     })
                 );
-                console.log(fetchedFiles)
+                // console.log(fetchedFiles)
                 setFiles(fetchedFiles);
             } catch (error) {
                 console.error('Error fetching notes and files:', error);
@@ -126,7 +126,7 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
             handleFileInputClick();
         } else if (key === 'renameFile') {
             const renameItemId = item.item_id || folder.id;
-            const renameItemValue = item.folder_name || item.item.name || item.item.title || ''
+            const renameItemValue = item.folder_name || item?.item?.name || item?.item?.title || ''
             setRenameItemId(renameItemId);
             setRenameItemType(fileType);
             setRenameItemValue(renameItemValue);
@@ -144,12 +144,27 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
         if (file) {
             try {
                 const fileUrl = await uploadFile(file);
-
+                console.log("File: ", file);
+                const newNote = {
+                    title: 'Note - ' + file.name,
+                    content: "",
+                    meta_data: {
+                        datetime: moment(new Date()).format("DD/MM/YYYY"),
+                        status: ["To-do"],
+                        tags: [],
+                        type: ["Self-study"],
+                    },
+                    owner: userId,
+                };
+                const noteRef = await createDocument('notes', newNote);
+                const noteId = noteRef.id;
                 const fileRef = await createDocument("files", {
-                    name: file.name,
+                    name: file.name.split(".")[0].trim(),
                     size: file.size,
                     type: file.type,
                     url: fileUrl,
+                    owner: userId,
+                    noteId: noteId,
                 });
                 const fileId = fileRef.id;
 
@@ -298,7 +313,7 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
                     ))}
                     {files.map((file) => (
                         <Menu.Item key={file.item_id} icon={<FilePdfOutlined />} style={{ minWidth: '160px' }}>
-                            <span onClick={() => handleNavigateFile(file.item_id, FileType.Pdf)} className="file-name">{file.item.name}</span>
+                            <span onClick={() => handleNavigateFile(file.item_id, FileType.Pdf)} className="file-name">{file?.item?.name}</span>
                             <DropDown fileType={FileType.Pdf} item={file} />
                         </Menu.Item>
                     ))}

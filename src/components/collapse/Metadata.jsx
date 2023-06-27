@@ -8,14 +8,12 @@ import moment from 'moment';
 
 const { Panel } = Collapse;
 
-
 const statusOptions = [
     { value: 'To-do', },
     { value: 'In progress', },
     { value: 'Done', },
     { value: 'Closed', },
 ];
-
 
 const options = [
     { value: "Self-study", label: "Self-study" },
@@ -47,7 +45,7 @@ const tagRender = (props) => {
     );
 };
 
-const Metadata = ({ noteData }) => {
+const Metadata = ({ noteData, noteId }) => {
     const { token } = theme.useToken();
 
     const panelStyle = {
@@ -64,29 +62,28 @@ const Metadata = ({ noteData }) => {
     };
     const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY', 'YYYY-MM-DD'];
 
+    const [datetimeVal, setDatetimeVal] = useState("");
+    const [status, setStatus] = useState("");
     const [tags, setTags] = useState([]);
+    const [types, setTypes] = useState([]);
+
     const [inputVisible, setInputVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [editInputIndex, setEditInputIndex] = useState(-1);
     const [editInputValue, setEditInputValue] = useState('');
     const inputRef = useRef(null);
     const editInputRef = useRef(null);
-    const [datetimeVal, setDatetimeVal] = useState("");
 
     useEffect(() => {
         setDatetimeVal(noteData?.meta_data?.datetime);
-    }, [noteData.meta_data?.datetime]);
-
-    console.log("NOTE DATA:", noteData);
-    useEffect(() => {
+        setStatus(noteData.meta_data?.status);
         setTags(noteData.meta_data?.tags || []);
-    }, [noteData.meta_data?.tags]);
-    // console.log("TAGS:", tags);
+        setTypes(noteData.meta_data?.type);
+        console.log("GET METADATA:", noteData);
+    }, [noteData]);
 
     useEffect(() => {
-        if (inputVisible) {
-            inputRef.current?.focus();
-        }
+        if (inputVisible) inputRef.current?.focus();
     }, [inputVisible]);
 
     useEffect(() => {
@@ -148,8 +145,8 @@ const Metadata = ({ noteData }) => {
     };
 
     const handleDatePicker = async (date, dateString) => {
-        console.log("datepicker:", date);
-        console.log("datestring: ", dateString);
+        // console.log("datepicker:", date);
+        // console.log("datestring: ", dateString);
         try {
             await updateDocumentProperty("notes", noteData.noteId, "meta_data", { ...noteData.meta_data, datetime: dateString });
         }
@@ -181,8 +178,8 @@ const Metadata = ({ noteData }) => {
 
     // console.log("Date:  ", String(noteData?.meta_data?.datetime))
     return (
-        <div className="container-metadata">
-            <Collapse defaultActiveKey={['']} ghost bordered={true}>
+        <div key={noteId} className="container-metadata">
+            <Collapse defaultActiveKey={['1']} ghost bordered={true}>
                 <Panel header="Metadata" key="1" style={panelStyle}>
                     {/* <p className="metadata-item">{text}</p> */}
                     <Space className="metadata-list" direction='vertical' size={10}>
@@ -211,7 +208,7 @@ const Metadata = ({ noteData }) => {
                                     // mode="multiple"
                                     showArrow
                                     tagRender={tagRender}
-                                    defaultValue={noteData.meta_data?.status}
+                                    defaultValue={status}
                                     style={{ width: '150px', }}
                                     size="small"
                                     options={statusOptions}
@@ -303,8 +300,7 @@ const Metadata = ({ noteData }) => {
                                     // mode="tags"
                                     size="small"
                                     placeholder="Select or Create"
-                                    // defaultValue={["Self-study"]}
-                                    defaultValue={noteData.meta_data?.type}
+                                    defaultValue={types}
                                     style={{ width: '150px', }}
                                     options={options}
                                     onChange={handleSelectType}

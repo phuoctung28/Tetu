@@ -1,68 +1,89 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from 'antd';
+import { Dropdown, Layout } from 'antd';
 import PdfViewerComponent from '../../components/PdfViewerComponent';
 import MainHeader from '../../components/header/MainHeader';
 import './file_page.css';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { useLocation, useParams } from 'react-router-dom';
-import { createDocument, getDocumentById, queryDocuments } from '../../services/firebase';
-import TetuEditor from '../../components/Editor/Editor';
-import NotePage from "../notepage/NotePage";
-import Notebook from "../notepage/Notebook";
+import { getDocumentById } from '../../services/firebase';
 import moment from 'moment';
+import NoteDual from '../notepage/NoteDual';
 
 const FilePage = () => {
+    const [selectedText, setSelectedText] = useState("");
+    const [fileData, setFileData] = useState({});
     const [dualNote, setDualNote] = useState(false);
-    const [note, setNote] = useState({});
+    const [noteId, setNoteId] = useState("");
     const [noteContent, setNoteContent] = useState('');
-    const [fetchedNote, setFetchedNote] = useState();
     const location = useLocation();
     const data = location.state;
-    const { pageId } = useParams();
+    const { fileId } = useParams();
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
-    useEffect(() => {
-        const initDualNote = async () => {
-            const pages = await queryDocuments('pages', 'file', '==', data?.fileUrl || pageId);
-            const page = pages[0];
-            if (page == null) {
-                const newNote = {
-                    title: 'File note',
-                    content: "",
-                    meta_data: {
-                        datetime: moment(new Date()).format("DD/MM/YYYY"),
-                        status: ["To-do"],
-                        tags: [],
-                        type: ["Self-study"],
-                    },
-                    owner: userId,
-                };
-                const noteRef = await createDocument('notes', newNote);
-                const noteId = noteRef.id;
-                await createDocument('pages', {
-                    file: data?.fileUrl,
-                    note: noteId,
-                });
-            } else {
-                const note = await getDocumentById('notes', page.note);
-                setNoteContent(note?.content || '');
-            }
-        };
 
-        initDualNote();
-    }, [data]);
+    useEffect(() => {
+        const fetchFile = async () => {
+            try {
+                const fetchedFile = await getDocumentById("files", fileId);
+                const currentFile = {
+                    id: fileId,
+                    name: fetchedFile.name.split(".")[0].trim(),
+                    url: fetchedFile.url,
+                    noteId: fetchedFile.noteId || "",
+                }
+                setFileData(currentFile);
+                setNoteId(fetchedFile.noteId);
+                document.title = fetchedFile.name.split(".")[0].trim();
+            } catch (error) {
+                console.log("Error fetch file:", error);
+            }
+        }
+        fetchFile();
+    }, [fileId]);
 
     const handleToggleDualNote = async () => {
         setDualNote(!dualNote);
-        const pages = await queryDocuments('pages', 'file', '==', data?.fileUrl);
-        const page = pages[0];
-
-        if (page) {
-            const note = await getDocumentById('notes', page.note);
-            setFetchedNote(note)
-            setNoteContent(note?.content || '');
-        }
     };
+
+    const handleMouseUp = () => {
+        const currentSelectedText = window.getSelection().toString().trim().toLowerCase();
+        setSelectedText(currentSelectedText)
+        // console.log(`Selected text: ${currentSelectedText}`);
+    }
+    const items = [{ label: 'Add to note', key: '1', },];
+
+    const onClick = async ({ key }) => {
+        const addNote = {
+            "time": new Date().getTime(),
+            "blocks": [
+                {
+                    "type": "paragraph",
+                    "data": {
+                        "text": selectedText
+                    }
+                },
+            ]
+        }
+        let currentContent = noteContent?.content;
+        if (!currentContent || currentContent.length === 0) {
+            currentContent = [addNote];
+        }
+        setNoteContent({ ...noteContent, content: currentContent })
+        // console.log("FETCH NOTE", noteContent);
+    };
+    useEffect(() => {
+        const keyDown = (event) => {
+            if (event.key === "d" && event.ctrlKey) {
+                event.preventDefault();
+                handleToggleDualNote();
+            }
+        };
+        document.addEventListener("keydown", keyDown);
+
+        return () => {
+            document.removeEventListener("keydown", keyDown);
+        };
+    });
 
     return (
         <Layout hasSider>
@@ -71,13 +92,23 @@ const FilePage = () => {
                 <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
                 <div className="working-space-container">
                     <PanelGroup autoSaveId="example" direction="horizontal">
-                        <Panel defaultSize={50}>
-                            <PdfViewerComponent style={{ border: 'none' }} pdfUrl={data?.fileUrl} />
+                        <Panel defaultSize={50} >
+                            <Dropdown
+                                menu={{ items, onClick }}
+                                trigger={['contextMenu']}>
+                                <div style={{
+                                    height: '100%',
+                                    width: '100%',
+                                }}
+                                    onMouseUp={handleMouseUp}>
+                                    <PdfViewerComponent style={{ border: 'none' }} pdfUrl={data?.fileUrl} />
+                                </div>
+                            </Dropdown>
                         </Panel>
                         {dualNote && <PanelResizeHandle className="space-divider" />}
                         {dualNote && (
-                            <Panel>
-                                <Notebook page={fetchedNote} />
+                            <Panel className="dual-note-panel">
+                                <NoteDual key={noteId} noteId={noteId} selectedText={selectedText} />
                             </Panel>
                         )}
                     </PanelGroup>

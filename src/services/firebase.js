@@ -40,7 +40,7 @@ export const createRef = (collection, documentId) => {
 }
 // Create a document in a Firestore collection
 export const createDocument = async (collections, data) => {
-    try {   
+    try {
         return await addDoc(collection(db, collections), data);
     } catch (error) {
         console.error('Error creating document:', error);
@@ -136,6 +136,26 @@ export const queryDocuments = async (collections, field, operator, value) => {
     }
 };
 
+export const queryDocumentsMultipleConditions = async (collections, fields, operators, values) => {
+    try {
+        const documents = [];
+        const queryConstraints = []
+        for (let i = 0; i < fields.length; ++i) {
+            if (fields[i] && operators[i] && values[i])
+                queryConstraints.push(where(fields[i], operators[i], values[i]))
+        }
+        const q = query(collection(db, collections), ...queryConstraints);
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            documents.push({ id: doc.id, ...doc.data() });
+        });
+        return documents;
+    } catch (error) {
+        console.error('Error querying documents:', error);
+        throw error;
+    }
+};
+
 export const getAllDocuments = async (collections) => {
     try {
         const documents = [];
@@ -166,25 +186,25 @@ export const getAllDocument = async (collections) => {
 };
 
 export const queryDocumentsCondition = async (collectionPath, conditions) => {
-   try {
-      const documents = [];
-      let queryRef = collection(db, collectionPath);
+    try {
+        const documents = [];
+        let queryRef = collection(db, collectionPath);
 
-      conditions.forEach(condition => {
-         const { field, operator, value } = condition;
-         queryRef = query(queryRef, where(field, operator, value));
-      });
+        conditions.forEach(condition => {
+            const { field, operator, value } = condition;
+            queryRef = query(queryRef, where(field, operator, value));
+        });
 
-      const querySnapshot = await getDocs(queryRef);
-      querySnapshot.forEach((doc) => {
-         documents.push({ id: doc.id, ...doc.data() });
-      });
+        const querySnapshot = await getDocs(queryRef);
+        querySnapshot.forEach((doc) => {
+            documents.push({ id: doc.id, ...doc.data() });
+        });
 
-      return documents;
-   } catch (error) {
-      console.error('Error querying documents:', error);
-      throw error;
-   }
+        return documents;
+    } catch (error) {
+        console.error('Error querying documents:', error);
+        throw error;
+    }
 };
 
 export const getDocumentById = async (collections, id) => {
@@ -210,7 +230,7 @@ export const uploadFile = (file) => {
             uploadTask.on(
                 "state_changed",
                 (snapshot) => {
-                    console.log("Upload in progress");
+                    // console.log("Upload in progress");
                 },
                 (error) => {
                     console.error("Error uploading file:", error);
@@ -219,7 +239,7 @@ export const uploadFile = (file) => {
                 () => {
                     getDownloadURL(uploadTask.snapshot.ref)
                         .then((url) => {
-                            console.log("File uploaded successfully:", url);
+                            // console.log("File uploaded successfully:", url);
                             resolve(url);
                         })
                         .catch((error) => {

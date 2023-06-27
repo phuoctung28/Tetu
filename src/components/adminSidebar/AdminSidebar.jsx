@@ -1,15 +1,34 @@
 import { Button, Layout, Avatar, Tooltip, Divider, message, Popover, Popconfirm, Modal } from 'antd';
-import { EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined, HomeOutlined } from '@ant-design/icons';
-import { auth, getDocumentById } from '../../services/firebase';
+import { InfoCircleOutlined, EllipsisOutlined, TableOutlined, ShareAltOutlined, CalendarOutlined, HomeOutlined, FieldTimeOutlined, BellOutlined, CustomerServiceOutlined, UnorderedListOutlined, FileSyncOutlined } from '@ant-design/icons';
+import { getDocumentById } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import SidebarMenu from './SidebarMenu';
 import "../../assets/styles/sidebar.css";
-import NewItem from './NewItem';
-
+import { UserOutlined, SettingOutlined } from '@ant-design/icons';
+import { Menu } from 'antd';
+import NewItem from '../sidebar/NewItem';
 const { Sider } = Layout;
+function getItem(label, key, icon, children, type) {
+    return {
+        key,
+        icon,
+        children,
+        label,
+        type,
+    };
+}
+const items = [
+    getItem('User', 'user', <UserOutlined />),
+    getItem('Order', 'order', <UnorderedListOutlined />),
+    // getItem('Transaction', 'trans', <FieldTimeOutlined />),
+    getItem('Bill', 'bill', <FileSyncOutlined />),
+    getItem('Notification', 'noti', <BellOutlined />),
+    getItem('Customer Support', 'support', <CustomerServiceOutlined />),
+    getItem('Private Info', 'info', <InfoCircleOutlined />),
+    getItem('Setting', 'setting', <SettingOutlined />),
+];
 
-const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
+const AdminSidebar = ({ currentPage, currentTitle, pageMenu, selectedMenuItem }) => {
 
     const navigate = useNavigate();
     const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -35,6 +54,11 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
         setOpen(newOpen);
     };
     // console.log(currentUser);
+    const onClick = (e) => {
+        console.log('click ', e.keyPath[0]);
+        if (e.keyPath[0] === 'user') navigate("/dashboard");
+        if (e.keyPath[0] === 'order') navigate("/manage-order");
+    };
     return (
         <Sider className='home-sider' style={{
             overflow: 'auto',
@@ -61,24 +85,24 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
                 <Button block size="small" type={pageMenu && pageMenu === "home" ? "primary" : "text"} icon={<HomeOutlined />} onClick={() => {
                     navigate("/home")
                 }} >
-                    Home Page
+                    Homepage
                 </Button>
                 <Button block size="small" type={pageMenu && pageMenu === "table" ? "primary" : "text"} icon={<TableOutlined />} onClick={() => {
                     navigate("/table")
                 }} >
-                    Table View
+                    Table view
                 </Button>
                 <Button block size="small" type={pageMenu && pageMenu === "calendar" ? "primary" : "text"} icon={<CalendarOutlined />} onClick={() => {
                     navigate("/calendar")
                 }} >
-                    Calendar View
+                    Calendar view
                 </Button>
                 {user.accountType === "premium"
                     ?
                     <Button block size="small" type={pageMenu && pageMenu === "graph" ? "primary" : "text"} icon={<ShareAltOutlined />} onClick={() => {
                         navigate("/graph")
                     }} >
-                        Graph View
+                        Graph view
                     </Button>
                     : <></>
                 }
@@ -89,6 +113,7 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
                     open={open}
                     onOpenChange={handleOpenChange}
                 >
+
                     <Button block size="small" type={pageMenu && pageMenu === "more" ? "primary" : "text"} icon={<EllipsisOutlined />}>
                         More
                     </Button>
@@ -96,11 +121,15 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
             </div>
             <Divider />
             {/* <SideMenu /> */}
-            <SidebarMenu
-                currentPage={currentPage}
-                currentTitle={currentTitle}
+            <Menu
+                onClick={onClick}
+                style={{ width: 199, }}
+                defaultSelectedKeys={['user']}
+                selectedKeys={[selectedMenuItem]}
+                mode="inline"
+                items={items}
             />
         </Sider >
     );
 };
-export default Sidebar;
+export default AdminSidebar;

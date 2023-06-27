@@ -1,6 +1,6 @@
 import { Layout, Typography, Col, Row, Popover, message, Modal } from 'antd';
 import { FileTwoTone, FolderAddTwoTone, FileTextTwoTone, StarTwoTone, AppstoreTwoTone, CalendarTwoTone, WalletTwoTone, SecurityScanTwoTone, ReadOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './home.css';
 import ReadDocument from '../../components/popover/ReadDocument';
@@ -43,9 +43,12 @@ const Home = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    useEffect(() => {
+        document.title = 'Home Page';
+    }, []);
     return (
         <Layout hasSider>
-            <Sidebar />
+            <Sidebar pageMenu="home" />
 
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
                 <MainHeader />
@@ -61,6 +64,7 @@ const Home = () => {
                                             content={<ReadDocument />}
                                             trigger="click"
                                             open={open}
+                                            placement="bottom"
                                             onOpenChange={handleOpenChange}
                                         >
                                             <button onClick={handleUploadFile} className='nav-btn' >

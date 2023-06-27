@@ -23,6 +23,7 @@ const ArticlePage = () => {
             console.log("article id:", articleId);
             const fetchedArticle = await getDocumentById("articles", articleId);
             setArticle(fetchedArticle);
+            document.title = "Article - " + fetchedArticle.title;
         } catch (error) {
             console.log("Error load article!", error);
         }
@@ -48,12 +49,7 @@ const ArticlePage = () => {
         // console.log(`Selected text: ${currentSelectedText}`);
     }
 
-    const items = [
-        {
-            label: 'Add to dictionary',
-            key: '1',
-        },
-    ];
+    const items = [{ label: 'Add to dictionary', key: '1', }];
 
 
     const onClick = async ({ key }) => {

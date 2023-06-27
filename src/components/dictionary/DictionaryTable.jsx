@@ -26,12 +26,14 @@ const columns = [
         title: 'Word',
         dataIndex: 'word',
         key: 'word',
+        width: '10%',
         render: (text) => <span>{text}</span>,
     },
     {
         title: 'Part of speech',
         key: 'part_of_speech',
         dataIndex: 'part_of_speech',
+        width: '9%',
         align: 'center',
         render: (_, { part_of_speech }) => (
             <Tag
@@ -43,34 +45,28 @@ const columns = [
 
         ),
         filters: [
-            {
-                text: 'Noun',
-                value: 'noun',
-            },
-            {
-                text: 'Verb',
-                value: 'verb',
-            },
-            {
-                text: 'Adjective',
-                value: 'adjective',
-            }
+            { text: 'Noun', value: 'noun', },
+            { text: 'Verb', value: 'verb', },
+            { text: 'Adjective', value: 'adjective', }
         ],
         onFilter: (value, record) => record.part_of_speech.indexOf(value) === 0,
     },
     {
         title: 'Phonetic',
         dataIndex: 'phonetic',
+        width: '10%',
         key: 'phonetic',
     },
     {
         title: 'Meaning',
         dataIndex: 'meaning',
+        width: '60%',
         key: 'meaning',
     },
     {
         title: 'Action',
         key: 'action',
+        width: '10%',
         render: (_, record) => (
             <Space size="middle">
                 <Button
