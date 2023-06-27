@@ -64,6 +64,7 @@ const Home = () => {
                                             content={<ReadDocument />}
                                             trigger="click"
                                             open={open}
+                                            placement="bottom"
                                             onOpenChange={handleOpenChange}
                                         >
                                             <button onClick={handleUploadFile} className='nav-btn' >

@@ -76,22 +76,31 @@ const GraphView = () => {
         },
         nodes: {
             shape: 'dot',
-            scaling: {
-                min: 10,
-                max: 30,
-            },
-            font: {
+            // scaling: {
+            //     min: 10,
+            //     max: 30,
+            // },
+            font: { 
                 size: 12,
             },
         },
         edges: {
             color: '#73A2FF',
-            width: 0.15,
-            smooth: {
-                enabled: true,
-                type: 'continuous',
-            },
+            width: 0.2,
+            // smooth: {
+            //     enabled: true,
+            //     type: 'discrete',
+            // },
         },
+        // physics: {
+        //     barnesHut: {
+        //         centralGravity: 0.001,
+        //         springLength: 60,
+        //         springConstant: 0.01,
+        //         damping: 1,
+        //         avoidOverlap: 0.01
+        //     },
+        // },
         manipulation: {
             initiallyActive: false,
             addEdge: async function (data, callback) {
@@ -145,12 +154,11 @@ const GraphView = () => {
             editEdge: false,
         },
         interaction: { hover: true },
-        filter: 'nodes',
     };
-    const [graphOptions, setGraphOptions] = useState(options);
+    const [graphOptions, setGraphOptions] = useState({});
     // useEffect(() => {
     //     setGraphOptions()
-    // }, [graphOptions]);
+    // }, [nodeList, edgeList]);
     const [modal, contextHolder] = Modal.useModal();
 
     const getEdgeFromNoteAndFile = (data) => {
@@ -192,6 +200,7 @@ const GraphView = () => {
             },
         }));
     }, [edgesFilterValues, nodeList, edgeList]);
+
     useEffect(() => {
         const fetchNotesAndFiles = async () => {
             try {
@@ -204,7 +213,7 @@ const GraphView = () => {
                     label: item.folder_name,
                     color: `rgba(${graphColor.r}, ${graphColor.g}, ${graphColor.b}, ${graphColor.a})`,
                     type: 'folder',
-                    size: nodeSize + 15,
+                    size: nodeSize + 8,
                     physics: false,
                 }));
                 const notes = fetchedNotes.map((item) => ({
@@ -315,6 +324,7 @@ const GraphView = () => {
                 },
             },
         });
+        setGraphOptions(options);
     }, [nodeList]);
 
     const edgeFilters = document.getElementsByName('edgesFilter');
@@ -344,7 +354,6 @@ const GraphView = () => {
             }
         }
         setGraphOptions(newOptions);
-        console.log("SHOW ARROW:", checked)
     }
 
     return (

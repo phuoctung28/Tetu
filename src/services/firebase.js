@@ -136,6 +136,26 @@ export const queryDocuments = async (collections, field, operator, value) => {
     }
 };
 
+export const queryDocumentsMultipleConditions = async (collections, fields, operators, values) => {
+    try {
+        const documents = [];
+        const queryConstraints = []
+        for (let i = 0; i < fields.length; ++i) {
+            if (fields[i] && operators[i] && values[i])
+                queryConstraints.push(where(fields[0], operators[0], values[0]))
+        }
+        const q = query(collection(db, collections), where(...queryConstraints));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            documents.push({ id: doc.id, ...doc.data() });
+        });
+        return documents;
+    } catch (error) {
+        console.error('Error querying documents:', error);
+        throw error;
+    }
+};
+
 export const getAllDocuments = async (collections) => {
     try {
         const documents = [];

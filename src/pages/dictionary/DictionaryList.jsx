@@ -25,6 +25,7 @@ const DictionaryList = () => {
             }
         }
         loadDictData();
+        document.title = "Dictionary";
     }, []);
 
     const handleToggleDualNote = () => {
@@ -37,13 +38,7 @@ const DictionaryList = () => {
         // console.log(`Selected text: ${currentSelectedText}`);
     }
 
-    const items = [
-        {
-            label: 'Add to dictionary',
-            key: '1',
-        },
-    ];
-
+    const items = [{ label: 'Add to dictionary', key: '1' }];
 
     const onClick = async ({ key }) => {
         const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${selectedText}`;
