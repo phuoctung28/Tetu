@@ -8,7 +8,7 @@ import { getDocumentById } from '../../services/firebase';
 
 const { Content } = Layout;
 
-const UserProfile = () => {
+const UserProfile = ({setIsDarkMode}) => {
     const [user, setUser] = useState({});
     const [usedStorage, setUsedStorage] = useState(14);
     const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -45,7 +45,7 @@ const UserProfile = () => {
         <Layout hasSider>
             <Sidebar pageMenu={"more"} />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode}/>
                 <Content className="profile-container">
                     <Row>
                         <Col span={7}>

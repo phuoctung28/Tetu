@@ -10,7 +10,7 @@ import { getDocumentById } from '../../services/firebase';
 import moment from 'moment';
 import NoteDual from '../notepage/NoteDual';
 
-const FilePage = () => {
+const FilePage = ({ setIsDarkMode }) => {
     const [selectedText, setSelectedText] = useState("");
     const [textFromFile, setTextFromFile] = useState("");
     const [fileData, setFileData] = useState({});
@@ -97,7 +97,7 @@ const FilePage = () => {
         <Layout hasSider>
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
-                <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
+                <MainHeader setIsDarkMode={setIsDarkMode} showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
                 <div className="working-space-container">
                     <PanelGroup autoSaveId="example" direction="horizontal">
                         <Panel defaultSize={50} >

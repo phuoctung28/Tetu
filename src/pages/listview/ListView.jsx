@@ -8,15 +8,15 @@ import { useEffect } from 'react';
 
 const { Content } = Layout;
 
-const ListView = () => {
+const ListView = ({ setIsDarkMode }) => {
     useEffect(() => {
         document.title = 'Table View';
     }, []);
     return (
         <Layout hasSider>
-            <Sidebar pageMenu="table"/>
+            <Sidebar pageMenu="table" />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="table-container">
                     <div className="table-view-title">
                         <h2>List of notes and files</h2>

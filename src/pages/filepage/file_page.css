@@ -1,22 +1,22 @@
-.empty_file_img {
+/* .empty-file-img {
     width: fit-content;
     height: 120px;
     object-fit: fill;
     margin: 20px auto;
 }
 
-.quick_btn {
+.quick-btn {
     color: #3b82f6;
     border: none;
     background-color: transparent;
     margin: 10px 0;
 }
 
-.quick_btn:hover {
+.quick-btn:hover {
     color: #1e40af;
 }
 
-.nav_btn {
+.nav-btn {
     height: 80px;
     width: 100%;
     background-color: #F7F9FC;
@@ -29,14 +29,14 @@
     border: none;
 }
 
-.nav_btn:hover {
+.nav-btn:hover {
     border: 1px solid #3b82f6;
 }
 
-.nav_icon {
+.nav-icon {
     margin-right: 20px;
     font-size: 25px;
-}
+} */
 
 .home-sider {
     overflow: auto;

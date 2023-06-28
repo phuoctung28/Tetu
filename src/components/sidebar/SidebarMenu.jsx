@@ -50,7 +50,7 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
     };
 
     return (
-        <div>
+        <div >
             <div className='new-item-btn-container'>
                 <Tooltip title="New folder">
                     <Button block className="btn-new-item" icon={<FolderAddOutlined />}
@@ -59,16 +59,17 @@ const SidebarMenu = ({ currentPage, currentTitle }) => {
                     </Button>
                 </Tooltip>
             </div>
+            <div className='menu-section-container'>
+                {folders.map((data) =>
+                    <TeTuMenu
+                        userId={userId}
+                        key={data.id}
+                        folderData={data}
+                        currentPage={currentPage}
+                        currentTitle={currentTitle} />
 
-            {folders.map((data) =>
-                <TeTuMenu
-                    userId={userId}
-                    key={data.id}
-                    folderData={data}
-                    currentPage={currentPage}
-                    currentTitle={currentTitle} />
-
-            )}
+                )}
+            </div>
             <Modal
                 title="Create New Folder"
                 open={folderModalVisible}

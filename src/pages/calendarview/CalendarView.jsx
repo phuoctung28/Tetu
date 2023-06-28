@@ -62,7 +62,7 @@ const getMonthData = (value) => {
         return 1394;
     }
 };
-const CalendarView = () => {
+const CalendarView = ({ setIsDarkMode }) => {
     const [fetchedData, setFetchedData] = useState();
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
     useEffect(() => {
@@ -121,7 +121,7 @@ const CalendarView = () => {
                 {filteredData.map((item) => (
                     <li key={item.title}>
                         <Tooltip placement="top" title={item.title}>
-                            <Button type="text" onClick={() => navigate(`/note/${item.id}`, { state: { name: item.title } }, { replace: true })}>
+                            <Button className="date-cell-btn-item" type="text" onClick={() => navigate(`/note/${item.id}`, { state: { name: item.title } }, { replace: true })}>
                                 <Badge className="date-cell-item" color="blue" text={item.title} />
                                 {/* {item.content} */}
                             </Button>
@@ -143,13 +143,13 @@ const CalendarView = () => {
         <Layout hasSider>
             <Sidebar pageMenu="calendar" />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="calendar-container">
                     <div className="calendar-view-title">
                         <h2>Calendar view mode</h2>
                         <p>View your notes and documents arranged by date, month, or year</p>
                     </div>
-                    <Calendar className="calendar-component" cellRender={cellRender} />
+                    <Calendar theme="dark" className="calendar-component" cellRender={cellRender} />
                 </Content>
             </Layout>
         </Layout>

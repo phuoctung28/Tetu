@@ -11,13 +11,13 @@ import AdminSidebar from '../../components/adminSidebar/AdminSidebar';
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
-const Dashboard = () => {
+const Dashboard = ({ setIsDarkMode }) => {
     const formatter = (value) => <CountUp end={value} separator="," />;
     return (
         <Layout hasSider>
-            <AdminSidebar selectedMenuItem="user"/>
+            <AdminSidebar selectedMenuItem="user" />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="dashboard-content-ctn" >
                     <div className="dashboard-wrapper">
                         <Row gutter={20}>

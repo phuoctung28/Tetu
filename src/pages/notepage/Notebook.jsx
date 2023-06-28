@@ -11,7 +11,7 @@ import './note-book.css';
 
 const { Content } = Layout;
 
-const Notebook = () => {
+const Notebook = ({setIsDarkMode}) => {
     const [title, setTitle] = useState("");
     const [noteData, setNoteData] = useState({});
     const [currentPage, setCurrentPage] = useState({});
@@ -105,7 +105,7 @@ const Notebook = () => {
             />
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
             <Layout className="site-layout">
-                <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} savingMsg={savingMsg} />
+                <MainHeader setIsDarkMode={setIsDarkMode} noteData={noteData} saveNoteContent={saveNoteContent} savingMsg={savingMsg} />
                 <Content className="notebook-wrapper">
                     <div className="note-space-container">
                         <div className="note-header">
@@ -117,7 +117,7 @@ const Notebook = () => {
                                     onPressEnter={handleKeyUp}
                                     bordered={false} />
                             </div>
-                            {noteData != undefined && <Metadata noteData={noteData} noteId={noteId} />}
+                            {noteData !== undefined && <Metadata noteData={noteData} noteId={noteId} />}
                         </div>
                         {noteData && <TetuEditor
                             key={noteId}

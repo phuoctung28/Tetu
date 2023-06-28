@@ -36,15 +36,7 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
     };
     // console.log(currentUser);
     return (
-        <Sider className='home-sider' style={{
-            overflow: 'auto',
-            height: '100vh',
-            position: 'fixed',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            background: 'white'
-        }}>
+        <Sider className='sidebar-container'>
             <div className='sider-top'
                 style={{ margin: '0 0 10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Avatar
@@ -58,19 +50,13 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
                 <p>{currentUser?.name}</p>
             </div>
             <div className='quicktool-container'>
-                <Button block size="small" type={pageMenu && pageMenu === "home" ? "primary" : "text"} icon={<HomeOutlined />} onClick={() => {
-                    navigate("/home")
-                }} >
+                <Button block size="small" type={pageMenu && pageMenu === "home" ? "primary" : "text"} icon={<HomeOutlined />} onClick={() => navigate("/home")} >
                     Home Page
                 </Button>
-                <Button block size="small" type={pageMenu && pageMenu === "table" ? "primary" : "text"} icon={<TableOutlined />} onClick={() => {
-                    navigate("/table")
-                }} >
+                <Button block size="small" type={pageMenu && pageMenu === "table" ? "primary" : "text"} icon={<TableOutlined />} onClick={() => navigate("/table")} >
                     Table View
                 </Button>
-                <Button block size="small" type={pageMenu && pageMenu === "calendar" ? "primary" : "text"} icon={<CalendarOutlined />} onClick={() => {
-                    navigate("/calendar")
-                }} >
+                <Button block size="small" type={pageMenu && pageMenu === "calendar" ? "primary" : "text"} icon={<CalendarOutlined />} onClick={() => navigate("/calendar")} >
                     Calendar View
                 </Button>
                 {user.accountType === "premium"
@@ -94,7 +80,7 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
                     </Button>
                 </Popover>
             </div>
-            <Divider />
+            <Divider className='styled-divider' />
             {/* <SideMenu /> */}
             <SidebarMenu
                 currentPage={currentPage}

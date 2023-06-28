@@ -9,7 +9,7 @@ import DictionaryTable from '../../components/dictionary/DictionaryTable';
 
 const { Content } = Layout;
 
-const DictionaryList = () => {
+const DictionaryList = ({ setIsDarkMode }) => {
     const [dualNote, setDualNote] = useState(false);
     const [selectedText, setSelectText] = useState("");
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
@@ -88,7 +88,7 @@ const DictionaryList = () => {
         <Layout hasSider>
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
+                <MainHeader setIsDarkMode={setIsDarkMode} showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
                 <Content className="dictionary-list-container">
                     <div className="dictionary-list-header">
                         <div className="dictionary-list-title">

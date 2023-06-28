@@ -24,7 +24,7 @@
 .calendar-container {
     height: calc(100vh - 50px);
     margin: 50px auto 0;
-    background-color: #fff;
+    background-color: var(--background) !important;
 }
 
 .calendar-view-title {
@@ -39,7 +39,7 @@
 }
 
 .calendar-view-title p {
-    color: #7a8694;
+    color: var(--text-primary) !important;
     font-style: italic;
     margin: 0 0 10px;
     font-size: 11.5px;
@@ -49,8 +49,9 @@
     width: 90%;
     margin: 0 auto;
     padding: 15px;
-    border: 0.3px solid #d2d6db;
+    border: 0.3px solid var(--border-primary) !important;
     border-radius: 8px;
+    background-color: var(--background) !important;
 }
 
 .date-cell-item {
@@ -58,3 +59,19 @@
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
+
+.date-cell-btn-item {
+    text-align: left !important;
+}
+
+/* 
+.ant-picker-panel,
+.ant-picker-cell-inner {
+    background-color: var(--background) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-secondary) !important;
+}
+
+.ant-badge-status-text {
+    color: var(--text-primary) !important;
+} */

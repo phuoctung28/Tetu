@@ -12,13 +12,13 @@ import TableOrder from '../../components/adminTable/TableOrder';
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
-const ManageOrder = () => {
+const ManageOrder = ({ setIsDarkMode }) => {
     const formatter = (value) => <CountUp end={value} separator="," />;
     return (
         <Layout hasSider>
-            <AdminSidebar selectedMenuItem="order"/>
+            <AdminSidebar selectedMenuItem="order" />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="dashboard-content-ctn" >
                     <div className="dashboard-wrapper">
                         <Row gutter={20}>

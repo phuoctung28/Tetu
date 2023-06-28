@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const { Content } = Layout;
 
-const GraphView = () => {
+const GraphView = ({ setIsDarkMode }) => {
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const { folderId } = useParams();
     // console.log("FOLDER ID:", folderId);
@@ -443,7 +443,7 @@ const GraphView = () => {
         <Layout hasSider>
             <Sidebar pageMenu="graph" />
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="graph-container">
                     <div className="graph-wrapper">
                         {contextHolder}

@@ -7,18 +7,18 @@ import MainHeader from '../../components/header/MainHeader';
 
 const { Content } = Layout;
 
-function PricingPage() {
-   return (
-      <Layout hasSider>
-         <Sidebar />
-         <Layout className="site-layout" style={{ marginLeft: 200, }} >
-            <MainHeader />
-            <Content style={{ margin: '0', overflow: 'initial', }} >
-               <PricingPlan />
-            </Content>
-         </Layout>
-      </Layout>
-   )
+function PricingPage({ setIsDarkMode }) {
+    return (
+        <Layout hasSider>
+            <Sidebar />
+            <Layout className="site-layout" style={{ marginLeft: 200, }} >
+                <MainHeader setIsDarkMode={setIsDarkMode} />
+                <Content style={{ margin: '0', overflow: 'initial', }} >
+                    <PricingPlan />
+                </Content>
+            </Layout>
+        </Layout>
+    )
 }
 
 export default PricingPage
