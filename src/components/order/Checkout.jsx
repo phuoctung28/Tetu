@@ -44,6 +44,7 @@ const CheckoutForm = ({ name, email, userId }) => {
                 status: "paid",
                 createdDate: moment(new Date()).format("DD/MM/YYYY HH:mm:ss"),
                 processDate: "",
+                value: "17,000",
             }
             await createDocument("orders", newOrder);
             setIsModalOpen(false);
