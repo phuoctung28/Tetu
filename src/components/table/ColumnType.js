@@ -68,29 +68,23 @@ export const columns = [
         render: (_, record) => (
             <Badge
                 color={
-                    record.status.localeCompare('To-do')
+                    record.status.localeCompare('To-do') === 0
                         ? 'yellow'
-                        : (record.status.localeCompare('In progress')
+                        : (record.status.localeCompare('In progress') === 0
                             ? 'blue'
-                            : 'green'
+                            : (record.status.localeCompare('Done') === 0
+                                ? 'green'
+                                : 'gray'
+                            )
                         )
                 }
                 text={record.status}
             />
         ),
         filters: [
-            {
-                text: 'To-do',
-                value: 'To-do',
-            },
-            {
-                text: 'In progress',
-                value: 'In progress',
-            },
-            {
-                text: 'Done',
-                value: 'Done',
-            }
+            { text: 'To-do', value: 'To-do', },
+            { text: 'In progress', value: 'In progress', },
+            { text: 'Done', value: 'Done', }
         ],
         onFilter: (value, record) => record.status.indexOf(value) === 0,
     },
@@ -107,18 +101,9 @@ export const columns = [
             </Tag>
         ),
         filters: [
-            {
-                text: 'Revision',
-                value: 'Revision',
-            },
-            {
-                text: 'In-class note',
-                value: 'In-class note',
-            },
-            {
-                text: 'Self-study',
-                value: 'Self-study',
-            }
+            { text: 'Revision', value: 'Revision', },
+            { text: 'In-class note', value: 'In-class note', },
+            { text: 'Self-study', value: 'Self-study', }
         ],
         onFilter: (value, record) => record.noteType.indexOf(value) === 0,
     },

@@ -11,7 +11,7 @@ import './note-book.css';
 
 const { Content } = Layout;
 
-const Notebook = ({ page }) => {
+const Notebook = ({setIsDarkMode}) => {
     const [title, setTitle] = useState("");
     const [noteData, setNoteData] = useState({});
     const [currentPage, setCurrentPage] = useState({});
@@ -105,23 +105,24 @@ const Notebook = ({ page }) => {
             />
             <Sidebar currentPage={currentPage} currentTitle={currentTitle} />
             <Layout className="site-layout">
-                <MainHeader noteData={noteData} saveNoteContent={saveNoteContent} savingMsg={savingMsg} />
+                <MainHeader setIsDarkMode={setIsDarkMode} noteData={noteData} saveNoteContent={saveNoteContent} savingMsg={savingMsg} />
                 <Content className="notebook-wrapper">
                     <div className="note-space-container">
                         <div className="note-header">
                             <div className="note-title-container">
                                 <Input
-                                    value={currentTitle || title}
+                                    value={title}
                                     className="note-title"
                                     onChange={changeTitle}
                                     onPressEnter={handleKeyUp}
                                     bordered={false} />
                             </div>
-                            <Metadata noteData={noteData} noteId={noteId} />
+                            {noteData !== undefined && <Metadata noteData={noteData} noteId={noteId} />}
                         </div>
-                        <TetuEditor
-                            editorData={noteData.content || ""}
-                            setNoteContent={setNoteContent} />
+                        {noteData && <TetuEditor
+                            key={noteId}
+                            editorData={noteData?.content}
+                            setNoteContent={setNoteContent} />}
                     </div>
                 </Content>
             </Layout>

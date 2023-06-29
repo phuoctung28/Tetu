@@ -1,4 +1,4 @@
-import { Badge, Button, Calendar, Divider, Layout } from 'antd';
+import { Badge, Button, Calendar, Divider, Layout, Tooltip } from 'antd';
 import React, { useState, useEffect } from 'react';
 import MainHeader from '../../components/header/MainHeader';
 import './calendar_view.css';
@@ -62,7 +62,7 @@ const getMonthData = (value) => {
         return 1394;
     }
 };
-const CalendarView = () => {
+const CalendarView = ({ setIsDarkMode }) => {
     const [fetchedData, setFetchedData] = useState();
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
     useEffect(() => {
@@ -86,7 +86,7 @@ const CalendarView = () => {
                 if (e.meta_data) {
                     const { meta_data, title } = e;
                     const datetime = meta_data.datetime;
-                    const formattedDate = moment(datetime).format("DD/MM/YYYY");
+                    const formattedDate = moment(datetime, 'DD/MM/YYYY').format('L');
                     listData.push({
                         id: e.id,
                         title: title,
@@ -120,10 +120,12 @@ const CalendarView = () => {
             <ul className="events">
                 {filteredData.map((item) => (
                     <li key={item.title}>
-                        <Button type="text" onClick={() => navigate(`/note/${item.id}`, { state: { name: item.title } }, { replace: true })}>
-                            <Badge color="blue" text={item.title} />
-                            {/* {item.content} */}
-                        </Button>
+                        <Tooltip placement="top" title={item.title}>
+                            <Button className="date-cell-btn-item" type="text" onClick={() => navigate(`/note/${item.id}`, { state: { name: item.title } }, { replace: true })}>
+                                <Badge className="date-cell-item" color="blue" text={item.title} />
+                                {/* {item.content} */}
+                            </Button>
+                        </Tooltip>
                     </li>
                 ))}
             </ul>
@@ -141,13 +143,13 @@ const CalendarView = () => {
         <Layout hasSider>
             <Sidebar pageMenu="calendar" />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="calendar-container">
                     <div className="calendar-view-title">
                         <h2>Calendar view mode</h2>
                         <p>View your notes and documents arranged by date, month, or year</p>
                     </div>
-                    <Calendar className="calendar-component" cellRender={cellRender} />
+                    <Calendar theme="dark" className="calendar-component" cellRender={cellRender} />
                 </Content>
             </Layout>
         </Layout>

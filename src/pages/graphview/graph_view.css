@@ -116,3 +116,10 @@
     align-items: center;
     justify-content: space-between;
 }
+
+
+.graph-node-title {
+    width: 150px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}

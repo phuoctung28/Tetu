@@ -10,7 +10,7 @@ import { createDocument, getAllDocuments, getDocumentById, queryDocuments } from
 const { Content } = Layout;
 
 
-const ArticlePage = () => {
+const ArticlePage = ({ setIsDarkMode }) => {
     const [selectedText, setSelectText] = useState("");
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const [article, setArticle] = useState({});
@@ -106,7 +106,7 @@ const ArticlePage = () => {
         <Layout hasSider>
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader showButton={true} />
+                <MainHeader setIsDarkMode={setIsDarkMode} showButton={true} />
                 <Content className="article-section" style={{ margin: '0', overflow: 'initial', }} >
                     <div className="article-container">
                         <div className="article-wrapper">

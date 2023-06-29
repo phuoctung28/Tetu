@@ -2,7 +2,7 @@
     margin: 0;
     overflow-y: auto;
     height: 100vh;
-    background-color: #fff;
+    background-color: var(--background);
 }
 
 .article-container {
@@ -28,7 +28,7 @@
 
 .article-title {
     font-weight: 700;
-    color: #3c4a57;
+    color: var(--text-title);
     font-size: 30px;
 }
 
@@ -40,6 +40,7 @@
     text-align: justify;
     font-size: 20px;
     line-height: 38px;
+    color: var(--text-primary);
 }
 
 .dictionary-container {
@@ -47,7 +48,7 @@
     height: calc(100vh - 50px);
     overflow: hidden;
     margin: 0;
-    border-left: 0.4px solid #e0e2e6;
+    border-left: 0.4px solid var(--border-primary);
 }
 
 .dictionary-list {
@@ -56,21 +57,21 @@
 }
 
 .dictionary-list-item {
-    border-top: 0.4px solid #e0e2e6;
-    border-bottom: 0.4px solid #e0e2e6;
+    border-top: 0.4px solid var(--border-primary);
+    border-bottom: 0.4px solid var(--border-primary);
     padding: 15px 10px;
     position: relative;
 }
 
 .dictionary-header {
     padding: 10px 15px;
-    border-bottom: 0.5px solid #e0e2e6;
+    border-bottom: 0.5px solid var(--border-primary);
 }
 
 .dictionary-header h2 {
     font-size: 20px;
     font-weight: 500;
-    color: #3c4a57;
+    color: var(--text-title);
     margin: 5px auto;
 }
 
@@ -108,6 +109,14 @@
 .item-word-type {
     font-style: italic;
     font-weight: 400;
-    color: #90979e;
+    color: var(--text-secondary);
     margin: 0;
+}
+
+.item-phone-tic {
+    color: var(--text-third);
+}
+
+.dictionary-item-meaning {
+    color: var(--text-primary);
 }

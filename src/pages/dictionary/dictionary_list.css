@@ -2,7 +2,7 @@
     width: 100%;
     height: calc(100vh - 50px);
     margin: 50px auto 0;
-    background-color: #fff;
+    background-color: var(--background);
 }
 
 .dictionary-list-header {
@@ -23,7 +23,7 @@
 }
 
 .dictionary-list-title p {
-    color: #7a8694;
+    color: var(--text-primary);
     font-style: italic;
     margin: 0 0 10px;
     font-size: 11.5px;

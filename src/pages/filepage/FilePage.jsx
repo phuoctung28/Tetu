@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Layout } from 'antd';
+import { Dropdown, Layout, message } from 'antd';
 import PdfViewerComponent from '../../components/PdfViewerComponent';
 import MainHeader from '../../components/header/MainHeader';
 import './file_page.css';
@@ -10,8 +10,9 @@ import { getDocumentById } from '../../services/firebase';
 import moment from 'moment';
 import NoteDual from '../notepage/NoteDual';
 
-const FilePage = () => {
+const FilePage = ({ setIsDarkMode }) => {
     const [selectedText, setSelectedText] = useState("");
+    const [textFromFile, setTextFromFile] = useState("");
     const [fileData, setFileData] = useState({});
     const [dualNote, setDualNote] = useState(false);
     const [noteId, setNoteId] = useState("");
@@ -53,24 +54,31 @@ const FilePage = () => {
     const items = [{ label: 'Add to note', key: '1', },];
 
     const onClick = async ({ key }) => {
-        const addNote = {
-            "time": new Date().getTime(),
-            "blocks": [
-                {
-                    "type": "paragraph",
-                    "data": {
-                        "text": selectedText
-                    }
-                },
-            ]
-        }
-        let currentContent = noteContent?.content;
-        if (!currentContent || currentContent.length === 0) {
-            currentContent = [addNote];
-        }
-        setNoteContent({ ...noteContent, content: currentContent })
+        // const addNote = {
+        //     "time": new Date().getTime(),
+        //     "blocks": [
+        //         {
+        //             "type": "paragraph",
+        //             "data": {
+        //                 "text": selectedText
+        //             }
+        //         },
+        //     ]
+        // }
+        // let currentContent = noteContent?.content;
+        // if (!currentContent || currentContent.length === 0) {
+        //     currentContent = [addNote];
+        // }
+        // setNoteContent({ ...noteContent, content: currentContent })
         // console.log("FETCH NOTE", noteContent);
+        if (selectedText.length > 0) {
+            setTextFromFile(selectedText);
+        } else {
+            message.warning("Nothing to add!");
+        }
     };
+
+    // toggle dual note
     useEffect(() => {
         const keyDown = (event) => {
             if (event.key === "d" && event.ctrlKey) {
@@ -89,7 +97,7 @@ const FilePage = () => {
         <Layout hasSider>
             <Sidebar />
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
-                <MainHeader showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
+                <MainHeader setIsDarkMode={setIsDarkMode} showButton={true} dualNote={dualNote} handleToggleDualNote={handleToggleDualNote} />
                 <div className="working-space-container">
                     <PanelGroup autoSaveId="example" direction="horizontal">
                         <Panel defaultSize={50} >
@@ -108,7 +116,7 @@ const FilePage = () => {
                         {dualNote && <PanelResizeHandle className="space-divider" />}
                         {dualNote && (
                             <Panel className="dual-note-panel">
-                                <NoteDual key={noteId} noteId={noteId} selectedText={selectedText} />
+                                <NoteDual key={noteId} noteId={noteId} textFromFile={textFromFile} />
                             </Panel>
                         )}
                     </PanelGroup>

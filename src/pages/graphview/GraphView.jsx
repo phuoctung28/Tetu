@@ -6,12 +6,14 @@ import './graph_view.css';
 import MainHeader from '../../components/header/MainHeader';
 import Sidebar from '../../components/sidebar/Sidebar';
 import Graph from 'react-graph-vis';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const { Content } = Layout;
 
-const GraphView = () => {
+const GraphView = ({ setIsDarkMode }) => {
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
+    const { folderId } = useParams();
+    // console.log("FOLDER ID:", folderId);
 
     const [graphColor, setGraphColor] = useState({ r: 43, g: 124, b: 233, a: 1 });
     const [nodeList, setNodeList] = useState([]);
@@ -61,6 +63,12 @@ const GraphView = () => {
             return { ...item, color: newColor }
         })
         setNodeList(newNodeList);
+        setGraphOptions({
+            ...graphOptions,
+            edges: {
+                color: newColor
+            },
+        });
         setState({
             ...state,
             graph: {
@@ -80,27 +88,28 @@ const GraphView = () => {
             //     min: 10,
             //     max: 30,
             // },
-            font: { 
+            font: {
                 size: 12,
             },
         },
         edges: {
-            color: '#73A2FF',
+            color: graphColor,
+            // color: '#73A2FF',
             width: 0.2,
-            // smooth: {
-            //     enabled: true,
-            //     type: 'discrete',
-            // },
+            smooth: {
+                enabled: true,
+                type: 'continuous',
+            },
         },
-        // physics: {
-        //     barnesHut: {
-        //         centralGravity: 0.001,
-        //         springLength: 60,
-        //         springConstant: 0.01,
-        //         damping: 1,
-        //         avoidOverlap: 0.01
-        //     },
-        // },
+        physics: {
+            barnesHut: {
+                centralGravity: 0.001,
+                springLength: 60,
+                springConstant: 0.01,
+                damping: 1,
+                avoidOverlap: 0.01
+            },
+        },
         manipulation: {
             initiallyActive: false,
             addEdge: async function (data, callback) {
@@ -161,6 +170,7 @@ const GraphView = () => {
     // }, [nodeList, edgeList]);
     const [modal, contextHolder] = Modal.useModal();
 
+
     const getEdgeFromNoteAndFile = (data) => {
         let edges = [];
         for (let item of data) {
@@ -178,6 +188,7 @@ const GraphView = () => {
         }
         return edges;
     };
+
     useEffect(() => {
         const filteredNodeList = nodeList.filter((node) => {
             if (node.type === 'folder') return edgesFilterValues.Folder;
@@ -201,78 +212,150 @@ const GraphView = () => {
         }));
     }, [edgesFilterValues, nodeList, edgeList]);
 
-    useEffect(() => {
-        const fetchNotesAndFiles = async () => {
-            try {
-                const fetchedNotes = await queryDocuments('notes', 'owner', '==', userId);
-                const fetchedFiles = await queryDocuments('files', 'owner', '==', userId);
-                const fetchedFolders = await queryDocuments('folders', 'owner', '==', userId);
-                const folders = fetchedFolders.map((item) => ({
-                    id: item.id,
-                    title: item.folder_name,
-                    label: item.folder_name,
-                    color: `rgba(${graphColor.r}, ${graphColor.g}, ${graphColor.b}, ${graphColor.a})`,
-                    type: 'folder',
-                    size: nodeSize + 8,
-                    physics: false,
-                }));
-                const notes = fetchedNotes.map((item) => ({
-                    id: item.id,
-                    title: item.title,
-                    label: item.title,
-                    color: `rgba(${graphColor.r + 70}, ${graphColor.g + 70}, ${graphColor.b + 70}, ${graphColor.a})`,
-                    type: 'note',
-                    size: nodeSize,
-                    // physics: false,
-                }));
-                const files = fetchedFiles.map((item) => ({
-                    id: item.id,
-                    title: item.name,
-                    label: item.name,
-                    color: `rgba(${graphColor.r + 120}, ${graphColor.g + 120}, ${graphColor.b + 120}, ${graphColor.a})`,
-                    type: 'file',
-                    size: nodeSize,
-                    // physics: false,
-                }));
-                const noteData = [...folders, ...notes, ...files];
+    const fetchNotesAndFilesInOneFolder = async () => {
+        try {
+            var edgeData = [];
+            var fetchedFiles = [];
+            var fetchedNotes = [];
 
-                const noteEdges = getEdgeFromNoteAndFile(fetchedNotes);
-                const fileEdges = getEdgeFromNoteAndFile(fetchedFiles);
-                const edgeData = [...noteEdges, ...fileEdges];
-
-                for (let item of fetchedFolders) {
-                    let rootNode = item.id;
-                    for (let note of item.notes) {
-                        edgeData.push({
-                            from: rootNode,
-                            to: note,
-                        });
-                    }
-                    for (let file of item.files) {
-                        edgeData.push({
-                            from: rootNode,
-                            to: file,
-                        });
-                    }
-                }
-                setNodeList(noteData);
-                setEdgeList(edgeData);
-                setState({
-                    ...state,
-                    counter: noteData.length,
-                    graph: {
-                        nodes: noteData,
-                        edges: edgeData,
-                    },
-                });
-            } catch (error) {
-                console.error('Error fetching notes and files:', error);
+            const fetchedFolder = await getDocumentById("folders", folderId);
+            for (let noteId of fetchedFolder.notes) {
+                const curNote = await getDocumentById("notes", noteId);
+                fetchedNotes.push({ id: noteId, ...curNote });
+                edgeData.push({ from: folderId, to: noteId });
             }
-        };
-        fetchNotesAndFiles();
+            for (let fileId of fetchedFolder.files) {
+                const curFile = await getDocumentById("files", fileId);
+                fetchedFiles.push({ id: fileId, ...curFile });
+                edgeData.push({ from: folderId, to: fileId });
+            }
+
+            const folders = [{
+                id: folderId,
+                title: fetchedFolder.folder_name,
+                label: fetchedFolder.folder_name,
+                color: `rgba(${graphColor.r}, ${graphColor.g}, ${graphColor.b}, ${graphColor.a})`,
+                type: 'folder',
+                size: nodeSize + 8,
+                physics: false,
+            }];
+            const notes = fetchedNotes.map((item) => ({
+                id: item.id,
+                title: item.title,
+                label: item.title,
+                color: `rgba(${graphColor.r + 70}, ${graphColor.g + 70}, ${graphColor.b + 70}, ${graphColor.a})`,
+                type: 'note',
+                size: nodeSize,
+                // physics: false,
+            }));
+            const files = fetchedFiles.map((item) => ({
+                id: item.id,
+                title: item.name,
+                label: item.name,
+                color: `rgba(${graphColor.r + 120}, ${graphColor.g + 120}, ${graphColor.b + 120}, ${graphColor.a})`,
+                type: 'file',
+                size: nodeSize,
+                // physics: false,
+            }));
+
+            const noteData = [...folders, ...notes, ...files];
+
+            const noteEdges = getEdgeFromNoteAndFile(fetchedNotes);
+            const fileEdges = getEdgeFromNoteAndFile(fetchedFiles);
+            edgeData = [...edgeData, ...noteEdges, ...fileEdges];
+
+            setNodeList(noteData);
+            setEdgeList(edgeData);
+            setState({
+                ...state,
+                counter: noteData.length,
+                graph: {
+                    nodes: noteData,
+                    edges: edgeData,
+                },
+            });
+        }
+        catch (error) {
+            console.log("Error fetching folder data:", error);
+        }
+    }
+
+    const fetchNotesAndFiles = async () => {
+        try {
+            const fetchedNotes = await queryDocuments('notes', 'owner', '==', userId);
+            const fetchedFiles = await queryDocuments('files', 'owner', '==', userId);
+            const fetchedFolders = await queryDocuments('folders', 'owner', '==', userId);
+            const folders = fetchedFolders.map((item) => ({
+                id: item.id,
+                title: item.folder_name,
+                label: item.folder_name,
+                color: `rgba(${graphColor.r}, ${graphColor.g}, ${graphColor.b}, ${graphColor.a})`,
+                type: 'folder',
+                size: nodeSize + 8,
+                physics: false,
+            }));
+            const notes = fetchedNotes.map((item) => ({
+                id: item.id,
+                title: item.title,
+                label: item.title,
+                color: `rgba(${graphColor.r + 70}, ${graphColor.g + 70}, ${graphColor.b + 70}, ${graphColor.a})`,
+                type: 'note',
+                size: nodeSize,
+                // physics: false,
+            }));
+            const files = fetchedFiles.map((item) => ({
+                id: item.id,
+                title: item.name,
+                label: item.name,
+                color: `rgba(${graphColor.r + 120}, ${graphColor.g + 120}, ${graphColor.b + 120}, ${graphColor.a})`,
+                type: 'file',
+                size: nodeSize,
+                // physics: false,
+            }));
+            const noteData = [...folders, ...notes, ...files];
+
+            const noteEdges = getEdgeFromNoteAndFile(fetchedNotes);
+            const fileEdges = getEdgeFromNoteAndFile(fetchedFiles);
+            const edgeData = [...noteEdges, ...fileEdges];
+
+            for (let item of fetchedFolders) {
+                let rootNode = item.id;
+                for (let note of item.notes) {
+                    edgeData.push({
+                        from: rootNode,
+                        to: note,
+                    });
+                }
+                for (let file of item.files) {
+                    edgeData.push({
+                        from: rootNode,
+                        to: file,
+                    });
+                }
+            }
+            setNodeList(noteData);
+            setEdgeList(edgeData);
+            setState({
+                ...state,
+                counter: noteData.length,
+                graph: {
+                    nodes: noteData,
+                    edges: edgeData,
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching notes and files:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (folderId != undefined)
+            fetchNotesAndFilesInOneFolder();
+        else
+            fetchNotesAndFiles();
 
         document.title = 'Graph View';
-    }, []);
+    }, [folderId]);
 
     const navigate = useNavigate();
 
@@ -360,7 +443,7 @@ const GraphView = () => {
         <Layout hasSider>
             <Sidebar pageMenu="graph" />
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
-                <MainHeader />
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="graph-container">
                     <div className="graph-wrapper">
                         {contextHolder}
@@ -392,8 +475,6 @@ const GraphView = () => {
                                     value={typeof nodeSize === 'number' ? nodeSize : 0}
                                 />
                             </div>
-
-
                         </div>
                         <div className="info-panel">
                             <div>Node Types</div>

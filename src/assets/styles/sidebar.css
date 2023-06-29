@@ -1,34 +1,57 @@
+.sidebar-container {
+    background-color: var(--background) !important;
+    overflow: auto !important;
+    height: 100vh !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    border-right: 0.8px solid var(--border-primary);
+}
+
+.sider-top {
+    color: var(--text-primary);
+}
+
 .quicktool-container {
-   margin: 0 20px;
-   display: flex;
-   flex-direction: column;
-   justify-content: space-between;
-   align-items: center;
-   gap: 10px;
+    margin: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-primary);
 }
 
 .quicktool-container .ant-btn {
     text-align: left !important;
+    /* color: var(--text-primary) !important; */
 }
+
+/* 
+.quicktool-container .ant-btn-primary {
+    color: #f0f8ff !important;
+} */
+
 .new-item-container {
-   display: flex;
-   flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .new-item {
-   width: 100%;
-   text-align: start;
+    width: 100%;
+    text-align: start;
 }
 
 .new-item-btn-container {
-   width: 100%;
-   padding: 0 20px;
-   margin-bottom: 20px;
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
+    width: 100%;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .ant-menu-item {
-   height: 30px !important;
+    height: 30px !important;
 }

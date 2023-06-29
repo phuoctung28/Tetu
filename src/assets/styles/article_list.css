@@ -1,0 +1,78 @@
+.modal-article {
+    /* width: 600px; */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+    opacity: 1;
+}
+
+.modal-container {
+    background-color: var(--background);
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-header-msg {
+    font-weight: 600;
+    font-size: 25px;
+    color: #2E465C;
+}
+
+.login-form-forgot {
+    float: right;
+}
+
+.ant-col-rtl .login-form-forgot {
+    float: left;
+}
+
+.login-form-button {
+    width: 100%;
+}
+
+.btn-google,
+.btn-apple {
+    background-color: #F4F8FB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    padding: 10px 0;
+    width: 220px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-google:hover,
+.btn-apple:hover {
+    background-color: #dce5ec;
+}
+
+.btn-google .btn-title,
+.btn-apple .btn-title {
+    font-weight: 700;
+    color: #4c5c63;
+    margin-left: 20px;
+}
+
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.error-msg {
+    text-align: center;
+    height: 30px;
+    color: #ff3d23;
+}

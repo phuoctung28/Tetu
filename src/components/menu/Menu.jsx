@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Input, Menu, Modal } from 'antd';
-import { BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined, FileAddOutlined, UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Dropdown, Input, Menu, Modal, Tooltip } from 'antd';
+import { ShareAltOutlined, BookOutlined, EllipsisOutlined, FilePdfOutlined, FolderOutlined, FileAddOutlined, UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { FileType } from '../../enums/FileType';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -274,6 +274,14 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
                         <Menu.Item key="deleteFile" onClick={() => handleMenuClick('deleteFile', item, fileType)}>
                             <DeleteOutlined /> {fileType === FileType.Folder ? 'Delete Folder' : 'Delete File'}
                         </Menu.Item>
+                        {isFolder && (
+                            <>
+                                <Menu.Item key="folderGraphView"
+                                    onClick={() => navigate(`/graph/${item.id}`)}>
+                                    <ShareAltOutlined /> Graph View
+                                </Menu.Item>
+                            </>
+                        )}
                     </Menu>
                 }
                 trigger={['click']}
@@ -307,13 +315,17 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
                     {notes.map((note) => (
 
                         <Menu.Item key={note.item_id} icon={<BookOutlined />} style={{ minWidth: '160px' }}>
-                            <span onClick={() => handleNavigateFile(note.item_id, FileType.Note)} className="file-name">{note?.item?.title}</span>
+                            <Tooltip placement="right" title={note?.item?.title}>
+                                <span onClick={() => handleNavigateFile(note.item_id, FileType.Note)} className="file-name">{note?.item?.title}</span>
+                            </Tooltip>
                             <DropDown fileType={FileType.Note} item={note} />
                         </Menu.Item>
                     ))}
                     {files.map((file) => (
                         <Menu.Item key={file.item_id} icon={<FilePdfOutlined />} style={{ minWidth: '160px' }}>
-                            <span onClick={() => handleNavigateFile(file.item_id, FileType.Pdf)} className="file-name">{file?.item?.name}</span>
+                            <Tooltip placement="right" title={file?.item?.name}>
+                                <span onClick={() => handleNavigateFile(file.item_id, FileType.Pdf)} className="file-name">{file?.item?.name}</span>
+                            </Tooltip>
                             <DropDown fileType={FileType.Pdf} item={file} />
                         </Menu.Item>
                     ))}

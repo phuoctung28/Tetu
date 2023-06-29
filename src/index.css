@@ -1,13 +1,171 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
 }
+
+:root {
+    --background: white;
+    --background-popup: white;
+    --background-hover: #f1f4f5;
+    --background-selected: #e6f4fe;
+    --background-secondary: white;
+    --primary-color: #0056EB;
+    --primary-color-hover: #004dd3;
+    --secondary-color: #0098FF;
+    --secondary-color-hover: #008ae6;
+    --text-primary: #2E465C;
+    --text-title: #3c4a57;
+    --text-primary-hover: #2a9bff;
+    --text-secondary: #63737A;
+    --text-third: #899CAA;
+    --border-primary: #ebebeb;
+    --border-secondary: #cfd2d6;
+    --button-primary: #7f848a;
+    --button-secondary: #9daaaf;
+    --button-border: #c5cbce;
+    --nav-button-background: #f7f9fc;
+    --accent: #0056EB;
+    --selection-background: #e6f4fe;
+    --text-marker: #2E465C;
+}
+
+[data-theme='dark'] {
+    --background: #171718;
+    --background-popup: #1f2020;
+    --background-hover: #353738;
+    --background-selected: #06378b;
+    --background-secondary: #1e2020;
+    --primary-color: #0056EB;
+    --secondary-color: #0098FF;
+    --text-primary: #e4e6e9;
+    --text-title: #e4e6e9;
+    --text-primary-hover: #2a9bff;
+    --text-secondary: #ebf9ff;
+    --text-third: #e8f5ff;
+    --border-primary: #364147;
+    --border-secondary: #373f44;
+    --button-primary: #afb8c0;
+    --button-secondary: #b0bbc0;
+    --button-border: #707b80;
+    --nav-button-background: #383a3b;
+    --accent: #0056EB;
+    --selection-background: #2E465C;
+    --text-marker: #e4e6e9;
+}
+
+* {
+    transition: color, border 0.1s ease !important;
+}
+
+/* 
+.ant-divider.styled-divider {
+    background-color: var(--border-primary) !important;
+}
+
+.ant-btn,
+.ant-float-btn {
+    color: var(--button-primary) !important;
+}
+
+.ant-float-btn {
+    background-color: var(--background-popup) !important;
+}
+
+.ant-btn-default,
+.ant-float-btn-default {
+    background-color: var(--background);
+    color: var(--button-primary) !important;
+    border-color: var(--button-border) !important;
+}
+
+.ant-float-btn-default:hover {
+    background-color: var(--background-hover);
+    color: var(--button-primary) !important;
+    border-color: var(--button-border) !important;
+}
+
+
+.ant-btn-primary {
+    color: #f0f8ff !important;
+}
+
+.ant-btn-icon,
+.ant-btn-icon .anticon {
+    color: var(--button-primary) !important;
+}
+
+.ant-table-container,
+.ant-table-thead,
+.ant-table-cell {
+    background-color: var(--background) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-primary) !important;
+}
+
+.ant-dropdown-menu,
+.ant-dropdown-menu-item,
+.ant-popover-inner,
+.ant-popconfirm-message {
+    background-color: var(--background-popup) !important;
+    color: var(--text-primary) !important;
+}
+
+.ant-dropdown-menu-item-active {
+    background-color: var(--background-hover) !important;
+}
+
+.ant-menu-item-active,
+.ant-menu-submenu-active .ant-menu-submenu-title {
+    background-color: var(--background-hover) !important;
+    color: var(--text-primary) !important;
+}
+
+.ant-menu-item-selected {
+    background-color: var(--background-selected) !important;
+    color: var(--text-primary) !important;
+}
+*/
+
+::selection {
+    background: var(--selection-background) !important;
+}
+
+.cdx-marker {
+    color: var(--text-marker) !important;
+}
+
+.ce-toolbar__plus,
+.ce-toolbar__settings-btn,
+#color-left-btn,
+#color-btn-text {
+    color: var(--text-primary) !important;
+}
+
+.ce-inline-toolbar {
+    background-color: var(--background-popup) !important;
+}
+
+.ce-inline-toolbar__dropdown:hover,
+.ce-inline-tool:hover {
+    background-color: var(--background-hover) !important;
+}
+
+/*
+.ant-collapse-header,
+.ant-collapse-content {
+    color: var(--text-primary) !important;
+}
+
+.ant-select-selector {
+    background-color: var(--background-secondary) !important;
+    color: var(--text-primary) !important;
+} */

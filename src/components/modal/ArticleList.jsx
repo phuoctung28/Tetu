@@ -7,7 +7,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
 import logo from '../../assets/images/logo.png';
-import '../../assets/styles/login_form.css';
+import '../../assets/styles/article_list.css';
 
 const ArticleList = () => {
     const navigate = useNavigate();
@@ -34,7 +34,7 @@ const ArticleList = () => {
         fetchArticleList();
     }, []);
     return (
-        <div className="modal-login">
+        <div className="modal-article">
             <div className="modal-container">
                 <List
                     dataSource={articleList}

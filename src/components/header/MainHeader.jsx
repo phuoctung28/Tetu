@@ -6,9 +6,11 @@ import '../../assets/styles/main_header.css';
 import { useNavigate } from 'react-router-dom';
 import SearchComponent from "../Seach/Search";
 
-const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData, saveNoteContent, savingMsg }) => {
+const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteData, saveNoteContent, savingMsg, setIsDarkMode }) => {
     const navigate = useNavigate();
     const [isSearchOpened, setIsSearchOpened] = useState(false);
+    const [theme, setTheme] = useState("dark");
+
     // const [crumbItem, setCrumbItem] = useState([]);
     // useEffect(() => {
     //     if (noteData) {
@@ -26,15 +28,41 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
         setIsSearchOpened(!isSearchOpened);
     };
 
+    const switchTheme = (currentTheme) => {
+        setTheme(currentTheme);
+        // console.log("handle:", typeof previousValue);
+        setIsDarkMode(currentTheme === "dark");
+        document.querySelector("body").setAttribute('data-theme', currentTheme);
+    };
+
     const ThemeColor = () => {
         return (
-            <div className="theme-color">
-                <Button style={{ backgroundColor: "white" }} />
-                <Button style={{ backgroundColor: "#1F99FF" }} />
-                <Button style={{ backgroundColor: "#191A1B" }} />
+            <div>
+                <div className="theme-color">
+                    <Button style={{ backgroundColor: "white" }} onClick={() => switchTheme("light")} />
+                    <Button style={{ backgroundColor: "#1F99FF" }} onClick={() => switchTheme("light")} />
+                    <Button style={{ backgroundColor: "#191A1B" }} onClick={() => switchTheme("dark")} />
+                </div>
+                <p>(<em>Ctrl + L</em> to toggle light/dark mode)</p>
             </div>
         )
     }
+
+    // useEffect(() => {
+    //     document.querySelector("body").setAttribute('data-theme', theme);
+    // }, []);
+    useEffect(() => {
+        const keyDown = (event) => {
+            if (event.ctrlKey && event.key === "l") {
+                event.preventDefault();
+                switchTheme(theme === "light" ? "dark" : "light");
+            }
+        };
+        document.addEventListener("keydown", keyDown);
+        return () => {
+            document.removeEventListener("keydown", keyDown);
+        };
+    });
     return (
         <div className='header-container'>
             <div className='header-left'>
