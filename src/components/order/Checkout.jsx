@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Button, Divider, Input, Modal, Popconfirm, Space } from "antd";
+import { Button, Divider, Input, Modal, Popconfirm, Space, message } from "antd";
 import "../../assets/styles/checkout_form.css";
 import qrPayment from "../../assets/images/qrpayment.jpg";
 import moment from 'moment/moment';
 import { createDocument } from "../../services/firebase";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = ({ name, email, userId }) => {
     // console.log("Checkout User", name, email, userId);
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
+    const navigate = useNavigate();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
@@ -44,6 +46,9 @@ const CheckoutForm = ({ name, email, userId }) => {
                 processDate: "",
             }
             await createDocument("orders", newOrder);
+            setIsModalOpen(false);
+            message.success("Order successfully! Wait for the admin to approve...", 10);
+            navigate("/user-profile");
         } catch (error) {
             console.log("Error save order data:", error)
         }
@@ -127,8 +132,8 @@ const CheckoutForm = ({ name, email, userId }) => {
                             [YOUR_EMAIL] - TETU PREMIUM
                         </pre>
                         <Space>
-                            <Button onClick={handleFinishPayment} type="primary">I've finished payment</Button>
-                            <Button>Cancel</Button>
+                            <Button onClick={handleFinishPayment} type="primary">Finish my order</Button>
+                            <Button onClick={handleCancel}>Cancel</Button>
                         </Space>
                     </div>
                 </div>

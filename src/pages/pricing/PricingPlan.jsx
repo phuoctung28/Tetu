@@ -3,7 +3,7 @@ import check from "../../assets/icons/check.svg";
 import cross from "../../assets/icons/cross.svg";
 import qrPayment from "../../assets/images/qrpayment.jpg";
 import './pricing_page.css';
-import { Modal, message } from "antd";
+import { Modal, Switch, message } from "antd";
 import { useNavigate } from 'react-router';
 import CheckoutForm from '../../components/order/Checkout';
 import { getDocumentById } from '../../services/firebase';
@@ -45,10 +45,16 @@ const PricingPlan = () => {
     return (
         <div>
             <div className="pricing-plan-container">
+                <div className="pricing-plan-head">
+                    <div className="pricing-plan-head-title">Support us in providing a better solution</div>
+                    <div className="pricing-plan-head-desc">Choose a plan to tailor your needs</div>
+                    <div className="pricing-plan-head-time"> Monthly <Switch /> Yearly</div>
+                </div>
                 <div className="pricing-content">
                     <div className="pricing-plan-basic">
                         <div className="plan-heading">
                             <p className="plan-title">Basic</p>
+                            <p className="plan-desc">Perfect to get started</p>
                             <p className="price-text">0đ<span class="text-small"> / month</span></p>
                         </div>
                         <ul className="benefits">
@@ -82,6 +88,7 @@ const PricingPlan = () => {
                     <div className="pricing-plan-premium">
                         <div className="plan-heading">
                             <p className="plan-title">Premium</p>
+                            <p className="plan-desc">Best for professionals</p>
                             <p className="price-text">17.000đ<span class="text-small"> / month</span></p>
                         </div>
                         <ul className="benefits">

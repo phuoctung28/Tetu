@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout } from 'antd';
+import { Layout, Switch } from 'antd';
 import './pricing_page.css'
 import PricingPlan from './PricingPlan';
 import Sidebar from '../../components/sidebar/Sidebar';

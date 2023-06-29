@@ -15,12 +15,12 @@ const UserProfile = ({ setIsDarkMode }) => {
     console.log("current user: ", currentUser);
     useEffect(() => {
         const loginUser = JSON.parse(localStorage.getItem("user"));
-        console.log("login user: ", loginUser);
+        // console.log("login user: ", loginUser);
         const fetchUser = async () => {
             try {
                 const fetchedUser = await getDocumentById("users", loginUser.user_id.trim());
                 setUser(fetchedUser);
-                console.log("USER: ", fetchedUser);
+                // console.log("USER: ", fetchedUser);
             } catch (error) {
                 console.log("Error fetch user")
             }
@@ -32,9 +32,8 @@ const UserProfile = ({ setIsDarkMode }) => {
 
 
     const data = [
-        { title: 'Ant Design Title 1', },
-        { title: 'Ant Design Title 2', },
-
+        { title: 'Notification 1', },
+        { title: 'Notification 2', },
     ];
     return (
         <Layout hasSider>
@@ -233,9 +232,8 @@ const UserProfile = ({ setIsDarkMode }) => {
                                         renderItem={(item, index) => (
                                             <List.Item>
                                                 <List.Item.Meta
-                                                    avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />}
-                                                    title={<a href="https://ant.design">{item.title}</a>}
-                                                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                                    title={<span>{item.title}</span>}
+                                                    description="Notification detail..."
                                                 />
                                             </List.Item>
                                         )}

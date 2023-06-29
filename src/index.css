@@ -18,6 +18,7 @@ code {
     --background-hover: #f1f4f5;
     --background-selected: #e6f4fe;
     --background-secondary: #f5f7fe;
+    --background-third: #f6f6f7;
     --background-note: #ffffff;
     --primary-color: #0056EB;
     --primary-color-hover: #004dd3;
@@ -46,6 +47,7 @@ code {
     --background-hover: #353738;
     --background-selected: #06378b;
     --background-secondary: #1e2020;
+    --background-third: #1e2020;
     --background-note: #1a1b1b;
     --primary-color: #0056EB;
     --secondary-color: #0098FF;
