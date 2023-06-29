@@ -24,11 +24,6 @@ function App() {
     const { defaultAlgorithm, darkAlgorithm } = theme;
     const [isDarkMode, setIsDarkMode] = useState(false);
 
-    const handleChangeTheme = () => {
-        console.log("THEME:", isDarkMode);
-        setIsDarkMode((previousValue) => !previousValue);
-    };
-
     return (
         <ConfigProvider
             theme={{

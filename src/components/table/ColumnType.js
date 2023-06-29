@@ -26,12 +26,14 @@ export const columns = [
     {
         title: 'Title',
         dataIndex: 'title',
+        width: '25%',
         key: 'title',
         render: (text, record) => <CustomRender text={text} record={record} />,
     },
     {
         title: 'Type',
         key: 'type',
+        width: '10%',
         dataIndex: 'type',
         align: 'center',
         render: (_, { type }) => (
@@ -64,6 +66,7 @@ export const columns = [
     {
         title: 'Status',
         dataIndex: 'status',
+        width: '10%',
         key: 'status',
         render: (_, record) => (
             <Badge
@@ -91,6 +94,7 @@ export const columns = [
     {
         title: 'Note Type',
         dataIndex: 'noteType',
+        width: '15%',
         key: 'noteType',
         render: (_, record) => (
             <Tag
@@ -111,6 +115,7 @@ export const columns = [
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
+        width: '10%',
         sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
     },
     {
