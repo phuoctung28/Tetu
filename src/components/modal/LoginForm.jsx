@@ -90,6 +90,14 @@ const LoginForm = () => {
                     folder_name: "Sample"
                 }
                 await createDocument("folders", folderData);
+
+                const attachmentFolderData = {
+                    files: [],
+                    notes: [],
+                    owner: user.uid,
+                    folder_name: "Attachments"
+                }
+                await createDocument("folders", attachmentFolderData);
             }
 
             const loginUser = {

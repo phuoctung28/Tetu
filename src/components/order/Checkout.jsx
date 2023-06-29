@@ -42,7 +42,7 @@ const CheckoutForm = ({ name, email, userId }) => {
                 phone: phone,
                 address: address,
                 status: "paid",
-                createdDate: moment(new Date()).format("DD/MM/YYYY"),
+                createdDate: moment(new Date()).format("DD/MM/YYYY HH:mm:ss"),
                 processDate: "",
             }
             await createDocument("orders", newOrder);

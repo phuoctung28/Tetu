@@ -122,7 +122,7 @@ const TableOrder = () => {
     const loadOrders = async () => {
         try {
             const fetchedOrderList = await getAllDocuments('orders');
-            console.log("ORDER LIST:", fetchedOrderList)
+            // console.log("ORDER LIST:", fetchedOrderList)
             setOrders(fetchedOrderList);
         } catch (error) {
             console.error('Error fetching folders and notes:', error);
@@ -160,8 +160,8 @@ const TableOrder = () => {
             address: order.address,
             status: order.status,
             value: order.value,
-            createdDate: moment(order.createdDate, 'DD/MM/YYYY').format('DD/MM/YYYY'),
-            processDate: moment(order.processDate, 'DD/MM/YYYY').format('DD/MM/YYYY'),
+            createdDate: moment(order.createdDate, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
+            processDate: (order.processDate && order.processDate.length > 0) ? moment(order.processDate, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss') : "",
         }));
         setTable([...ordersModel]);
     };
@@ -186,13 +186,13 @@ const TableOrder = () => {
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => <span>{record.name}</span>,
-            ...getColumnSearchProps('name'),
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
             render: (_, record) => (<span>{record.email}</span>),
+            ...getColumnSearchProps('email'),
         },
         {
             title: 'Phone',

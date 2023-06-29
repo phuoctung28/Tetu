@@ -42,7 +42,7 @@ const LandingPage = () => {
     }, [top]);
 
     return (
-        <div className='container'>
+        <div className='landing-page-container'>
             <div className={`landing-header ${(!top) && `scroll`}`}>
                 <div className="landing-header-wrapper">
                     <button className='logo-btn'>

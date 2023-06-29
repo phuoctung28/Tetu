@@ -69,10 +69,12 @@
     grid-column: span 3 / span 3;
 }
 
+.social-link li,
 .col-item {
     color: #868e9c;
     text-decoration: none;
     margin-bottom: 8px;
+    list-style: none;
 }
 
 .col-desc {

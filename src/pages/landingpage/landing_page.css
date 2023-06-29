@@ -1,6 +1,11 @@
-.container {
+.landing-page-container {
     /*width: 100%;*/
     background-color: #fff;
+}
+
+.landing-page-container {
+    text-decoration: none;
+    list-style-type: none;
 }
 
 .landing-header {
