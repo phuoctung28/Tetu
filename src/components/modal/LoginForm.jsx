@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Divider, message } from 'antd';
-import { auth, provider, database, getDocumentById } from "../../services/firebase";
+import { auth, provider, database, getDocumentById, createDocument } from "../../services/firebase";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
 import logo from '../../assets/images/logo.png';
 import '../../assets/styles/login_form.css';
+import moment from 'moment';
+import { DEFAULT_INITIAL_DATA } from "../../constants/sample_note";
 
 const layout = {
     labelCol: { span: 8, },
@@ -66,24 +68,48 @@ const LoginForm = () => {
             const email = user.email;
 
             const fetchedUser = await getDocumentById("users", user.uid);
+            if (!fetchedUser) {
+                const newNote = {
+                    title: 'Getting Started',
+                    content: DEFAULT_INITIAL_DATA,
+                    meta_data: {
+                        datetime: moment(new Date()).format("DD/MM/YYYY"),
+                        status: ["To-do"],
+                        tags: ["Sample"],
+                        type: ["Self-study"],
+                    },
+                    owner: user.uid,
+                };
+                const noteRef = await createDocument('notes', newNote);
+                const noteId = noteRef.id;
+
+                const folderData = {
+                    files: [],
+                    notes: [noteId],
+                    owner: user.uid,
+                    folder_name: "Sample"
+                }
+                await createDocument("folders", folderData);
+            }
 
             const loginUser = {
+                googleAuth: true,
                 user_id: user.uid,
                 email: user.email,
                 name: user.displayName,
                 profilePic: user.photoURL,
                 accountType: fetchedUser?.accountType || "basic",
-                googleAuth: true
+                status: "active",
+                lastUpdate: moment(new Date(), "DD/MM/YYYY").format("DD/MM/YYYY"),
             }
 
             const usersCollectionRef = doc(database, 'users', user.uid);
             await setDoc(usersCollectionRef, loginUser);
-            console.log("google user:", user);
+            // console.log("google user:", user);
 
             localStorage.setItem("user", JSON.stringify(loginUser));
             message.success("Login success!");
             navigate("/home");
-
         } catch (error) {
             // console.log('error: ', error);
         }

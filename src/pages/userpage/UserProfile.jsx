@@ -8,19 +8,19 @@ import { getDocumentById } from '../../services/firebase';
 
 const { Content } = Layout;
 
-const UserProfile = ({setIsDarkMode}) => {
+const UserProfile = ({ setIsDarkMode }) => {
     const [user, setUser] = useState({});
     const [usedStorage, setUsedStorage] = useState(14);
     const currentUser = JSON.parse(localStorage.getItem("user"));
     console.log("current user: ", currentUser);
     useEffect(() => {
         const loginUser = JSON.parse(localStorage.getItem("user"));
-        console.log("login user: ", loginUser);
+        // console.log("login user: ", loginUser);
         const fetchUser = async () => {
             try {
                 const fetchedUser = await getDocumentById("users", loginUser.user_id.trim());
                 setUser(fetchedUser);
-                console.log("USER: ", fetchedUser);
+                // console.log("USER: ", fetchedUser);
             } catch (error) {
                 console.log("Error fetch user")
             }
@@ -32,20 +32,14 @@ const UserProfile = ({setIsDarkMode}) => {
 
 
     const data = [
-        { title: 'Ant Design Title 1', },
-        { title: 'Ant Design Title 2', },
-        { title: 'Ant Design Title 3', },
-        { title: 'Ant Design Title 4', },
-        { title: 'Ant Design Title 5', },
-        { title: 'Ant Design Title 6', },
-        { title: 'Ant Design Title 7', },
-        { title: 'Ant Design Title 8', },
+        { title: 'Notification 1', },
+        { title: 'Notification 2', },
     ];
     return (
         <Layout hasSider>
             <Sidebar pageMenu={"more"} />
             <Layout className="site-layout" style={{ marginLeft: 200, }} >
-                <MainHeader setIsDarkMode={setIsDarkMode}/>
+                <MainHeader setIsDarkMode={setIsDarkMode} />
                 <Content className="profile-container">
                     <Row>
                         <Col span={7}>
@@ -110,7 +104,7 @@ const UserProfile = ({setIsDarkMode}) => {
                                 <div className="profile-section-title">Settings</div>
                                 <div className="profile-item">
                                     <div className="profile-item-title">
-                                        <Switch defaultChecked />
+                                        <Switch />
                                     </div>
                                     <div className="profile-item-content">
                                         Receive letters, news and updates via email
@@ -118,7 +112,7 @@ const UserProfile = ({setIsDarkMode}) => {
                                 </div>
                                 <div className="profile-item">
                                     <div className="profile-item-title">
-                                        <Switch defaultChecked />
+                                        <Switch />
                                     </div>
                                     <div className="profile-item-content">
                                         Support Access
@@ -126,7 +120,7 @@ const UserProfile = ({setIsDarkMode}) => {
                                 </div>
                                 <div className="profile-item">
                                     <div className="profile-item-title">
-                                        <Switch defaultChecked />
+                                        <Switch />
                                     </div>
                                     <div className="profile-item-content">
                                         Mobile notifications
@@ -134,7 +128,7 @@ const UserProfile = ({setIsDarkMode}) => {
                                 </div>
                                 <div className="profile-item">
                                     <div className="profile-item-title">
-                                        <Switch defaultChecked />
+                                        <Switch />
                                     </div>
                                     <div className="profile-item-content">
                                         Open links in desktop app
@@ -238,9 +232,8 @@ const UserProfile = ({setIsDarkMode}) => {
                                         renderItem={(item, index) => (
                                             <List.Item>
                                                 <List.Item.Meta
-                                                    avatar={<Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`} />}
-                                                    title={<a href="https://ant.design">{item.title}</a>}
-                                                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                                    title={<span>{item.title}</span>}
+                                                    description="Notification detail..."
                                                 />
                                             </List.Item>
                                         )}

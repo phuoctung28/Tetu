@@ -37,8 +37,7 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
     // console.log(currentUser);
     return (
         <Sider className='sidebar-container'>
-            <div className='sider-top'
-                style={{ margin: '0 0 10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div className='sidebar-top'>
                 <Avatar
                     shape="square"
                     style={{ verticalAlign: 'middle', marginRight: 10 }}
@@ -47,7 +46,13 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
                     src={currentUser?.profilePic}>
                     {currentUser?.profilePic ? '' : currentUser?.name.split(' ').at(-1).charAt(0)}
                 </Avatar>
-                <p>{currentUser?.name}</p>
+                {
+                    currentUser?.name.length > 15
+                        ? <Tooltip placement='right' title={currentUser?.name}>
+                            <p className='user-name'>{currentUser?.name}</p>
+                        </Tooltip>
+                        : <p className='user-name'>{currentUser?.name}</p>
+                }
             </div>
             <div className='quicktool-container'>
                 <Button block size="small" type={pageMenu && pageMenu === "home" ? "primary" : "text"} icon={<HomeOutlined />} onClick={() => navigate("/home")} >

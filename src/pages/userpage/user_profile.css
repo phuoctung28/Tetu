@@ -1,7 +1,7 @@
 .profile-container {
     width: 100%;
     height: calc(100vh - 50px);
-    background-color: #f5f7fe;
+    background-color: var(--background-secondary);
     margin: 50px auto 0;
     padding: 20px 60px;
     /* display: grid;
@@ -21,7 +21,7 @@
     margin-bottom: 20px;
     margin-right: 20px;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: var(--background);
     box-shadow: rgba(149, 157, 165, 0.068) 0px 8px 24px;
     padding: 20px;
 }
@@ -42,7 +42,7 @@
 }
 
 .intro-card-ava {
-    border: 3px solid #fff;
+    border: 3px solid var(--border-primary);
     margin: 0 !important;
     /* margin-bottom: 20px !important; */
     background-color: #0093E9;
@@ -64,13 +64,14 @@
 
 
 .intro-card-stat-item div:first-child {
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 20px;
 }
 
 .intro-card-stat-item div:nth-child(2) {
     font-size: 16px;
-    color: #a9b5d3;
+    color: var(--text-light);
 }
 
 .profile-info {
@@ -89,6 +90,7 @@
 }
 
 .profile-name {
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 22px;
 }
@@ -96,17 +98,17 @@
 .profile-role {
     font-weight: 500;
     font-size: 18px;
-    color: #a9b5d3;
+    color: var(--text-light);
 }
 
 .profile-item-title {
     width: 120px;
-    color: #83929c;
+    color: var(--text-title);
     font-size: 17px;
 }
 
 .profile-item-content {
-    color: #59646d;
+    color: var(--text-secondary);
     font-weight: 600;
     font-size: 17px;
 }
@@ -114,7 +116,7 @@
 .profile-desc {
     margin: 10px 0;
     font-size: 15px;
-    color: #59646d;
+    color: var(--text-secondary);
     text-align: justify;
 }
 
@@ -143,7 +145,7 @@
     margin: 40px auto 15px;
     width: 80px;
     height: 80px;
-    background-color: #f5f6f8;
+    background-color: var(--background-secondary);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -163,12 +165,12 @@
 .storage-msg div:first-child {
     font-weight: 600;
     font-size: 22px;
-    color: #546570;
+    color: var(--text-title);
 }
 
 .storage-msg div:nth-child(2) {
     font-size: 17px;
-    color: #acb3c7;
+    color: var(--text-light);
 }
 
 .storage-progress {
@@ -187,6 +189,7 @@
 }
 
 .profile-setting .profile-item-content {
+    color: var(--text-secondary);
     width: 200px;
     overflow-wrap: break-word;
     font-weight: normal;

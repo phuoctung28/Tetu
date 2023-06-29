@@ -4,7 +4,7 @@
     overflow: auto;
     /* width: 100%; */
     height: 100vh;
-    background: var(--background-secondary);
+    background: var(--background-note);
     scrollbar-gutter: stable both-edges;
 }
 
@@ -39,8 +39,8 @@
     color: var(--text-primary) !important;
 }
 
-.container-metadata .ant-tag,
+/* .container-metadata .ant-tag,
 .container-metadata .ant-tag-close-icon {
     color: var(--text-primary) !important;
     background-color: var(--background-secondary) !important;
-}
+} */

@@ -144,7 +144,7 @@ const TeTuMenu = ({ userId, folderData, currentPage, currentTitle }) => {
         if (file) {
             try {
                 const fileUrl = await uploadFile(file);
-                console.log("File: ", file);
+                // console.log("File: ", file);
                 const newNote = {
                     title: 'Note - ' + file.name,
                     content: "",

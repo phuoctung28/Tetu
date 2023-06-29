@@ -3,12 +3,14 @@ import check from "../../assets/icons/check.svg";
 import cross from "../../assets/icons/cross.svg";
 import qrPayment from "../../assets/images/qrpayment.jpg";
 import './pricing_page.css';
-import { Modal, message } from "antd";
+import { Modal, Switch, message } from "antd";
 import { useNavigate } from 'react-router';
 import CheckoutForm from '../../components/order/Checkout';
+import { getDocumentById } from '../../services/firebase';
 
 const PricingPlan = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentUser, setCurrentUser] = useState({});
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -16,8 +18,8 @@ const PricingPlan = () => {
         setIsModalOpen(false);
     };
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log("PRICING USER:", user);
+
+
 
     // useEffect(() => {
     //     setTimeout(() => {
@@ -25,16 +27,34 @@ const PricingPlan = () => {
     //         navigate("/user-profile")
     //     }, 15000)
     // }, [isModalOpen])
+
+    const fetchCurrentUser = async (user) => {
+        try {
+            const curUser = await getDocumentById("users", user.user_id);
+            setCurrentUser(curUser);
+        } catch (error) {
+            console.log("Error fetching user:", error);
+        }
+    }
+
     useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        fetchCurrentUser(user);
         document.title = 'Pricing Plan';
     }, []);
     return (
         <div>
             <div className="pricing-plan-container">
+                <div className="pricing-plan-head">
+                    <div className="pricing-plan-head-title">Support us in providing a better solution</div>
+                    <div className="pricing-plan-head-desc">Choose a plan to tailor your needs</div>
+                    <div className="pricing-plan-head-time"> Monthly <Switch /> Yearly</div>
+                </div>
                 <div className="pricing-content">
                     <div className="pricing-plan-basic">
                         <div className="plan-heading">
                             <p className="plan-title">Basic</p>
+                            <p className="plan-desc">Perfect to get started</p>
                             <p className="price-text">0đ<span class="text-small"> / month</span></p>
                         </div>
                         <ul className="benefits">
@@ -59,13 +79,16 @@ const PricingPlan = () => {
                                 <p>Graph view</p>
                             </li>
                         </ul>
-                        <div className="btn-select-plan">
-                            Current plan
-                        </div>
+                        {
+                            currentUser.accountType === "premium"
+                                ? <div className="btn-select-plan premium">Downgrade to this plan</div>
+                                : <div className="btn-select-plan">Current plan</div>
+                        }
                     </div>
                     <div className="pricing-plan-premium">
                         <div className="plan-heading">
                             <p className="plan-title">Premium</p>
+                            <p className="plan-desc">Best for professionals</p>
                             <p className="price-text">17.000đ<span class="text-small"> / month</span></p>
                         </div>
                         <ul className="benefits">
@@ -90,9 +113,11 @@ const PricingPlan = () => {
                                 <p>Graph view</p>
                             </li>
                         </ul>
-                        <div className="btn-select-plan premium" onClick={showModal}>
-                            Choose this plan
-                        </div>
+                        {
+                            currentUser.accountType === "premium"
+                                ? <div className="btn-select-plan">Current plan</div>
+                                : <div className="btn-select-plan premium" onClick={showModal}>Choose this plan</div>
+                        }
                     </div>
                 </div>
             </div>
@@ -103,7 +128,7 @@ const PricingPlan = () => {
                 footer={null}
                 width={800}
             >
-                <CheckoutForm name={user.name} email={user.email} userId={user.user_id} />
+                <CheckoutForm name={currentUser.name} email={currentUser.email} userId={currentUser.user_id} />
                 {/* <img src={qrPayment} alt={"payment"} className='qrPayment' /> */}
             </Modal>
         </div>

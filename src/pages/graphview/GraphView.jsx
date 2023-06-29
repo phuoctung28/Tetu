@@ -10,6 +10,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const { Content } = Layout;
 
+const genColorString = (color) => {
+    return `rgb(${color.r}, ${color.g}, ${color.b}, 1)`;
+}
+
 const GraphView = ({ setIsDarkMode }) => {
     const userId = JSON.parse(localStorage.getItem("user")).user_id;
     const { folderId } = useParams();
@@ -66,7 +70,7 @@ const GraphView = ({ setIsDarkMode }) => {
         setGraphOptions({
             ...graphOptions,
             edges: {
-                color: newColor
+                color: newColor,
             },
         });
         setState({
@@ -93,7 +97,7 @@ const GraphView = ({ setIsDarkMode }) => {
             },
         },
         edges: {
-            color: graphColor,
+            color: genColorString(graphColor),
             // color: '#73A2FF',
             width: 0.2,
             smooth: {

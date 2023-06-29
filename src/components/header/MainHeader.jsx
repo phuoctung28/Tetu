@@ -30,6 +30,7 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
 
     const switchTheme = (currentTheme) => {
         setTheme(currentTheme);
+        localStorage.setItem("theme", currentTheme);
         // console.log("handle:", typeof previousValue);
         setIsDarkMode(currentTheme === "dark");
         document.querySelector("body").setAttribute('data-theme', currentTheme);
@@ -39,11 +40,11 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
         return (
             <div>
                 <div className="theme-color">
-                    <Button style={{ backgroundColor: "white" }} onClick={() => switchTheme("light")} />
+                    <Button style={{ backgroundColor: "#ffffff" }} onClick={() => switchTheme("light")} />
                     <Button style={{ backgroundColor: "#1F99FF" }} onClick={() => switchTheme("light")} />
                     <Button style={{ backgroundColor: "#191A1B" }} onClick={() => switchTheme("dark")} />
                 </div>
-                <p>(<em>Ctrl + L</em> to toggle light/dark mode)</p>
+                <p>(<em>Ctrl + Q</em> to toggle light/dark mode)</p>
             </div>
         )
     }
@@ -52,8 +53,15 @@ const MainHeader = ({ showButton = false, dualNote, handleToggleDualNote, noteDa
     //     document.querySelector("body").setAttribute('data-theme', theme);
     // }, []);
     useEffect(() => {
+
+        const localTheme = localStorage.getItem("theme");
+        if (!localTheme) {
+            localStorage.setItem("theme", "light");
+        }
+        switchTheme(localTheme);
+
         const keyDown = (event) => {
-            if (event.ctrlKey && event.key === "l") {
+            if (event.ctrlKey && event.key === "q") {
                 event.preventDefault();
                 switchTheme(theme === "light" ? "dark" : "light");
             }

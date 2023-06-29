@@ -19,15 +19,18 @@ const TableUser = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
+
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
         setSearchedColumn(dataIndex);
     };
+
     const handleReset = (clearFilters) => {
         clearFilters();
         setSearchText('');
     };
+
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div
@@ -122,12 +125,13 @@ const TableUser = () => {
     const loadUsers = async () => {
         try {
             const fetchedUserList = await getAllDocuments('users');
-            // console.log("USER LIST:", fetchedUserList)
+            console.log("USER LIST:", fetchedUserList)
             setUsers(fetchedUserList);
         } catch (error) {
             console.error('Error fetching folders and notes:', error);
         }
     };
+
     const handleChangePlan = async (record) => {
         // console.log("UPDATE USER:", record);
         const newPlan = record.accountType === "premium" ? "basic" : "premium";
@@ -289,15 +293,16 @@ const TableUser = () => {
             ),
         },
     ];
+
     return (
-        <>
+        <div>
             <Table
                 pagination={{
                     position: ["topRight"],
                 }}
                 columns={columns}
                 dataSource={table} />
-        </>
+        </div>
     );
 };
 
