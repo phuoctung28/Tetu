@@ -11,6 +11,16 @@
 
 .sider-top {
     color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.user-name {
+    width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow-wrap: unset;
 }
 
 .quicktool-container {

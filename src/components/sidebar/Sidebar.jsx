@@ -47,7 +47,7 @@ const Sidebar = ({ currentPage, currentTitle, pageMenu }) => {
                     src={currentUser?.profilePic}>
                     {currentUser?.profilePic ? '' : currentUser?.name.split(' ').at(-1).charAt(0)}
                 </Avatar>
-                <p>{currentUser?.name}</p>
+                <p className='user-name'>{currentUser?.name}</p>
             </div>
             <div className='quicktool-container'>
                 <Button block size="small" type={pageMenu && pageMenu === "home" ? "primary" : "text"} icon={<HomeOutlined />} onClick={() => navigate("/home")} >

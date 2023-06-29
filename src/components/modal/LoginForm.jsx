@@ -8,6 +8,7 @@ import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
 import logo from '../../assets/images/logo.png';
 import '../../assets/styles/login_form.css';
+import moment from 'moment';
 
 const layout = {
     labelCol: { span: 8, },
@@ -68,12 +69,14 @@ const LoginForm = () => {
             const fetchedUser = await getDocumentById("users", user.uid);
 
             const loginUser = {
+                googleAuth: true,
                 user_id: user.uid,
                 email: user.email,
                 name: user.displayName,
                 profilePic: user.photoURL,
                 accountType: fetchedUser?.accountType || "basic",
-                googleAuth: true
+                status: "active",
+                lastUpdate: moment(new Date(), "DD/MM/YYYY"),
             }
 
             const usersCollectionRef = doc(database, 'users', user.uid);
@@ -83,7 +86,6 @@ const LoginForm = () => {
             localStorage.setItem("user", JSON.stringify(loginUser));
             message.success("Login success!");
             navigate("/home");
-
         } catch (error) {
             // console.log('error: ', error);
         }

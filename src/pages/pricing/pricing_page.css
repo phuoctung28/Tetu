@@ -1,7 +1,7 @@
 .pricing-plan-container {
     width: 100%;
-    height: calc(100vh - 50px);
-    background-color: #fff;
+    height: 100vh;
+    background-color: var(--background);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,7 +21,7 @@
     width: 400px;
     height: 550px;
     border-radius: 24px;
-    border: 0.5px solid #b4bcc0;
+    border: 0.5px solid var(--border-primary);
     padding: 30px;
     position: relative;
 }
@@ -67,7 +67,7 @@
 .plan-title {
     font-size: 26px;
     font-weight: 600;
-    color: #223138;
+    color: var(--text-title);
     margin: 10px auto;
 }
 
@@ -86,16 +86,17 @@
     display: flex;
     align-items: center;
     gap: 20px;
+    text-decoration: none;
 }
 
 .options p {
     font-size: 18px;
     font-weight: 600;
-    color: #223138;
+    color: var(--text-primary);
 }
 
 .basic p {
-    color: #cfd4d6;
+    color: var(--text-third);
 }
 
 .ant-modal-title {

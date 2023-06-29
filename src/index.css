@@ -17,7 +17,7 @@ code {
     --background-popup: white;
     --background-hover: #f1f4f5;
     --background-selected: #e6f4fe;
-    --background-secondary: white;
+    --background-secondary: #f5f7fe;
     --primary-color: #0056EB;
     --primary-color-hover: #004dd3;
     --secondary-color: #0098FF;
@@ -26,7 +26,8 @@ code {
     --text-title: #3c4a57;
     --text-primary-hover: #2a9bff;
     --text-secondary: #63737A;
-    --text-third: #899CAA;
+    --text-third: #bbc0c4;
+    --text-light: #a9b5d3;
     --border-primary: #ebebeb;
     --border-secondary: #cfd2d6;
     --button-primary: #7f848a;
@@ -50,7 +51,8 @@ code {
     --text-title: #e4e6e9;
     --text-primary-hover: #2a9bff;
     --text-secondary: #ebf9ff;
-    --text-third: #e8f5ff;
+    --text-third: #787e83;
+    --text-light: #a9b5d3;
     --border-primary: #364147;
     --border-secondary: #373f44;
     --button-primary: #afb8c0;

@@ -8,14 +8,11 @@ import logo from '../../assets/images/logo.png';
 import google from '../../assets/icons/google.png';
 import apple from '../../assets/icons/apple.svg';
 import '../../assets/styles/login_form.css';
+import moment from 'moment';
 
 const layout = {
-    labelCol: {
-        span: 8,
-    },
-    wrapperCol: {
-        span: 24,
-    },
+    labelCol: { span: 8, },
+    wrapperCol: { span: 24, },
 };
 
 const onFinish = (values) => {
@@ -55,7 +52,9 @@ const RegisterForm = () => {
                 user_id: user.uid,
                 email: email,
                 name: name,
-                accountType: "basic"
+                accountType: "basic",
+                status: "active",
+                lastUpdate: moment(new Date(), "DD/MM/YYYY"),
             }
             setDoc(usersCollectionRef, loginUser);
 
@@ -75,17 +74,18 @@ const RegisterForm = () => {
         try {
             const userCredential = await signInWithPopup(auth, provider)
             const user = userCredential.user;
-            const email = user.email;
-
             const usersCollectionRef = doc(database, 'users', user.uid);
-            await setDoc(usersCollectionRef, { email, googleAuth: true });
 
             const loginUser = {
                 user_id: user.uid,
                 email: user.email,
                 name: user.displayName,
                 profilePic: user.photoURL,
+                accountType: "basic",
+                status: "active",
+                lastUpdate: moment(new Date(), "DD/MM/YYYY"),
             }
+            await setDoc(usersCollectionRef, { googleAuth: true, ...loginUser });
             localStorage.setItem("user", JSON.stringify(loginUser));
             message.success("Login success!");
             navigate("/home");

@@ -17,8 +17,8 @@ const navItems = [
     { title: 'New Session', key: '2', icon: <FolderAddTwoTone className='nav-icon' />, navLink: '' },
     // { title: 'New Notebook', key: '3', icon: <BookTwoTone className='nav-icon' />, navLink: '/note' },
     // { title: 'New Canvas', key: '4', icon: <AppstoreTwoTone className='nav-icon' />, navLink: '' },
-    { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav-icon' />, navLink: '' },
-    { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav-icon' />, navLink: '' },
+    { title: 'Graph View', key: '5', icon: <StarTwoTone className='nav-icon' />, navLink: '/graph' },
+    { title: 'Calendar View', key: '6', icon: <CalendarTwoTone className='nav-icon' />, navLink: '/calendar' },
 
     { title: 'Citation Box', key: '7', icon: <WalletTwoTone className='nav-icon' />, navLink: '' },
     { title: 'Revision', key: '8', icon: <SecurityScanTwoTone className='nav-icon' />, navLink: '' },
@@ -28,24 +28,39 @@ const Home = ({ setIsDarkMode }) => {
     const [open, setOpen] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = 'Home Page';
+    }, []);
+
     const showModal = () => {
         setIsModalOpen(true);
     };
+
     const handleOpenChange = (newOpen) => {
         setOpen(newOpen);
     };
 
-    const devMsg = (msgTitle) => message.info(msgTitle + " is in development!");
     const handleUploadFile = () => { };
+
     const handleOk = () => {
         setIsModalOpen(false);
     };
+
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    useEffect(() => {
-        document.title = 'Home Page';
-    }, []);
+
+    const devMsg = (msgTitle) => message.info(msgTitle + " is in development!");
+
+    const handleClickNavButton = (item) => {
+        if (item.navLink.length === 0) {
+            devMsg(item.title);
+        }
+        navigate(item.navLink);
+    }
+
     return (
         <Layout hasSider>
             <Sidebar pageMenu="home" />
@@ -87,7 +102,7 @@ const Home = ({ setIsDarkMode }) => {
                                     </Col>
                                     {navItems.map((item, index) => (
                                         <Col key={index} className="gutter-row" span={6}>
-                                            <button onClick={() => devMsg(item.title)} className='nav-btn' >
+                                            <button onClick={() => handleClickNavButton(item)} className='nav-btn' >
                                                 {item.icon}
                                                 <Text className="nav-text" style={{ fontSize: '20px' }} strong>{item.title}</Text>
                                             </button>

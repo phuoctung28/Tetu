@@ -28,7 +28,7 @@ function App() {
         console.log("THEME:", isDarkMode);
         setIsDarkMode((previousValue) => !previousValue);
     };
-    
+
     return (
         <ConfigProvider
             theme={{
