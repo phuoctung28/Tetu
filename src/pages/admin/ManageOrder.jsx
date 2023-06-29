@@ -68,7 +68,7 @@ const ManageOrder = ({ setIsDarkMode }) => {
                             </Col>
                         </Row>
                     </div>
-                    <div className="table-user" >
+                    <div className="table-order" >
                         <Card style={{ height: "100%" }} bordered={false}>
                             <TableOrder />
                         </Card>

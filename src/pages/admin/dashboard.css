@@ -6,7 +6,8 @@
     padding: 20px;
 }
 
-.table-user {
+.table-user,
+.table-order {
     /* background-color: #fff; */
     margin-top: 20px;
     height: 720px;

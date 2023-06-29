@@ -36,6 +36,7 @@
         "react-beautiful-dnd": "^13.1.1",
         "react-countup": "^6.4.2",
         "react-dom": "^18.2.0",
+        "react-ga4": "^2.1.0",
         "react-graph-vis": "^1.0.7",
         "react-highlight-words": "^0.20.0",
         "react-quill": "^2.0.0",

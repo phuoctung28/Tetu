@@ -100,18 +100,18 @@ const GraphView = ({ setIsDarkMode }) => {
             color: genColorString(graphColor),
             // color: '#73A2FF',
             width: 0.2,
-            smooth: {
-                enabled: true,
-                type: 'continuous',
-            },
+            // smooth: {
+            //     enabled: true,
+            //     type: 'discrete',
+            // },
         },
         physics: {
             barnesHut: {
-                centralGravity: 0.001,
+                centralGravity: 0,
                 springLength: 60,
                 springConstant: 0.01,
                 damping: 1,
-                avoidOverlap: 0.01
+                avoidOverlap: 0.5
             },
         },
         manipulation: {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Button, Form, Input, Divider, message } from 'antd';
-import { auth, provider, database, createDocument } from "../../services/firebase";
+import { auth, provider, database, createDocument, getDocumentById } from "../../services/firebase";
 import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from 'firebase/firestore';
 import logo from '../../assets/images/logo.png';
@@ -49,7 +49,7 @@ const RegisterForm = () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            const usersCollectionRef = doc(database, 'users', user.uid);
+
             const loginUser = {
                 user_id: user.uid,
                 email: email,
@@ -58,30 +58,42 @@ const RegisterForm = () => {
                 status: "active",
                 lastUpdate: moment(new Date(), "DD/MM/YYYY").format("DD/MM/YYYY"),
             }
-            await setDoc(usersCollectionRef, loginUser);
+            const fetchedUser = await getDocumentById("users", user.uid);
 
-            const newNote = {
-                title: 'Getting Started',
-                content: DEFAULT_INITIAL_DATA,
-                meta_data: {
-                    datetime: moment(new Date()).format("DD/MM/YYYY"),
-                    status: ["To-do"],
-                    tags: ["Sample"],
-                    type: ["Self-study"],
-                },
-                owner: user.uid,
-            };
-            const noteRef = await createDocument('notes', newNote);
-            const noteId = noteRef.id;
+            if (!fetchedUser) {
+                const usersCollectionRef = doc(database, 'users', user.uid);
+                await setDoc(usersCollectionRef, loginUser);
 
-            const folderData = {
-                files: [],
-                notes: [noteId],
-                owner: user.uid,
-                folder_name: "Sample"
+                const newNote = {
+                    title: 'Getting Started',
+                    content: DEFAULT_INITIAL_DATA,
+                    meta_data: {
+                        datetime: moment(new Date()).format("DD/MM/YYYY"),
+                        status: ["To-do"],
+                        tags: ["Sample"],
+                        type: ["Self-study"],
+                    },
+                    owner: user.uid,
+                };
+                const noteRef = await createDocument('notes', newNote);
+                const noteId = noteRef.id;
+
+                const folderData = {
+                    files: [],
+                    notes: [noteId],
+                    owner: user.uid,
+                    folder_name: "Sample"
+                }
+                await createDocument("folders", folderData);
+
+                const attachmentFolderData = {
+                    files: [],
+                    notes: [],
+                    owner: user.uid,
+                    folder_name: "Attachments"
+                }
+                await createDocument("folders", attachmentFolderData);
             }
-            await createDocument("folders", folderData);
-
             localStorage.setItem("user", JSON.stringify(loginUser));
             setLoading(false);
             message.success("Login success!");
@@ -131,6 +143,15 @@ const RegisterForm = () => {
                 folder_name: "Sample"
             }
             await createDocument("folders", folderData);
+
+            const attachmentFolderData = {
+                files: [],
+                notes: [],
+                owner: user.uid,
+                folder_name: "Attachments"
+            }
+            await createDocument("folders", attachmentFolderData);
+
             localStorage.setItem("user", JSON.stringify(loginUser));
             message.success("Login success!");
             navigate("/home");

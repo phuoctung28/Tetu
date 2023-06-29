@@ -75,7 +75,7 @@ const UserProfile = ({ setIsDarkMode }) => {
                                 </div>
                             </div>
                         </Col>
-                        <Col span={7}>
+                        <Col span={8}>
                             <div className="profile-card profile-storage-card">
                                 <div className="storage-card-top">
                                     <div className="storage-icon-ctn">
@@ -99,7 +99,7 @@ const UserProfile = ({ setIsDarkMode }) => {
                                 </div>
                             </div>
                         </Col>
-                        <Col span={10}>
+                        <Col span={9}>
                             <div className="profile-card profile-setting">
                                 <div className="profile-section-title">Settings</div>
                                 <div className="profile-item">
@@ -142,7 +142,7 @@ const UserProfile = ({ setIsDarkMode }) => {
                             <div className="profile-card profile-wrapper profile-info-card">
                                 <div className="profile-section-title">Personal</div>
                                 <div className="profile-desc">
-                                    Hi, I’m {currentUser.name}, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality). <Button type="text" icon={<EditOutlined />} />
+                                    Hi, I’m {currentUser.name}. <Button type="text" icon={<EditOutlined />} />
                                 </div>
                                 <div className="profile-item">
                                     <div className="profile-item-title">Email</div>
@@ -184,7 +184,7 @@ const UserProfile = ({ setIsDarkMode }) => {
                                 </div>
                             </div>
                         </Col>
-                        <Col span={7}>
+                        <Col span={8}>
                             <div className="profile-card profile-wrapper account-card">
                                 <div className="profile-section-title">Account</div>
                                 <div className="profile-item">
@@ -222,7 +222,7 @@ const UserProfile = ({ setIsDarkMode }) => {
                                 </div>
                             </div>
                         </Col>
-                        <Col span={10}>
+                        <Col span={9}>
                             <div className="profile-card notification-section notification-card">
                                 <div className="profile-section-title">Notifications</div>
                                 <div className="noti-list-wrapper">
